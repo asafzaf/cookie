@@ -1,0 +1,37 @@
+{
+  "recipes": [
+    {
+      "title": "Pasta with tomato sauce",
+      "time": "30 minutes",
+      "ingredients": ["pasta", "tomato sauce", "salt", "pepper"],
+      "instructions": [
+        "Boil the pasta",
+        "Add the tomato sauce",
+        "Add salt and pepper"
+      ],
+      "difficulty": "easy",
+      "image": "../assets/images/pasta.jpg",
+      "id": 1,
+      "rating": 4,
+      "comments": [
+        {
+          "user": "John",
+          "comment": "I love this recipe!"
+        },
+        {
+          "user": "Jane",
+          "comment": "I don't like it"
+        }
+      ],
+      "category": "pasta",
+      "tags": ["pasta", "tomato", "sauce"],
+      "date": "2020-01-01",
+      "author": "John Doe",
+      "source": "https://www.simplyrecipes.com/recipes/spaghetti_with_meat_sauce/",
+      "sourceName": "Simply Recipes",
+      "sourceImage": "https://www.simplyrecipes.com/wp-content/uploads/2018/01/simplyrecipes-logo-vertical-1.png",
+      "sourceRating": 4,
+      "sourceComments": 100
+    }
+  ]
+}

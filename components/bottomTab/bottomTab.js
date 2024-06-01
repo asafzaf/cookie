@@ -1,11 +1,12 @@
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeScreen from "../components/homeScreen";
+import HomeScreen from "../../screens/homeScreen";
+import RecipesIndexScreen from "../../screens/recipesIndexScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function MyTabs() {
+export default function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -42,7 +43,7 @@ export default function MyTabs() {
       />
       <Tab.Screen
         name="Recipes"
-        component={HomeScreen}
+        component={RecipesIndexScreen}
         options={{
           tabBarLabel: "Recipes",
           tabBarIcon: ({ color, size }) => (
