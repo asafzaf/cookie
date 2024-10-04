@@ -8,21 +8,9 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import firebaseConfig from "./firebaseCreds.json";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAt8OUegN1bS4YhzepLDrhUeFSn7-fIQw4",
-  authDomain: "cookie-147c5.firebaseapp.com",
-  projectId: "cookie-147c5",
-  storageBucket: "cookie-147c5.appspot.com",
-  messagingSenderId: "550727993258",
-  appId: "1:550727993258:web:3072abaa6469031988cdd3",
-  measurementId: "G-YS3NDVV28S",
-};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
