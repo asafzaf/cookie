@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { StyleSheet } from "react-native";
-import styles from "../styles/styles";
+import styles from "../../styles/styles";
 
 export default function HomeScreen() {
   return (

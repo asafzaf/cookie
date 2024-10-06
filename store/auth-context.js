@@ -2,9 +2,11 @@ import { createContext, useState } from "react";
 
 export const AuthContext = createContext({
   token: "",
+  mongoId: "",
   userId: "",
   userFirstName: "",
   userLastName: "",
+  userEmail: "",
   language: "en",
   isLoggedIn: false,
   login: (token) => {},
@@ -13,13 +15,15 @@ export const AuthContext = createContext({
 
 function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
+  const [mongoId, setMongoId] = useState();
   const [userId, setUserId] = useState();
   const [userEmail, setUserEmail] = useState();
   const [userFirstName, setUserFirstName] = useState();
   const [userLastName, setUserLastName] = useState();
 
-  function login(token, userId, userEmail, userFirstName, userLastName) {
+  function login(token, mongoId, userId, userEmail, userFirstName, userLastName) {
     setAuthToken(token);
+    setMongoId(mongoId);
     setUserId(userId);
     setUserEmail(userEmail);    
     setUserFirstName(userFirstName);
@@ -28,6 +32,7 @@ function AuthContextProvider({ children }) {
 
   function logout() {
     setToken(null)
+    setMongoId(null);
     setUserId(null);
     setUserEmail(null);
     setUserFirstName(null);
@@ -38,6 +43,7 @@ function AuthContextProvider({ children }) {
 
   const contextValue = {
     token: authToken,
+    mongoId: mongoId,
     userId: userId,
     userEmail: userEmail,
     userFirstName: userFirstName,

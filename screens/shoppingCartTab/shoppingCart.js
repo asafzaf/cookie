@@ -7,9 +7,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
-import dummyData from "../data/dummyItems.json";
-import { getItems } from "../http/itemHttp";
+import dummyData from "../../data/dummyItems.json";
+import { getItems } from "../../http/itemHttp";
 
 const ShoppingCart = () => {
   const [search, setSearch] = useState("");
@@ -28,8 +29,8 @@ const ShoppingCart = () => {
   }, []);
 
   const filteredItems = items.filter((item) =>
-          item.name["heb"].toLowerCase().includes(search.toLowerCase())
-        );
+    item.name["heb"].toLowerCase().includes(search.toLowerCase())
+  );
 
   const addItemToShoppingList = (item) => {
     setShoppingList([...shoppingList, item]);
@@ -47,18 +48,21 @@ const ShoppingCart = () => {
       />
       <View style={[styles.section, { maxHeight: screenHeight / 3 }]}>
         <Text style={styles.sectionTitle}>Available Items</Text>
-        <FlatList
-          data={filteredItems}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => addItemToShoppingList(item)}>
-              <View style={styles.item}>
-                <Text>{item.name["heb"]}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          contentContainerStyle={styles.list}
-        />
+        {loading && <ActivityIndicator size="large" />}
+        {!loading && (
+          <FlatList
+            data={filteredItems}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => addItemToShoppingList(item)}>
+                <View style={styles.item}>
+                  <Text>{item.name["heb"]}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            contentContainerStyle={styles.list}
+          />
+        )}
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>My Shopping List</Text>

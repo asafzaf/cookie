@@ -2,14 +2,21 @@
 import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeScreen from "../../screens/homeScreen";
-import ShoppingCart from "../../screens/shoppingCart";
-import RecipesIndexScreen from "../../screens/recipesIndexScreen";
-import ProfileBox from "./profileBox";
+// import HomeScreen from "../screens/homeTab/homeScreen";
+// import ShoppingCart from "../screens/shoppingCartTab/shoppingCart";
+// import RecipesIndexScreen from "../screens/recipesTab/recipesIndexScreen";
+// import SettingsScreen from "../screens/settingsTab/settingsScreen";
+
+import HomeTabNavigator from "./homeTabNavigator";
+import ShoppingCartTabNavigator from "./shoppingCartTabNavigator";
+import RecipesTabNavigator from "./recipesTabNavigator";
+import SettingsTabNavigator from "./settingsTabNavigator";
+
+import ProfileBox from "../components/bottomTab/profileBox";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab({lang}) {
+export default function BottomTab() {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>
@@ -20,11 +27,13 @@ export default function BottomTab({lang}) {
             <MaterialCommunityIcons name="account" size={30} color={tintColor} pressColor={pressColor} onPress={()=>{setModalVisible(true);}}/>
           ),
           tabBarVisibilityAnimationConfig: { show: "slide-up", hide: "slide-down" },
+          headerShown: false,
         }}
+
       >
         <Tab.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Home Tab"
+          component={HomeTabNavigator}
           options={{
             tabBarLabel: "Home",
             tabBarIcon: ({ color, size }) => (
@@ -33,9 +42,8 @@ export default function BottomTab({lang}) {
           }}
         />
         <Tab.Screen
-          name="Shopping Cart"
-          component={ShoppingCart}
-          initialParams={language=lang}
+          name="Shopping Cart Tab"
+          component={ShoppingCartTabNavigator}
           options={{
             tabBarLabel: "Shopping Cart",
             tabBarIcon: ({ color, size }) => (
@@ -48,8 +56,8 @@ export default function BottomTab({lang}) {
           }}
         />
         <Tab.Screen
-          name="Recipes"
-          component={RecipesIndexScreen}
+          name="Recipes Tab"
+          component={RecipesTabNavigator}
           options={{
             tabBarLabel: "Recipes",
             tabBarIcon: ({ color, size }) => (
@@ -58,8 +66,8 @@ export default function BottomTab({lang}) {
           }}
         />
         <Tab.Screen
-          name="Settings"
-          component={HomeScreen}
+          name="Settings Tab"
+          component={SettingsTabNavigator}
           options={{
             tabBarLabel: "Settings",
             tabBarIcon: ({ color, size }) => (

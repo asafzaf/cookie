@@ -1,0 +1,63 @@
+import data from "./server.json";
+import axios from "axios";
+import { handleAxiosError } from "./axios.error";
+
+export const getUserById = async (userId) => {
+  try {
+    const response = await axios.get(data.serverUrl + "/api/v1/user/" + userId, {
+      timeout: 5000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const createUser = async (user) => {
+  try {
+    const response = await axios.post(data.serverUrl + "/api/v1/user", user, {
+      timeout: 5000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const updateUser = async (user) => {
+  try {
+    const response = await axios.put(data.serverUrl + "/api/v1/user", user, {
+      timeout: 5000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+export const deleteUser = async () => {
+  try {
+    const response = await axios.delete(data.serverUrl + "/api/v1/user", {
+      timeout: 5000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
