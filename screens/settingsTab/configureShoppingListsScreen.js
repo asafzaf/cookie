@@ -10,8 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
-import { getShoppingListById } from "../../http/shoppingListHttp";
-import { getUserById } from "../../http/userHttp";
+import { getShoppingListByUserId } from "../../utils/shoppinglist";
 
 const ConfigureShoppingListsScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -23,16 +22,9 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const userData = await getUserById(authCtx.userId);
-      const listsIds = userData.data.shoppingLists;
-      const data = [];
-      for (const listId of listsIds) {
-        const res = await getShoppingListById(listId);
-        console.log("Res:", res);
-        data.push(res.data);
-        console.log("Data:", data);
-      }
-      console.log("data:", data);
+      authCtx.
+      console.log("User ID (conf): ", authCtx.userId);
+      const data = await getShoppingListByUserId(authCtx.userId);
       setShoppingLists(data || []);
       setLoading(false);
     }

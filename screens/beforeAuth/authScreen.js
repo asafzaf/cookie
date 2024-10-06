@@ -30,7 +30,8 @@ const AuthScreen = () => {
           user.uid,
           user.email,
           userItem.data.first_name,
-          userItem.data.last_name
+          userItem.data.last_name,
+          userItem.data.default_shopping_list
         );
       } else {
         console.log("Login failed");
@@ -62,7 +63,8 @@ const AuthScreen = () => {
           user.uid,
           user.email,
           newUser.first_name,
-          newUser.last_name
+          newUser.last_name,
+          newUser.default_shopping_list
         );
       } else {
         console.log("Signup failed");
