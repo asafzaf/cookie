@@ -23,36 +23,43 @@ const ShoppingCart = () => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [itemsLoading, setItemsLoading] = useState(true);
+  const [listLoading, setListLoading] = useState(true);
   const [listName, setListName] = useState(null);
 
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchData() {
-      setLoading(true);
+      setItemsLoading(true);
+      setListLoading(true);
 
       let res = await getItems();
       setItems(res.data || []);
+
+      setItemsLoading(false);
+      if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
+        setListLoading(false);
+        return;
+      }
 
       let data = await getShoppingListById(authCtx.selectedList);
 
       setShoppingList(data.data.items || []);
       setListName(data.data.name || "-No Name-");
-
-      setLoading(false);
+      setListLoading(false);
     }
     fetchData();
   }, []);
 
   useEffect(() => {
     async function fetchData() {
-      setLoading(true);
+      setListLoading(true);
       let data = await getShoppingListById(authCtx.selectedList);
       setShoppingList(data.data.items || []);
       setListName(data.data.name || "-No Name-");
 
-      setLoading(false);
+      setListLoading(false);
     }
     fetchData();
   }, [authCtx]);
@@ -86,8 +93,8 @@ const ShoppingCart = () => {
       />
       <View style={[styles.section, { maxHeight: screenHeight / 3 }]}>
         <Text style={styles.sectionTitle}>Available Items</Text>
-        {loading && <ActivityIndicator size="large" />}
-        {!loading && (
+        {itemsLoading && <ActivityIndicator size="large" />}
+        {!itemsLoading && (
           <FlatList
             data={filteredItems}
             keyExtractor={(item) => item._id}
@@ -108,8 +115,8 @@ const ShoppingCart = () => {
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>My Shopping List</Text>
-        {loading && <ActivityIndicator size="large" />}
-        {!loading && (
+        {listLoading && <ActivityIndicator size="large" />}
+        {!listLoading && (
           <FlatList
             data={shoppingList}
             keyExtractor={(item) => item._id}
