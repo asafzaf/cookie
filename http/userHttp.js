@@ -13,7 +13,7 @@ export const getUserById = async (userId) => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("getUserById", error);
   }
 };
 
@@ -28,7 +28,7 @@ export const createUser = async (user) => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("ceateUser", error);
   }
 };
 
@@ -43,7 +43,7 @@ export const updateUser = async (user) => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("updateUser", error);
   }
 };
 
@@ -58,6 +58,6 @@ export const deleteUser = async () => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("deleteUser", error);
   }
 };

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
-import { getShoppingListByUserId } from "../../utils/shoppinglist";
+import { getShoppingListByUserId } from "../../utils/shoppinglist"; // Import existing function
 
 const ConfigureShoppingListsScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -22,16 +22,15 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      authCtx.
-      console.log("User ID (conf): ", authCtx.userId);
+      if (!authCtx.userId) {
+        setLoading(false);
+        return;
+      }
       const data = await getShoppingListByUserId(authCtx.userId);
       setShoppingLists(data || []);
       setLoading(false);
     }
     fetchData();
-    for (const list of shoppingLists) {
-      console.log("List:", list);
-    }
   }, []);
 
   const filteredLists = shoppingLists.filter((list) =>
@@ -66,6 +65,14 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
           />
         )}
       </View>
+
+      {/* Floating button in bottom-right corner */}
+      <TouchableOpacity
+        style={styles.createButton}
+        onPress={() => navigation.navigate("Create New List")} // Navigate to CreateListScreen
+      >
+        <Text style={styles.createButtonText}>+ Create New List</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -106,6 +113,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+  },
+  // Style for the floating button
+  createButton: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: "#007BFF",
+    borderRadius: 50,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    elevation: 3,
+  },
+  createButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

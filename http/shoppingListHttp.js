@@ -13,7 +13,7 @@ export const getShoppingListById = async (listId) => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("getShoppingListById", error);
   }
 };
 
@@ -28,7 +28,7 @@ export const createShoppingList = async (shoppingList) => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("createShoppingList", error);
   }
 };
 
@@ -41,9 +41,10 @@ export const addItemToShoppingList = async (listId, item) => {
       },
     });
     const obj = JSON.parse(response.request._response);
+    console.log("addItemToShoppingList", obj);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("addItemToShoppingList", error);
   }
 }
 
@@ -56,8 +57,9 @@ export const removeItemFromShoppingList = async (listId, item) => {
       },
     });
     const obj = JSON.parse(response.request._response);
+    console.log("removeItemFromShoppingList", obj);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("removeItemFromShoppingList", error);
   }
 }

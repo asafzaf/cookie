@@ -12,6 +12,8 @@ import {
 
 import { AuthContext } from "../../store/auth-context";
 
+import ShoppingListItem from "../../components/shoppingCart/shoppingListItem";
+
 import { getItems } from "../../http/itemHttp";
 import {
   getShoppingListById,
@@ -55,6 +57,10 @@ const ShoppingCart = () => {
   useEffect(() => {
     async function fetchData() {
       setListLoading(true);
+      if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
+        setListLoading(false);
+        return;
+      }
       let data = await getShoppingListById(authCtx.selectedList);
       setShoppingList(data.data.items || []);
       setListName(data.data.name || "-No Name-");
@@ -69,15 +75,17 @@ const ShoppingCart = () => {
   );
 
   const addItem = async (list, item) => {
-    addItemToShoppingList(list, item);
+    await addItemToShoppingList(list, item);
     const newList = await getShoppingListById(authCtx.selectedList);
     setShoppingList(newList.data.items || []);
   };
 
-  const removeItem = async (list, item) => {
-    removeItemFromShoppingList(list, item);
+  const refreshList = async () => {
+    setListLoading(true);
+    console.log("Refreshing list");
     const newList = await getShoppingListById(authCtx.selectedList);
     setShoppingList(newList.data.items || []);
+    setListLoading(false);
   };
 
   const screenHeight = Dimensions.get("window").height;
@@ -120,30 +128,7 @@ const ShoppingCart = () => {
           <FlatList
             data={shoppingList}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={[styles.item, {}]}>
-                <View>
-                  <Text>{item.item.name["heb"]}</Text>
-                </View>
-                <View style={styles.quantityContainer}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      removeItem(authCtx.selectedList, { item: item.item._id });
-                    }}
-                  >
-                    <Text style={styles.mediumText}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.mediumText}>{item.quantity}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      addItem(authCtx.selectedList, { item: item.item._id });
-                    }}
-                  >
-                    <Text style={styles.mediumText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
+            renderItem={({ item }) => <ShoppingListItem item={item} refreshList={refreshList} />}
             contentContainerStyle={styles.list}
           />
         )}

@@ -13,6 +13,6 @@ export const getItems = async () => {
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
-    handleAxiosError(error);
+    handleAxiosError("getItems", error);
   }
 };

@@ -1,6 +1,7 @@
-export const handleAxiosError = (error) => {
+export const handleAxiosError = (func_name ,error) => {
   if (error.response) {
     // The server responded with a status code outside 2xx
+    console.log("On Function: ", func_name);
     console.log("Error Response:", error.response.data);
     console.log("Status:", error.response.status);
   } else if (error.request) {

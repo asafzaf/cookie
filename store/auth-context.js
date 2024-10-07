@@ -10,10 +10,12 @@ export const AuthContext = createContext({
   language: "en",
   defaultShoppingList: "",
   selectedList: "",
+  userData: {},
   isLoggedIn: false,
   login: (token) => {},
   logout: () => {},
   change_list: (list) => {},
+  refresh_user_data: (data) => {},
 });
 
 function AuthContextProvider({ children }) {
@@ -25,8 +27,9 @@ function AuthContextProvider({ children }) {
   const [userLastName, setUserLastName] = useState();
   const [defaultShoppingList, setDefaultShoppingList] = useState();
   const [selectedList, setSelectedList] = useState();
+  const [userData, setUserData] = useState({});
 
-  function login(token, mongoId, userId, userEmail, userFirstName, userLastName, defaultShoppingList) {
+  function login(token, mongoId, userId, userEmail, userFirstName, userLastName, defaultShoppingList, userData) {
     setAuthToken(token);
     setMongoId(mongoId);
     setUserId(userId);
@@ -35,6 +38,7 @@ function AuthContextProvider({ children }) {
     setUserLastName(userLastName);
     setDefaultShoppingList(defaultShoppingList);
     setSelectedList(defaultShoppingList);
+    setUserData(userData);
   }
 
   function logout() {
@@ -46,10 +50,15 @@ function AuthContextProvider({ children }) {
     setUserLastName(null);
     setDefaultShoppingList(null);
     setSelectedList(null);
+    setUserData(null);
   }
 
   function change_list(list) {
     setSelectedList(list);
+  }
+
+  function refresh_user_data(data) {
+    setUserData(data);
   }
 
   
@@ -63,10 +72,12 @@ function AuthContextProvider({ children }) {
     userLastName: userLastName,
     defaultShoppingList: defaultShoppingList,
     selectedList: selectedList,
+    userData: userData,
     isLoggedIn: !!authToken,
     login,
     logout,
     change_list,
+    refresh_user_data,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

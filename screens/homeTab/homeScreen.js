@@ -45,7 +45,9 @@ export default function HomeScreen() {
       setLoading(false);
     }
     fetchData();
-  }, [authCtx.isLoggedIn, authCtx.userId, defaultShoppingListId]); // Dependencies for useEffect
+  }, [authCtx.isLoggedIn, authCtx.userId, defaultShoppingListId, authCtx.userData]); // Dependencies for useEffect
+
+    
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen); // Toggle dropdown visibility
