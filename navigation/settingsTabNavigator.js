@@ -17,11 +17,11 @@ const SettingsTabNavigator = () => {
     <>
       <Stack.Navigator
         screenOptions={{
-          headerLeft: ({ tintColor, pressColor }) => (
+          headerRight: ({ black, pressColor }) => (
             <MaterialCommunityIcons
               name="account"
-              size={30}
-              color={tintColor}
+              size={27}
+              color={black}
               pressColor={pressColor}
               onPress={() => {
                 setModalVisible(true);

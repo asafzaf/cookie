@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { signUp, login } from "../../services/firebase";
 import { AuthContext } from "../../store/auth-context";
 import { createUser, getUserById } from "../../http/userHttp";
@@ -14,33 +14,63 @@ const AuthScreen = () => {
   const authCtx = useContext(AuthContext);
 
   const handleLogin = async () => {
-    // Handle login logic here
     try {
-      console.log("email:", email);
+      console.log("Email:", email);
       console.log("Password:", password);
+  
+      // Attempt to log in the user
       const user = await login(email, password);
+      console.log("User:", user);
+  
+      if (!user || user.errorCode) {
+        console.log("Login failed");
+        setPassword(""); // Reset password field
+        Alert.alert(
+          "Login failed",
+          user?.errorMessage || "Please check your credentials and try again"
+        );
+        return;
+      }
+  
+      // Fetch user data by ID (assuming getUserById fetches from the backend)
       const userItem = await getUserById(user.uid);
+  
+      if (!userItem) {
+        console.log("User item fetch failed");
+        setPassword(""); // Reset password field
+        Alert.alert(
+          "Login failed",
+          "System error. Please try again later"
+        );
+        return;
+      }
+  
+      // Proceed with successful login
+      console.log("Login successful");
       console.log("User:", user);
       console.log("User Item:", userItem);
-      if (user && userItem) {
-        console.log("Login successful");
-        authCtx.login(
-          user.stsTokenManager.accessToken,
-          userItem.data._id,
-          user.uid,
-          user.email,
-          userItem.data.first_name,
-          userItem.data.last_name,
-          userItem.data.default_shopping_list,
-          userItem.data
-        );
-      } else {
-        console.log("Login failed");
-      }
+  
+      // Call the context or authentication handler
+      authCtx.login(
+        user.stsTokenManager.accessToken,
+        userItem.data._id,
+        user.uid,
+        user.email,
+        userItem.data.first_name,
+        userItem.data.last_name,
+        userItem.data.default_shopping_list,
+        userItem.data
+      );
+      
     } catch (error) {
-      console.log("error:", error);
+      console.log("Error:", error);
+      Alert.alert(
+        "Login failed",
+        "An unexpected error occurred. Please try again later."
+      );
     }
   };
+  
 
   const handleSignup = async () => {
     // Handle signup logic here
@@ -60,7 +90,7 @@ const AuthScreen = () => {
         console.log("Signup successful");
         authCtx.login(
           user.stsTokenManager.accessToken,
-          newUser.data._id,
+          newUser._id,
           user.uid,
           user.email,
           newUser.first_name,

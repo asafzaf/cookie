@@ -14,7 +14,7 @@ const ProfileBox = ({ visible, setModalVisible }) => {
   const authCtx = useContext(AuthContext);
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={() => setModalVisible(false)}
