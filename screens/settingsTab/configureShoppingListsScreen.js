@@ -8,9 +8,13 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
+import { setDefaultShoppingList } from "../../http/shoppingListHttp"; // Import new function
 import { getShoppingListByUserId } from "../../utils/shoppinglist"; // Import existing function
+
+import { Alert } from "react-native";
 
 const ConfigureShoppingListsScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -39,6 +43,21 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
 
   const screenHeight = Dimensions.get("window").height;
 
+  const handleSetDefult = async (listId) => {
+    // Set default shopping list
+    setLoading(true);
+    const newUserData = await setDefaultShoppingList({
+      userId: authCtx.mongoId,
+      listId,
+    });
+    if (newUserData) {
+      await authCtx.refresh_user_data(newUserData);
+      console.log("New default list", authCtx.userData.defaultShoppingList);
+    }
+    Alert.alert("Success", "Default shopping list updated successfully");
+    setLoading(false);
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -55,11 +74,23 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
             data={filteredLists}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => {}}>
-                <View style={styles.item}>
-                  <Text>{item.name}</Text>
-                </View>
-              </TouchableOpacity>
+              // <TouchableOpacity disable={true} onPress={() => {}}>
+              <View style={styles.item}>
+                <Text>{item.name}</Text>
+                {item._id !== authCtx.defaultShoppingList && (
+                  <Pressable
+                    onPress={() => {
+                      handleSetDefult(item._id);
+                    }}
+                  >
+                    <Text style={{ color: "blue" }}>Set as default</Text>
+                  </Pressable>
+                )}
+                {item._id === authCtx.defaultShoppingList && (
+                  <Text style={{ fontWeight: "bold" }}>Default List</Text>
+                )}
+              </View>
+              // </TouchableOpacity>
             )}
             contentContainerStyle={styles.list}
           />

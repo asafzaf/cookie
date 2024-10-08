@@ -29,11 +29,20 @@ function AuthContextProvider({ children }) {
   const [selectedList, setSelectedList] = useState();
   const [userData, setUserData] = useState({});
 
-  function login(token, mongoId, userId, userEmail, userFirstName, userLastName, defaultShoppingList, userData) {
+  function login(
+    token,
+    mongoId,
+    userId,
+    userEmail,
+    userFirstName,
+    userLastName,
+    defaultShoppingList,
+    userData
+  ) {
     setAuthToken(token);
     setMongoId(mongoId);
     setUserId(userId);
-    setUserEmail(userEmail);    
+    setUserEmail(userEmail);
     setUserFirstName(userFirstName);
     setUserLastName(userLastName);
     setDefaultShoppingList(defaultShoppingList);
@@ -42,7 +51,7 @@ function AuthContextProvider({ children }) {
   }
 
   function logout() {
-    setToken(null)
+    setToken(null);
     setMongoId(null);
     setUserId(null);
     setUserEmail(null);
@@ -59,9 +68,8 @@ function AuthContextProvider({ children }) {
 
   function refresh_user_data(data) {
     setUserData(data);
+    setDefaultShoppingList(data.default_shopping_list);
   }
-
-  
 
   const contextValue = {
     token: authToken,
