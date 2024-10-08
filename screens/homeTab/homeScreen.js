@@ -162,7 +162,7 @@ const ScreenStyles = StyleSheet.create({
   },
   dropdownText: {
     fontSize: styles.text.size.medium,
-    color: styles.colors.black,
+    color: styles.colors.primary,
     flex: 1, // Allow text to occupy available space
   },
   dropdownList: {
@@ -182,6 +182,6 @@ const ScreenStyles = StyleSheet.create({
   },
   dropdownItemText: {
     fontSize: styles.text.size.medium,
-    color: styles.colors.black,
+    color: styles.colors.primary,
   },
 });
