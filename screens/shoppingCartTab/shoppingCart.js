@@ -22,9 +22,13 @@ import {
 } from "../../http/shoppingListHttp";
 
 const ShoppingCart = () => {
+  const [AddItemsVisible, setAddItemsVisible] = useState(true);
+  const [MyShoppingListVisible, setMyShoppingListVisible] = useState(true);
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([]);
-  const [shoppingList, setShoppingList] = useState([]);
+  const [shoppingListItems, setShoppingListItems] = useState([]);
+  const [unrecognizedShoppingListItems, setUnrecognizedShoppingListItems] =
+    useState([]);
   const [itemsLoading, setItemsLoading] = useState(true);
   const [listLoading, setListLoading] = useState(true);
   const [listName, setListName] = useState(null);
@@ -47,7 +51,8 @@ const ShoppingCart = () => {
 
       let data = await getShoppingListById(authCtx.selectedList);
 
-      setShoppingList(data.data.items || []);
+      setShoppingListItems(data.data.items || []);
+      setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
       setListName(data.data.name || "-No Name-");
       setListLoading(false);
     }
@@ -62,7 +67,8 @@ const ShoppingCart = () => {
         return;
       }
       let data = await getShoppingListById(authCtx.selectedList);
-      setShoppingList(data.data.items || []);
+      setShoppingListItems(data.data.items || []);
+      setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
       setListName(data.data.name || "-No Name-");
 
       setListLoading(false);
@@ -77,60 +83,97 @@ const ShoppingCart = () => {
   const addItem = async (list, item) => {
     await addItemToShoppingList(list, item);
     const newList = await getShoppingListById(authCtx.selectedList);
-    setShoppingList(newList.data.items || []);
+    setShoppingListItems(newList.data.items || []);
+  };
+
+  const addUnrecognizedItem = async (list, item) => {
+    await addUnrecognizedItemToShoppingList(list, item);
+    const newList = await getShoppingListById(authCtx.selectedList);
+    setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
   };
 
   const refreshList = async () => {
     setListLoading(true);
     console.log("Refreshing list");
     const newList = await getShoppingListById(authCtx.selectedList);
-    setShoppingList(newList.data.items || []);
+    setShoppingListItems(newList.data.items || []);
+    setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
     setListLoading(false);
+  };
+
+  const toggleAddItems = () => {
+    setAddItemsVisible(!AddItemsVisible);
+  };
+
+  const toggleMyShoppingList = () => {
+    setMyShoppingListVisible(!MyShoppingListVisible);
   };
 
   const screenHeight = Dimensions.get("window").height;
 
+  const addItemsHeight = MyShoppingListVisible
+    ? screenHeight / 3
+    : screenHeight / 2;
+  const myShoppingListHeight = AddItemsVisible
+    ? screenHeight / 3
+    : screenHeight / 2;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Shopping List: {listName}</Text>
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search items..."
-        value={search}
-        onChangeText={setSearch}
-      />
-      <View style={[styles.section, { maxHeight: screenHeight / 3 }]}>
-        <Text style={styles.sectionTitle}>Available Items</Text>
-        {itemsLoading && <ActivityIndicator size="large" />}
-        {!itemsLoading && (
-          <FlatList
-            data={filteredItems}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  addItem(authCtx.selectedList, { item: item._id })
-                }
-              >
-                <View style={styles.item}>
-                  <Text>{item.name["heb"]}</Text>
-                </View>
-              </TouchableOpacity>
+      <Text style={[styles.sectionTitle, {alignSelf:'center'}]}>Shopping List: {listName}</Text>
+      <View style={[styles.section, { maxHeight: addItemsHeight }]}>
+        <TouchableOpacity onPress={toggleAddItems}>
+          <Text style={styles.sectionTitle}>Add Items</Text>
+        </TouchableOpacity>
+        {AddItemsVisible && (
+          <>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Search items..."
+              value={search}
+              onChangeText={setSearch}
+            />
+            {itemsLoading && <ActivityIndicator size="large" />}
+            {!itemsLoading && (
+              <FlatList
+                data={filteredItems}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      addItem(authCtx.selectedList, { item: item._id })
+                    }
+                  >
+                    <View style={styles.item}>
+                      <Text>{item.name["heb"]}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                contentContainerStyle={styles.list}
+              />
             )}
-            contentContainerStyle={styles.list}
-          />
+          </>
         )}
       </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>My Shopping List</Text>
-        {listLoading && <ActivityIndicator size="large" />}
-        {!listLoading && (
-          <FlatList
-            data={shoppingList}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <ShoppingListItem item={item} refreshList={refreshList} />}
-            contentContainerStyle={styles.list}
-          />
+
+      <View style={[styles.section, { maxHeight: myShoppingListHeight }]}>
+        <TouchableOpacity onPress={toggleMyShoppingList}>
+          <Text style={styles.sectionTitle}>My Shopping List</Text>
+        </TouchableOpacity>
+        {MyShoppingListVisible && (
+          <>
+            {listLoading && <ActivityIndicator size="large" />}
+            {!listLoading && (
+              <FlatList
+                data={[...shoppingListItems, ...unrecognizedShoppingListItems]}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <ShoppingListItem item={item} refreshList={refreshList} />
+                )}
+                contentContainerStyle={styles.list}
+              />
+            )}
+          </>
         )}
       </View>
     </View>
