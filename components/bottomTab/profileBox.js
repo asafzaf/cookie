@@ -21,25 +21,27 @@ const ProfileBox = ({ visible, setModalVisible }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Profile Information</Text>
+          <Text style={styles.modalHeaderText}>Profile Information</Text>
           <Image
             style={styles.profileImage}
-            source={{ uri: "https://example.com/profile.jpg" }}
+            source={{ uri: "https://example.com/profile.jpg" }} // Replace with dynamic profile URL
           />
-          <View>
-            <Text style={styles.name}>First name: {authCtx.userFirstName}</Text>
-            <Text style={styles.name}>Last name: {authCtx.userLastName}</Text>
-            <Text style={styles.email}>Email: {authCtx.userEmail}</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>First name: {authCtx.userFirstName}</Text>
+            <Text style={styles.infoText}>Last name: {authCtx.userLastName}</Text>
+            <Text style={styles.infoText}>Email: {authCtx.userEmail}</Text>
           </View>
-          <Button
-            title="Edit Profile"
-            // onPress={}
-          />
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => console.log("Edit Profile Pressed")} // Add your onPress functionality
+          >
+            <Text style={styles.editButtonText}>Edit Profile</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
           >
-            <Text style={styles.textStyle}>Close</Text>
+            <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -58,7 +60,8 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 30,
+    width: '90%',
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -69,20 +72,51 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  modalHeaderText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  infoContainer: {
+    marginBottom: 30,
+    alignItems: "center",
+  },
+  infoText: {
+    fontSize: 16,
+    color: "#555",
+    marginBottom: 5,
+  },
+  editButton: {
+    backgroundColor: "#4CAF50",
+    borderRadius: 20,
+    padding: 10,
+    marginBottom: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  editButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   closeButton: {
     backgroundColor: "#2196F3",
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    width: "80%",
+    alignItems: "center",
   },
-  textStyle: {
+  closeButtonText: {
     color: "white",
+    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
   },
 });
 

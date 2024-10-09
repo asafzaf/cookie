@@ -38,7 +38,7 @@ export const signUp = async (email, password) => {
     throw errorObject;
   }
 };
-  
+
 export const login = async (email, password) => {
   try {
     // Attempt to sign in with email and password
@@ -52,16 +52,16 @@ export const login = async (email, password) => {
 
   } catch (error) {
     // Extract error information and log it
-    const errorCode = error.code;
-    const errorMessage = error.message;
+    let errorCode = error.code;
+    let errorMessage = error.message;
     
     
     if (errorCode === "auth/invalid-credential") {
-      console.error("Invalid credentials");
+      // console.error("Invalid credentials");
       errorMessage = "Invalid credentials. Please check your email and password";
     }
     const errorObject = { errorCode, errorMessage };
-    console.error("Login Error:", errorObject);
+    // console.error("Login Error:", errorObject);
 
     // Return the error object for further handling in the client
     return errorObject;

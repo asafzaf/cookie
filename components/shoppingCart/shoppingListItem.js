@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { StyleSheet } from "react-native";
-import { ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import {
   addItemToShoppingList,
+  createAddUnrecognizedItemToShoppingList,
+  addUnrecognizedItemToShoppingList,
   removeItemFromShoppingList,
+  removeUnrecognizedItemFromShoppingList,
 } from "../../http/shoppingListHttp";
 
 import { AuthContext } from "../../store/auth-context";
@@ -18,71 +21,118 @@ const ShoppingListItem = ({ item, refreshList }) => {
 
   const increaseItem = async (list, item) => {
     setLoading(true);
-    const newData = await addItemToShoppingList(list, item);
-    console.log("New Data:", newData);
+    let newData = null;
+    if (data.item.numberOfTimesRecognized !== undefined) {
+      // console.log("increaseItem", data.item.numberOfTimesRecognized);
+      newData = await addUnrecognizedItemToShoppingList(list, item);
+    } else {
+      newData = await addItemToShoppingList(list, item);
+    }
     setData(newData || []);
     setLoading(false);
   };
 
   const removeItem = async (list, item) => {
     setLoading(true);
-    const newData = await removeItemFromShoppingList(list, item);
-    console.log("New Data:", newData);
+    let newData = null;
+    if (data.item.numberOfTimesRecognized !== undefined) {
+      // console.log("removeItem", data.item.numberOfTimesRecognized);
+      newData = await removeUnrecognizedItemFromShoppingList(list, item);
+    } else {
+      newData = await removeItemFromShoppingList(list, item);
+    }
     if (newData === null) {
-        refreshList();
+      refreshList();
     }
     setData(newData || []);
     setLoading(false);
   };
 
-  console.log("Init Data:", data);
+  console.log("ShoppingListItem", data);
+  console.log("ShoppingListItem", data.item);
+
+  const unercognizedMark =
+    data?.item?.numberOfTimesRecognized !== undefined ? (
+      <MaterialCommunityIcons
+        name="map-marker-question-outline"
+        size={22}
+        color="orange"
+        style={{ marginRight: 10 }}
+      ></MaterialCommunityIcons>
+    ) : null;
+
+  const name =
+    typeof data?.item?.name === "string"
+      ? data.item.name
+      : data?.item?.name?.["heb"] || "Error Extract Name";
 
   return (
-    <>
-      <View style={[styles.item, {}]}>
-        <View>
-          <Text>{data.item.name["heb"]}</Text>
-        </View>
-        {loading && <ActivityIndicator size="small" />}
-        {!loading && (
-          <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                removeItem(authCtx.selectedList, { item: data.item._id });
-              }}
-            >
-              <Text style={styles.mediumText}>-</Text>
-            </TouchableOpacity>
-            <Text style={styles.mediumText}>{data.quantity}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                increaseItem(authCtx.selectedList, { item: data.item._id });
-              }}
-            >
-              <Text style={styles.mediumText}>+</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+    <View style={styles.item}>
+      <View style={styles.nameContainer}>
+        {unercognizedMark}
+        <Text>{name}</Text>
       </View>
-    </>
+      {loading && <ActivityIndicator size="small" />}
+      {!loading && (
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              removeItem(authCtx.selectedList, { item: data.item._id });
+            }}
+          >
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+          <Text style={styles.mediumText}>{data.quantity}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              increaseItem(authCtx.selectedList, { item: data.item._id });
+            }}
+          >
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    width: 100,
-  },
   item: {
-    padding: 16,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
+  nameContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    flex: 1,
+    paddingRight: 10,
+  },
+  quantityContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
   mediumText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: "#888", // Button background color
+    paddingVertical: 6, // Vertical padding for button size
+    paddingHorizontal: 12, // Horizontal padding for button size
+    borderRadius: 5, // Rounded corners
+    justifyContent: "center", // Center the text vertically
+    alignItems: "center", // Center the text horizontally
+  },
+  buttonText: {
+    color: "white", // Text color
     fontSize: 16,
     fontWeight: "bold",
   },

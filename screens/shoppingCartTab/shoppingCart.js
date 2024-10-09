@@ -18,7 +18,7 @@ import { getItems } from "../../http/itemHttp";
 import {
   getShoppingListById,
   addItemToShoppingList,
-  removeItemFromShoppingList,
+  createAddUnrecognizedItemToShoppingList,
 } from "../../http/shoppingListHttp";
 
 const ShoppingCart = () => {
@@ -84,12 +84,14 @@ const ShoppingCart = () => {
     await addItemToShoppingList(list, item);
     const newList = await getShoppingListById(authCtx.selectedList);
     setShoppingListItems(newList.data.items || []);
+    setSearch("");
   };
 
-  const addUnrecognizedItem = async (list, item) => {
-    await addUnrecognizedItemToShoppingList(list, item);
+  const addUnrecognizedItem = async (list, itemName) => {
+    await createAddUnrecognizedItemToShoppingList(authCtx.mongoId, list, itemName);
     const newList = await getShoppingListById(authCtx.selectedList);
     setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
+    setSearch("");
   };
 
   const refreshList = async () => {
@@ -113,16 +115,21 @@ const ShoppingCart = () => {
 
   const addItemsHeight = MyShoppingListVisible
     ? screenHeight / 3
-    : screenHeight / 2;
+    : screenHeight / 1.7;
   const myShoppingListHeight = AddItemsVisible
     ? screenHeight / 3
-    : screenHeight / 2;
+    : screenHeight / 1.7;
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.sectionTitle, {alignSelf:'center'}]}>Shopping List: {listName}</Text>
+      <Text style={[styles.sectionTitle, { alignSelf: "center" }]}>
+        Shopping List: {listName}
+      </Text>
       <View style={[styles.section, { maxHeight: addItemsHeight }]}>
-        <TouchableOpacity onPress={toggleAddItems}>
+        <TouchableOpacity
+          style={styles.shoppingListTitle}
+          onPress={toggleAddItems}
+        >
           <Text style={styles.sectionTitle}>Add Items</Text>
         </TouchableOpacity>
         {AddItemsVisible && (
@@ -135,30 +142,57 @@ const ShoppingCart = () => {
             />
             {itemsLoading && <ActivityIndicator size="large" />}
             {!itemsLoading && (
-              <FlatList
-                data={filteredItems}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      addItem(authCtx.selectedList, { item: item._id })
-                    }
-                  >
-                    <View style={styles.item}>
-                      <Text>{item.name["heb"]}</Text>
-                    </View>
-                  </TouchableOpacity>
+              <>
+                {filteredItems.length === 0 ? (
+                  <View style={styles.noMatchContainer}>
+                    <Text style={styles.noMatchText}>
+                      No matching items found
+                    </Text>
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={() =>
+                        addUnrecognizedItem(authCtx.selectedList, search)
+                      }
+                    >
+                      <Text style={styles.addButtonText}>
+                        Add "{search}" to the list
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <FlatList
+                    data={filteredItems}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          addItem(authCtx.selectedList, { item: item._id })
+                        }
+                      >
+                        <View style={styles.item}>
+                          <Text>{item.name["heb"]}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                    contentContainerStyle={styles.list}
+                  />
                 )}
-                contentContainerStyle={styles.list}
-              />
+              </>
             )}
           </>
         )}
       </View>
 
       <View style={[styles.section, { maxHeight: myShoppingListHeight }]}>
-        <TouchableOpacity onPress={toggleMyShoppingList}>
+        <TouchableOpacity
+          style={styles.shoppingListTitle}
+          onPress={toggleMyShoppingList}
+        >
           <Text style={styles.sectionTitle}>My Shopping List</Text>
+          <Text style={styles.counterTitle}>
+            {[...shoppingListItems, ...unrecognizedShoppingListItems].length}{" "}
+            items
+          </Text>
         </TouchableOpacity>
         {MyShoppingListVisible && (
           <>
@@ -191,6 +225,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 8,
+    marginTop: 4,
     marginBottom: 16,
     backgroundColor: "#fff",
   },
@@ -225,6 +260,32 @@ const styles = StyleSheet.create({
   },
   mediumText: {
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  shoppingListTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+  },
+  counterTitle: {
+    fontSize: 14,
+  },
+  noMatchContainer: {
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  noMatchText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 10,
+  },
+  addButton: {
+    padding: 10,
+    backgroundColor: "#007bff",
+    borderRadius: 5,
+  },
+  addButtonText: {
+    color: "#fff",
     fontWeight: "bold",
   },
 });
