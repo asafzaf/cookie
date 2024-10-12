@@ -23,7 +23,6 @@ const ShoppingListItem = ({ item, refreshList }) => {
     setLoading(true);
     let newData = null;
     if (data.item.numberOfTimesRecognized !== undefined) {
-      // console.log("increaseItem", data.item.numberOfTimesRecognized);
       newData = await addUnrecognizedItemToShoppingList(list, item);
     } else {
       newData = await addItemToShoppingList(list, item);
@@ -36,7 +35,6 @@ const ShoppingListItem = ({ item, refreshList }) => {
     setLoading(true);
     let newData = null;
     if (data.item.numberOfTimesRecognized !== undefined) {
-      // console.log("removeItem", data.item.numberOfTimesRecognized);
       newData = await removeUnrecognizedItemFromShoppingList(list, item);
     } else {
       newData = await removeItemFromShoppingList(list, item);
@@ -47,9 +45,6 @@ const ShoppingListItem = ({ item, refreshList }) => {
     setData(newData || []);
     setLoading(false);
   };
-
-  console.log("ShoppingListItem", data);
-  console.log("ShoppingListItem", data.item);
 
   const unercognizedMark =
     data?.item?.numberOfTimesRecognized !== undefined ? (

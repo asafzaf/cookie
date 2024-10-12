@@ -54,7 +54,6 @@ export const addItemToShoppingList = async (listId, item) => {
       }
     );
     const obj = JSON.parse(response.request._response);
-    console.log("addItemToShoppingList", obj);
     return obj;
   } catch (error) {
     handleAxiosError("addItemToShoppingList", error);
@@ -73,11 +72,9 @@ export const createAddUnrecognizedItemToShoppingList = async (
       createOnList: listId,
     };
     const itemResponse = await createUnrecognizedItem(obj);
-    console.log("createAddUnrecognizedItemToShoppingList", itemResponse);
     const itemId = itemResponse._id;
-    
+
     const res = addUnrecognizedItemToShoppingList(listId, { item: itemId });
-    console.log("createAddUnrecognizedItemToShoppingList", res);
     return res;
   } catch (error) {
     handleAxiosError("createAddUnrecognizedItemToShoppingList", error);
@@ -97,12 +94,11 @@ export const addUnrecognizedItemToShoppingList = async (listId, item) => {
       }
     );
     const obj = JSON.parse(response.request._response);
-    console.log("addUnrecognizedItemToShoppingList", obj);
     return obj;
   } catch (error) {
     handleAxiosError("addUnrecognizedItemToShoppingList", error);
   }
-}
+};
 
 export const removeItemFromShoppingList = async (listId, item) => {
   try {
@@ -117,7 +113,6 @@ export const removeItemFromShoppingList = async (listId, item) => {
       }
     );
     const obj = JSON.parse(response.request._response);
-    console.log("removeItemFromShoppingList", obj);
     return obj;
   } catch (error) {
     handleAxiosError("removeItemFromShoppingList", error);
@@ -137,7 +132,6 @@ export const removeUnrecognizedItemFromShoppingList = async (listId, item) => {
       }
     );
     const obj = JSON.parse(response.request._response);
-    console.log("removeUnrecognizedItemFromShoppingList", obj);
     return obj;
   } catch (error) {
     handleAxiosError("removeUnrecognizedItemFromShoppingList", error);
@@ -157,9 +151,84 @@ export const setDefaultShoppingList = async ({ userId, listId }) => {
       }
     );
     const obj = JSON.parse(response.request._response);
-    console.log("setDefaultShoppingList", obj);
     return obj;
   } catch (error) {
     handleAxiosError("setDefaultShoppingList", error);
+  }
+};
+
+export const addUserToShoppingList = async (listId, userEmail) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/addUser",
+      { listId, userEmail },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("addUserToShoppingList", error);
+  }
+};
+
+export const removeUserFromShoppingList = async (listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/removeUser",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("removeUserFromShoppingList", error);
+  }
+};
+
+export const addAdminToShoppingList = async (listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/addAdmin",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("addAdminToShoppingList", error);
+  }
+};
+
+export const removeAdminFromShoppingList = async (listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/removeAdmin",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("removeAdminFromShoppingList", error);
   }
 };

@@ -1,5 +1,13 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { signUp, login } from "../../services/firebase";
 import { AuthContext } from "../../store/auth-context";
 import { createUser, getUserById } from "../../http/userHttp";
@@ -10,18 +18,17 @@ const AuthScreen = () => {
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [signupPage, setSignupPage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const authCtx = useContext(AuthContext);
 
   const handleLogin = async () => {
     try {
-      console.log("Email:", email);
-      console.log("Password:", password);
-  
+      setLoading(true);
+
       // Attempt to log in the user
       const user = await login(email, password);
-      console.log("User:", user);
-  
+
       if (!user || user.errorCode) {
         console.log("Login failed");
         setPassword(""); // Reset password field
@@ -29,27 +36,21 @@ const AuthScreen = () => {
           "Login failed",
           user?.errorMessage || "Please check your credentials and try again"
         );
+        setLoading(false);
         return;
       }
-  
+
       // Fetch user data by ID (assuming getUserById fetches from the backend)
       const userItem = await getUserById(user.uid);
-  
+
       if (!userItem) {
         console.log("User item fetch failed");
         setPassword(""); // Reset password field
-        Alert.alert(
-          "Login failed",
-          "System error. Please try again later"
-        );
+        Alert.alert("Login failed", "System error. Please try again later");
+        setLoading(false);
         return;
       }
-  
-      // Proceed with successful login
-      console.log("Login successful");
-      console.log("User:", user);
-      console.log("User Item:", userItem);
-  
+
       // Call the context or authentication handler
       authCtx.login(
         user.stsTokenManager.accessToken,
@@ -61,7 +62,7 @@ const AuthScreen = () => {
         userItem.data.default_shopping_list,
         userItem.data
       );
-      
+      setLoading(false);
     } catch (error) {
       console.log("Error:", error);
       Alert.alert(
@@ -70,13 +71,10 @@ const AuthScreen = () => {
       );
     }
   };
-  
 
   const handleSignup = async () => {
     // Handle signup logic here
     try {
-      console.log("email:", email);
-      console.log("Password:", password);
       const user = await signUp(email, password);
       const newUser = await createUser({
         first_name: firstName,
@@ -84,10 +82,7 @@ const AuthScreen = () => {
         email,
         userId: user.uid,
       });
-      console.log("User:", user);
-      console.log("New User:", newUser);
       if (user && newUser) {
-        console.log("Signup successful");
         authCtx.login(
           user.stsTokenManager.accessToken,
           newUser._id,
@@ -98,15 +93,20 @@ const AuthScreen = () => {
           newUser.default_shopping_list,
           newUser.data
         );
+        Alert.alert("Signup successful", "Welcome to the app!");
       } else {
-        console.log("Signup failed");
+        Alert.alert("Signup failed", "Please try again later");
       }
     } catch (error) {
       console.log("error:", error);
     }
   };
 
-  return signupPage ? (
+  return loading ? (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" />
+    </View>
+  ) : signupPage ? (
     <View style={styles.container}>
       <Text style={styles.title}>Signup</Text>
       <TextInput

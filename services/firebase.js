@@ -18,9 +18,6 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
-console.log("auth:", auth);
-// const user = auth.currentUser;
-
 export const signUp = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -43,9 +40,7 @@ export const login = async (email, password) => {
   try {
     // Attempt to sign in with email and password
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    
-    console.log("User Credential:", userCredential);
-    
+        
     // Return the signed-in user
     const user = userCredential.user;
     return user;

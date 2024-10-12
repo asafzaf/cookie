@@ -28,7 +28,6 @@ export default function HomeScreen() {
     async function fetchData() {
       setLoading(true);
       if (authCtx.isLoggedIn && authCtx.userId) {
-        console.log("User ID (homescreen):", authCtx.userId);
         let data = await getShoppingListByUserId(authCtx.userId);
         setItems(data || []);
 

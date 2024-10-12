@@ -4,7 +4,6 @@ import { handleAxiosError } from "./axios.error";
 
 export const createUnrecognizedItem = async (item) => {
   try {
-    console.log("createUnrecognizedItem", item);
     const response = await axios.post(data.serverUrl + "/api/v1/unrecognizedItem", item, {
       timeout: 5000,
       headers: {

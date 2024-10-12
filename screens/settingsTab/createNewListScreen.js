@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { AuthContext } from "../../store/auth-context";
+import { getUserById } from "../../http/userHttp";
 import { createShoppingList } from "../../http/shoppingListHttp"; // Assuming you have a function for creating a list
 
 const CreateListScreen = ({ navigation }) => {
@@ -13,9 +14,14 @@ const CreateListScreen = ({ navigation }) => {
       return;
     }
 
-    const newList = await createShoppingList({userId: authCtx.mongoId, name: listName}); // Create new list
+    const newList = await createShoppingList({
+      userId: authCtx.mongoId,
+      name: listName,
+    }); // Create new list
     if (newList) {
       Alert.alert("List created successfully");
+      const userData = await getUserById(authCtx.mongoId); // Fetch user data
+      authCtx.refresh_user_data(userData); // Refresh user data
       navigation.goBack(); // Go back to the previous screen
     } else {
       Alert.alert("Failed to create list");

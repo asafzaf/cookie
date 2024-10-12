@@ -81,9 +81,11 @@ const ShoppingCart = () => {
   );
 
   const addItem = async (list, item) => {
+    setListLoading(true);
     await addItemToShoppingList(list, item);
     const newList = await getShoppingListById(authCtx.selectedList);
     setShoppingListItems(newList.data.items || []);
+    setListLoading(false);
     setSearch("");
   };
 
@@ -96,7 +98,6 @@ const ShoppingCart = () => {
 
   const refreshList = async () => {
     setListLoading(true);
-    console.log("Refreshing list");
     const newList = await getShoppingListById(authCtx.selectedList);
     setShoppingListItems(newList.data.items || []);
     setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
