@@ -13,7 +13,7 @@ import styles from "../../styles/styles";
 import { getShoppingListByUserId } from "../../utils/shoppinglist";
 import { ActivityIndicator } from "react-native";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false); // Controls dropdown visibility
   const [selectedItem, setSelectedItem] = useState(null); // Holds selected item
@@ -44,9 +44,12 @@ export default function HomeScreen() {
       setLoading(false);
     }
     fetchData();
-  }, [authCtx.isLoggedIn, authCtx.userId, defaultShoppingListId, authCtx.userData]); // Dependencies for useEffect
-
-    
+  }, [
+    authCtx.isLoggedIn,
+    authCtx.userId,
+    defaultShoppingListId,
+    authCtx.userData,
+  ]); // Dependencies for useEffect
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen); // Toggle dropdown visibility
@@ -104,6 +107,11 @@ export default function HomeScreen() {
         style={styles.item}
         title="Let's start Shopping!"
         borderWidth="2"
+        onPress={() => {
+          navigation.navigate("Live Shopping", {
+            listId: authCtx.selectedList
+          });
+        }}
       >
         <Ionicons
           name="cart-outline"

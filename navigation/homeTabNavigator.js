@@ -4,6 +4,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 import HomeScreen from "../screens/homeTab/homeScreen";
 
+import ShoppingLiveScreen from "../screens/homeTab/shoppingLiveScreen";
+
 import MessagesModal from "../components/homeScreen/messageModal";
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +39,7 @@ const HomeTabNavigator = () => {
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Live Shopping" component={ShoppingLiveScreen} />
       </Stack.Navigator>
       {messageModalVisible && (
         <MessagesModal

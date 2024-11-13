@@ -25,7 +25,6 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false); // Assume the current user is an admin for this example
 
-  //   const [isAdmin, setIsAdmin] = useState(true); // Assume the current user is an admin for this example
   const [newUserEmail, setNewUserEmail] = useState("");
 
   useEffect(() => {
@@ -139,7 +138,7 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
       <Text style={styles.userName}>{item.email}</Text>
-      {isAdmin && (
+      {isAdmin && (item._id != userId) && (
         <Button
           title={item.isAdmin ? "Remove Admin" : "Make Admin"}
           onPress={() =>

@@ -22,6 +22,24 @@ export const getShoppingListById = async (listId) => {
   }
 };
 
+export const getOrderedShoppingListById = async (listId) => {
+  try {
+    const response = await axios.get(
+      data.serverUrl + "/api/v1/shoppinglist/" + listId + "/ordered",
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("getOrderedShoppingListById", error);
+  }
+};
+
 export const createShoppingList = async (shoppingList) => {
   try {
     const response = await axios.post(
@@ -170,6 +188,7 @@ export const addUserToShoppingList = async (listId, userEmail) => {
       }
     );
     const obj = JSON.parse(response.request._response);
+    console.log("Add User Response", obj);
     return obj;
   } catch (error) {
     handleAxiosError("addUserToShoppingList", error);
