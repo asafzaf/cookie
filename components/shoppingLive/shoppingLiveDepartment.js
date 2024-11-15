@@ -7,21 +7,21 @@ const ShoppingLiveDepartment = (props) => {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState(props.items);
   const [totalItems, setTotalItems] = React.useState(0);
-  const [selectedItems, setSelectedItems] = React.useState(0);
+  const [checkedItems, setCheckedItems] = React.useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       let total = 0;
-      let selected = 0;
+      let checked = 0;
       items.forEach((item) => {
         total++;
-        if (item.selected) {
-          selected++;
+        if (item.checked) {
+          checked++;
         }
       });
 
       setTotalItems(total);
-      setSelectedItems(selected);
+      setCheckedItems(checked);
     };
 
     loadData();
@@ -34,16 +34,23 @@ const ShoppingLiveDepartment = (props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: props.departmentCount === props.checkedCount ? "#C2FFC7" : "#f9f9f9"}]}>
       <View style={styles.topLeftContainer}>
-        <Text style={styles.itemCount}>{totalItems} items total</Text>
+        <Text style={styles.itemCount}>{props.departmentCount} items total</Text>
       </View>
       <View style={styles.topRightContainer}>
-        <Text style={styles.selectedCount}>{selectedItems} selected</Text>
+        <Text style={styles.selectedCount}>{props.checkedCount} checked</Text>
       </View>
-      <Text style={styles.departmentName}>{departmentName}</Text>
+      <Text style={styles.departmentName} onPress={toggleOpen}>{departmentName}</Text>
       {open &&
-        items.map((item) => <ShoppingLiveItem key={item._id} item={item} />)}
+        items.map((item) => (
+          <ShoppingLiveItem
+            key={item.item._id}
+            item={item}
+            departmentId={props.departmentId}
+            handleItemCheck={props.handleItemCheck}
+          />
+        ))}
 
       <Text style={styles.toggleText} onPress={toggleOpen}>
         Toggle Open
@@ -95,8 +102,7 @@ const styles = StyleSheet.create({
   },
   toggleText: {
     fontSize: 16,
-    color: "#007BFF",
-    textDecorationLine: "underline",
+    color: "grey",
   },
 });
 

@@ -24,7 +24,7 @@ const Gate = () => {
 export default function App() {
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style="auto" />
       <AuthContextProvider>
         <Gate />
       </AuthContextProvider>

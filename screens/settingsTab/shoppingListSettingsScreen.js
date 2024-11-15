@@ -30,7 +30,6 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      console.log("List Item ID", listItemId);
       const res = await getShoppingListById(listItemId);
       if (res) {
         for (let i = 0; i < res.data.admins.length; i++) {
