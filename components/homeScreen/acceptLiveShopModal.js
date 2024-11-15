@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Button,
   Modal,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 
-const CancelLiveShopModal = ({ visible, setModalVisible, navigation }) => {
+import { AuthContext } from "../../store/auth-context";
+
+import { handleListSubmit } from "../homeScreen/liveShopSubmision";
+
+const AcceptLiveShopModal = ({ visible, setModalVisible, navigation }) => {
+  const authCtx = useContext(AuthContext);
+  const listId = authCtx.selectedList;
+  const userId = authCtx.mongoId;
+  const shoppingListDepartments = authCtx.checkedList;
+  const [totalPrice, setTotalPrice] = useState(0);
+
   return (
     <Modal
       animationType="fade"
@@ -18,9 +28,9 @@ const CancelLiveShopModal = ({ visible, setModalVisible, navigation }) => {
     >
       <View style={styles.modalBackdrop}>
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>Cancel Live Shopping</Text>
+          <Text style={styles.title}>Complete Live Shopping</Text>
           <Text style={styles.messageText}>
-            Are you sure you want to cancel the live shopping session?
+            Are you sure you want to complete the live shopping session?
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -29,9 +39,33 @@ const CancelLiveShopModal = ({ visible, setModalVisible, navigation }) => {
             >
               <Text style={styles.buttonText}>No</Text>
             </TouchableOpacity>
+            <View style={styles.priceContainer}>
+              <Text>Total Price:</Text>
+              <TextInput
+                onChangeText={(text) => setTotalPrice(text)}
+                value={totalPrice}
+                inputMode="numeric"
+                style={styles.priceInput}
+              />
+            </View>
             <TouchableOpacity
               style={styles.confirmButton}
-              onPress={() => {
+              onPress={async () => {
+                // console.log("Accept live shopping");
+                // setModalVisible(false);
+                // console.log("List ID: ", listId);
+                // console.log("User ID: ", userId);
+                // console.log(
+                //   "Shopping List Departments: ",
+                //   shoppingListDepartments
+                // );
+                console.log("Total Price: ", totalPrice);
+                await handleListSubmit(
+                  listId,
+                  userId,
+                  totalPrice,
+                  shoppingListDepartments
+                );
                 setModalVisible(false);
                 navigation.navigate("Home");
               }}
@@ -85,6 +119,18 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  priceContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  priceInput: {
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 5,
+    padding: 5,
+    width: 100,
+    marginLeft: 10,
+  },
 });
 
-export default CancelLiveShopModal;
+export default AcceptLiveShopModal;

@@ -12,10 +12,12 @@ export const AuthContext = createContext({
   selectedList: "",
   userData: {},
   isLoggedIn: false,
+  checkedList: [],
   login: (token) => {},
   logout: () => {},
   change_list: (list) => {},
   refresh_user_data: (data) => {},
+  updateCheckedList: (departments) => {},
 });
 
 function AuthContextProvider({ children }) {
@@ -28,6 +30,7 @@ function AuthContextProvider({ children }) {
   const [defaultShoppingList, setDefaultShoppingList] = useState();
   const [selectedList, setSelectedList] = useState();
   const [userData, setUserData] = useState({});
+  const [checkedList, setCheckedList] = useState([]);
 
   function login(
     token,
@@ -48,6 +51,7 @@ function AuthContextProvider({ children }) {
     setDefaultShoppingList(defaultShoppingList);
     setSelectedList(defaultShoppingList);
     setUserData(userData);
+    setCheckedList([]);
   }
 
   function logout() {
@@ -60,6 +64,7 @@ function AuthContextProvider({ children }) {
     setDefaultShoppingList(null);
     setSelectedList(null);
     setUserData(null);
+    setCheckedList([]);
   }
 
   function change_list(list) {
@@ -69,6 +74,10 @@ function AuthContextProvider({ children }) {
   function refresh_user_data(data) {
     setUserData(data);
     setDefaultShoppingList(data.default_shopping_list);
+  }
+
+  function updateCheckedList(departments) {
+    setCheckedList(departments);
   }
 
   const contextValue = {
@@ -82,10 +91,12 @@ function AuthContextProvider({ children }) {
     selectedList: selectedList,
     userData: userData,
     isLoggedIn: !!authToken,
+    checkedList: checkedList,
     login,
     logout,
     change_list,
     refresh_user_data,
+    updateCheckedList
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

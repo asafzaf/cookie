@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import ShoppingLiveDepartment from "../../components/shoppingLive/shoppingLiveDepartment";
+
+import { AuthContext } from "../../store/auth-context";
 
 import {
   getShoppingListById,
   getOrderedShoppingListById,
+  updateLiveShoppingList,
 } from "../../http/shoppingListHttp";
 
 const ShoppingLiveScreen = ({ route, navigation }) => {
@@ -12,13 +15,15 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
   const [shoppingList, setShoppingList] = useState(null);
   const [shoppingListDepartments, setShoppingListDepartments] = useState([]);
 
+  const authCtx = useContext(AuthContext);
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await getOrderedShoppingListById(listId);
       if (res) {
         setShoppingList(res.data);
-        res.data.orededData.forEach(department => {
-          department.items.forEach(item => {
+        res.data.orededData.forEach((department) => {
+          department.items.forEach((item) => {
             item.checked = false;
           });
           department.itemCount = department.items.length; // Add item count to department
@@ -33,41 +38,23 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-  //     // Stop the default back action
-  //     e.preventDefault();
-
-  //     // Prompt the user with a confirmation alert
-  //     Alert.alert(
-  //       'Go back?',
-  //       'Are you sure you want to go back?',
-  //       [
-  //         { text: "Cancel", style: "cancel", onPress: () => {} },
-  //         {
-  //           text: "Yes",
-  //           style: "destructive",
-  //           onPress: () => navigation.dispatch(e.data.action),
-  //         },
-  //       ]
-  //     );
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
-
   const handleItemCheck = (departmentId, itemId) => {
     const newShoppingListDepartments = [...shoppingListDepartments];
     const departmentIndex = newShoppingListDepartments.findIndex(
       (department) => department.id === departmentId
     );
-    const itemIndex = newShoppingListDepartments[departmentIndex].items.findIndex(
-      (item) => item.item._id === itemId
-    );
-    newShoppingListDepartments[departmentIndex].items[itemIndex].checked = !newShoppingListDepartments[departmentIndex].items[itemIndex].checked;
-    newShoppingListDepartments[departmentIndex].checkedCount = newShoppingListDepartments[departmentIndex].items.filter(item => item.checked).length;
+    const itemIndex = newShoppingListDepartments[
+      departmentIndex
+    ].items.findIndex((item) => item.item._id === itemId);
+    newShoppingListDepartments[departmentIndex].items[itemIndex].checked =
+      !newShoppingListDepartments[departmentIndex].items[itemIndex].checked;
+    newShoppingListDepartments[departmentIndex].checkedCount =
+      newShoppingListDepartments[departmentIndex].items.filter(
+        (item) => item.checked
+      ).length;
     setShoppingListDepartments(newShoppingListDepartments);
-  }
+    authCtx.updateCheckedList(newShoppingListDepartments);
+  };
 
   return (
     <View style={styles.container}>

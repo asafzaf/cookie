@@ -59,6 +59,31 @@ export const createShoppingList = async (shoppingList) => {
   }
 };
 
+export const updateLiveShoppingList = async (listId, userId, totalPrice, departments) => {
+  try {
+    console.log("Update Live Shopping List", listId, userId, totalPrice, departments);
+    const response = await axios.put(
+      data.serverUrl + "/api/v1/shoppinglist/" + listId + "/live",
+      {
+        departments: departments,
+        userId: userId,
+        totalPrice: totalPrice,
+      },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    console.log("Update Live Shopping List Response", obj);
+    return obj;
+  } catch (error) {
+    handleAxiosError("updateLiveShoppingList", error);
+  }
+};
+
 export const addItemToShoppingList = async (listId, item) => {
   try {
     const response = await axios.post(

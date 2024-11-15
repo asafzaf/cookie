@@ -1,8 +1,5 @@
 import React from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
-// import { CheckBox } from '@mui/material';
-
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const ShoppingLiveItem = (props) => {
   const itemId = props.item.item._id;
@@ -25,9 +22,9 @@ const ShoppingLiveItem = (props) => {
         ]}
         onPress={handleClick}
       >
-        <View>
+        <View style={{alignItems: "center"}}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.quantity}>Quantity: {quantity}</Text>
+          <Text style={styles.quantity}>כמות: {quantity}</Text>
         </View>
       </TouchableOpacity>
     </>
@@ -36,7 +33,7 @@ const ShoppingLiveItem = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
+    width: "95%",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,

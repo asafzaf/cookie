@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import ShoppingLiveItem from "./shoppingLiveItem";
 
@@ -34,14 +34,14 @@ const ShoppingLiveDepartment = (props) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: props.departmentCount === props.checkedCount ? "#C2FFC7" : "#f9f9f9"}]}>
+    <TouchableOpacity onPress={toggleOpen} style={[styles.container, { backgroundColor: props.departmentCount === props.checkedCount ? "#C2FFC7" : "#f9f9f9"}]}>
       <View style={styles.topLeftContainer}>
         <Text style={styles.itemCount}>{props.departmentCount} items total</Text>
       </View>
       <View style={styles.topRightContainer}>
         <Text style={styles.selectedCount}>{props.checkedCount} checked</Text>
       </View>
-      <Text style={styles.departmentName} onPress={toggleOpen}>{departmentName}</Text>
+      <Text style={styles.departmentName} >{departmentName}</Text>
       {open &&
         items.map((item) => (
           <ShoppingLiveItem
@@ -51,11 +51,11 @@ const ShoppingLiveDepartment = (props) => {
             handleItemCheck={props.handleItemCheck}
           />
         ))}
-
+{/* 
       <Text style={styles.toggleText} onPress={toggleOpen}>
         Toggle Open
-      </Text>
-    </View>
+      </Text> */}
+    </TouchableOpacity>
   );
 };
 

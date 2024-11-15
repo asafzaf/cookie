@@ -12,6 +12,8 @@ import ShoppingLiveScreen from "../screens/homeTab/shoppingLiveScreen";
 import MessagesModal from "../components/homeScreen/messageModal";
 import CancelLiveShopModal from "../components/homeScreen/cancelLiveShopModal";
 
+import AcceptLiveShopModal from "../components/homeScreen/acceptLiveShopModal";
+
 const Stack = createNativeStackNavigator();
 
 const HomeTabNavigator = () => {
@@ -65,23 +67,18 @@ const HomeTabNavigator = () => {
                   name="cancel"
                   size={26}
                 />
-                ,<Text style={{ fontSize: 16 }}>Cancel</Text>
+                <Text style={{ fontSize: 16 }}>Cancel</Text>
               </TouchableOpacity>
             ),
             headerRight: () => (
               <TouchableOpacity
                 style={{ flexDirection: "row", alignItems: "center" }}
                 onPress={() => {
-                  setCancelLiveShopModalVisible(true);
+                  setAcceptLiveShopModalVisible(true);
                 }}
               >
-                <Text style={{fontSize: 16}}>Accept</Text>
-                <MaterialCommunityIcons
-                  name="check"
-                  size={27}
-                  color="black"
-                  onPress={() => setMessageModalVisible(true)}
-                />
+                <Text style={{ fontSize: 16 }}>Accept</Text>
+                <MaterialCommunityIcons name="check" size={27} color="black" />
               </TouchableOpacity>
             ),
             gestureEnabled: false,
