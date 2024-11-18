@@ -44,22 +44,13 @@ const AcceptLiveShopModal = ({ visible, setModalVisible, navigation }) => {
               <TextInput
                 onChangeText={(text) => setTotalPrice(text)}
                 value={totalPrice}
-                inputMode="numeric"
+                inputMode="decimal"
                 style={styles.priceInput}
               />
             </View>
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={async () => {
-                // console.log("Accept live shopping");
-                // setModalVisible(false);
-                // console.log("List ID: ", listId);
-                // console.log("User ID: ", userId);
-                // console.log(
-                //   "Shopping List Departments: ",
-                //   shoppingListDepartments
-                // );
-                console.log("Total Price: ", totalPrice);
                 await handleListSubmit(
                   listId,
                   userId,

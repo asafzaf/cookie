@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  RefreshControl,
+  ScrollView,
 } from "react-native";
+
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthContext } from "../../store/auth-context";
 
@@ -20,8 +24,11 @@ import {
   addItemToShoppingList,
   createAddUnrecognizedItemToShoppingList,
 } from "../../http/shoppingListHttp";
+import ModalMessage from "../../components/general/modalMessage";
+import { LanguageStringContext } from "../../store/language-context";
 
 const ShoppingCart = () => {
+  const [refreshing, setRefreshing] = useState(false);
   const [AddItemsVisible, setAddItemsVisible] = useState(true);
   const [MyShoppingListVisible, setMyShoppingListVisible] = useState(true);
   const [search, setSearch] = useState("");
@@ -32,8 +39,17 @@ const ShoppingCart = () => {
   const [itemsLoading, setItemsLoading] = useState(true);
   const [listLoading, setListLoading] = useState(true);
   const [listName, setListName] = useState(null);
-
+  const [openNoListModal, setOpenNoListModal] = useState(false);
   const authCtx = useContext(AuthContext);
+
+  const { translations } = useContext(LanguageStringContext);
+
+  const onPefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -45,6 +61,7 @@ const ShoppingCart = () => {
 
       setItemsLoading(false);
       if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
+        setOpenNoListModal(true);
         setListLoading(false);
         return;
       }
@@ -90,7 +107,11 @@ const ShoppingCart = () => {
   };
 
   const addUnrecognizedItem = async (list, itemName) => {
-    await createAddUnrecognizedItemToShoppingList(authCtx.mongoId, list, itemName);
+    await createAddUnrecognizedItemToShoppingList(
+      authCtx.mongoId,
+      list,
+      itemName
+    );
     const newList = await getShoppingListById(authCtx.selectedList);
     setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
     setSearch("");
@@ -124,20 +145,21 @@ const ShoppingCart = () => {
   return (
     <View style={styles.container}>
       <Text style={[styles.sectionTitle, { alignSelf: "center" }]}>
-        Shopping List: {listName}
+        {translations.shopping_list.title}: {listName}
       </Text>
       <View style={[styles.section, { maxHeight: addItemsHeight }]}>
         <TouchableOpacity
           style={styles.shoppingListTitle}
           onPress={toggleAddItems}
         >
-          <Text style={styles.sectionTitle}>Add Items</Text>
+          <Text style={styles.sectionTitle}>{translations.shopping_list.add_items}</Text>
         </TouchableOpacity>
         {AddItemsVisible && (
           <>
             <TextInput
               style={styles.searchBar}
-              placeholder="Search items..."
+              // autoFocus={true}
+              placeholder={translations.shopping_list.search_items}
               value={search}
               onChangeText={setSearch}
             />
@@ -147,7 +169,7 @@ const ShoppingCart = () => {
                 {filteredItems.length === 0 ? (
                   <View style={styles.noMatchContainer}>
                     <Text style={styles.noMatchText}>
-                      No matching items found
+                      {translations.shopping_list.items_not_found}
                     </Text>
                     <TouchableOpacity
                       style={styles.addButton}
@@ -189,10 +211,10 @@ const ShoppingCart = () => {
           style={styles.shoppingListTitle}
           onPress={toggleMyShoppingList}
         >
-          <Text style={styles.sectionTitle}>My Shopping List</Text>
+          <Text style={styles.sectionTitle}>{translations.shopping_list.my_shopping_list}</Text>
           <Text style={styles.counterTitle}>
             {[...shoppingListItems, ...unrecognizedShoppingListItems].length}{" "}
-            items
+            {translations.shopping_list.items}
           </Text>
         </TouchableOpacity>
         {MyShoppingListVisible && (
@@ -211,6 +233,14 @@ const ShoppingCart = () => {
           </>
         )}
       </View>
+      {openNoListModal && (
+         <ModalMessage 
+            show={openNoListModal}
+            handleClose={() => setOpenNoListModal(false)}
+            title="No List Selected"
+            message="Please select a shopping list from the home screen."
+         />
+      )}
     </View>
   );
 };
@@ -221,7 +251,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   searchBar: {
-    height: 40,
+    height: 50,
+    fontSize: 18,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,

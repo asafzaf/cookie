@@ -9,6 +9,7 @@ const ShoppingLiveDepartment = (props) => {
   const [totalItems, setTotalItems] = React.useState(0);
   const [checkedItems, setCheckedItems] = React.useState(0);
 
+  
   useEffect(() => {
     const loadData = async () => {
       let total = 0;
@@ -19,16 +20,17 @@ const ShoppingLiveDepartment = (props) => {
           checked++;
         }
       });
-
+      
       setTotalItems(total);
       setCheckedItems(checked);
     };
-
+    
     loadData();
   }, []);
-
+  
   const departmentName = props.departmentName;
-
+  const { items_total, items_checked, quantity } = props.translations;
+  
   const toggleOpen = () => {
     setOpen(!open);
   };
@@ -36,16 +38,17 @@ const ShoppingLiveDepartment = (props) => {
   return (
     <TouchableOpacity onPress={toggleOpen} style={[styles.container, { backgroundColor: props.departmentCount === props.checkedCount ? "#C2FFC7" : "#f9f9f9"}]}>
       <View style={styles.topLeftContainer}>
-        <Text style={styles.itemCount}>{props.departmentCount} items total</Text>
+        <Text style={styles.itemCount}>{props.departmentCount} {items_total}</Text>
       </View>
       <View style={styles.topRightContainer}>
-        <Text style={styles.selectedCount}>{props.checkedCount} checked</Text>
+        <Text style={styles.selectedCount}>{props.checkedCount} {items_checked}</Text>
       </View>
       <Text style={styles.departmentName} >{departmentName}</Text>
       {open &&
         items.map((item) => (
           <ShoppingLiveItem
             key={item.item._id}
+            quantityText={quantity}
             item={item}
             departmentId={props.departmentId}
             handleItemCheck={props.handleItemCheck}

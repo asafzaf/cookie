@@ -1,0 +1,28 @@
+{
+    "home_title": "ברוך הבא!",
+    "home_recipes": "המתכונים שלי",
+    "home_messages": "הודעות",
+    "home_no_messages": "אין הודעות חדשות",
+    "close": "סגור",
+    "shopping_list": "רשימת קניות",
+    "shopping_list_add_items": "הוסף פריטים",
+    "shopping_search_items": "חפש פריטים",
+    "shopping_list_my_shopping_list": "רשימת הקניות שלי",
+    "items": "פריטים",
+    "recipes": "מתכונים",
+    "recipes_title": "בוא נגלה ביחד מתכונים חדשים!",
+    "settings": "הגדרות",
+    "settings_language": "שפה",
+    "settings_dark_mode": "מצב כהה",
+    "settings_configure_shopping_lists": "הגדרת רשימות קניות",
+    "settings_configure_recipes": "הגדרת מתכונים",
+    "settings_shopping_lists_avaliable": "רשימות קניות זמינות",
+    "settings_shopping_lists_default": "ברירת מחדל",
+    "settings_recipes_avaliable": "מתכונים זמינים",
+    "settings_shopping_list_add_user": "הוסף משתמש",
+    "settings_shopping_list_remove_user": "הסר משתמש",
+    "settings_shopping_list_user_list": "רשימת משתמשים",
+    "settings_shopping_list_make_admin": "הפוך למנהל",
+    "settings_shopping_list_remove_admin": "הסר ממנהל"
+  }
+  

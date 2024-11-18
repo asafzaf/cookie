@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
+import { LanguageStringContext } from "../../store/language-context";
 import {
   TouchableOpacity,
   Text,
@@ -13,6 +14,8 @@ import styles from "../../styles/styles";
 import { getShoppingListByUserId } from "../../utils/shoppinglist";
 import { ActivityIndicator } from "react-native";
 
+import ComingSoonComponent from "../../components/general/commingSoonComponent";
+
 export default function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false); // Controls dropdown visibility
@@ -20,6 +23,7 @@ export default function HomeScreen({ navigation }) {
   const [items, setItems] = useState([]); // Holds the list of items
 
   const authCtx = useContext(AuthContext);
+  const { translations } = useContext(LanguageStringContext);
 
   // Use the default shopping list ID if it exists
   const defaultShoppingListId = authCtx.defaultShoppingList || null;
@@ -64,7 +68,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={ScreenStyles.topic}>
-        Hello there, {authCtx.userFirstName}!
+        {translations.home_screen.title}, {authCtx.userFirstName}!
       </Text>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
@@ -109,7 +113,7 @@ export default function HomeScreen({ navigation }) {
         borderWidth="2"
         onPress={() => {
           navigation.navigate("Live Shopping", {
-            listId: authCtx.selectedList
+            listId: authCtx.selectedList,
           });
         }}
       >
@@ -118,16 +122,21 @@ export default function HomeScreen({ navigation }) {
           size={ScreenStyles.icon.size}
           color={ScreenStyles.icon.color}
         />
-        <Text style={ScreenStyles.buttonText}>Let's start Shopping!</Text>
+        <Text style={ScreenStyles.buttonText}>
+          {translations.home_screen.start_shopping}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.item} title="My recipes" borderWidth="2">
+        <ComingSoonComponent />
         <Ionicons
           name="book-outline"
           size={ScreenStyles.icon.size}
           color={ScreenStyles.icon.color}
         />
-        <Text style={ScreenStyles.buttonText}>My recipes</Text>
+        <Text style={ScreenStyles.buttonText}>
+          {translations.home_screen.my_recipes}
+        </Text>
       </TouchableOpacity>
 
       <StatusBar style="auto" />
@@ -137,6 +146,7 @@ export default function HomeScreen({ navigation }) {
 
 const ScreenStyles = StyleSheet.create({
   topic: {
+    textAlign: "center",
     fontSize: styles.text.size.large,
     fontWeight: "bold",
     color: styles.colors.black,
@@ -168,6 +178,7 @@ const ScreenStyles = StyleSheet.create({
     width: "100%", // Set the dropdown width to 100%
   },
   dropdownText: {
+    textAlign: "center",
     fontSize: styles.text.size.medium,
     color: styles.colors.primary,
     flex: 1, // Allow text to occupy available space
@@ -188,6 +199,7 @@ const ScreenStyles = StyleSheet.create({
     borderBottomColor: styles.colors.lightGray,
   },
   dropdownItemText: {
+    textAlign: "center",
     fontSize: styles.text.size.medium,
     color: styles.colors.primary,
   },

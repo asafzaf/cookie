@@ -10,12 +10,22 @@ import {
   updateLiveShoppingList,
 } from "../../http/shoppingListHttp";
 
+import { LanguageStringContext } from "../../store/language-context";
+
 const ShoppingLiveScreen = ({ route, navigation }) => {
   const { listId } = route.params;
   const [shoppingList, setShoppingList] = useState(null);
   const [shoppingListDepartments, setShoppingListDepartments] = useState([]);
 
   const authCtx = useContext(AuthContext);
+
+  const { translations } = useContext(LanguageStringContext);
+
+  const childTranslation = {
+    items_total: translations.home_screen.items_total,
+    items_checked: translations.home_screen.items_checked,
+    quantity: translations.home_screen.quantity,
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +68,7 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Shopping Live Screen</Text>
+      <Text style={styles.Text}>{translations.home_screen.live_shopping_topic}</Text>
       <ScrollView
         style={{ width: "100%", height: 200 }} // Added this line
       >
@@ -66,6 +76,7 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
           {shoppingListDepartments.map((department) => (
             <ShoppingLiveDepartment
               key={department.id}
+              translations={childTranslation}
               departmentId={department.id}
               departmentName={department.department.heb}
               items={department.items}
@@ -85,6 +96,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  Text: {
+    fontSize: 20,
+    padding: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

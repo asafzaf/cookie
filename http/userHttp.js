@@ -1,6 +1,10 @@
-import data from "./server.json";
+// import data from "./server.json";
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
+
+const data = {
+  serverUrl: process.env.EXPO_PUBLIC_API_URL,
+}
 
 export const getUserById = async (userId) => {
   try {

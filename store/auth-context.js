@@ -7,7 +7,7 @@ export const AuthContext = createContext({
   userFirstName: "",
   userLastName: "",
   userEmail: "",
-  language: "en",
+  language: "",
   defaultShoppingList: "",
   selectedList: "",
   userData: {},
@@ -18,6 +18,7 @@ export const AuthContext = createContext({
   change_list: (list) => {},
   refresh_user_data: (data) => {},
   updateCheckedList: (departments) => {},
+  updateLanguage: (lang) => {},
 });
 
 function AuthContextProvider({ children }) {
@@ -25,6 +26,7 @@ function AuthContextProvider({ children }) {
   const [mongoId, setMongoId] = useState();
   const [userId, setUserId] = useState();
   const [userEmail, setUserEmail] = useState();
+  const [language, setLanguage] = useState("english");
   const [userFirstName, setUserFirstName] = useState();
   const [userLastName, setUserLastName] = useState();
   const [defaultShoppingList, setDefaultShoppingList] = useState();
@@ -37,6 +39,7 @@ function AuthContextProvider({ children }) {
     mongoId,
     userId,
     userEmail,
+    language,
     userFirstName,
     userLastName,
     defaultShoppingList,
@@ -46,6 +49,7 @@ function AuthContextProvider({ children }) {
     setMongoId(mongoId);
     setUserId(userId);
     setUserEmail(userEmail);
+    setLanguage(language);
     setUserFirstName(userFirstName);
     setUserLastName(userLastName);
     setDefaultShoppingList(defaultShoppingList);
@@ -59,6 +63,7 @@ function AuthContextProvider({ children }) {
     setMongoId(null);
     setUserId(null);
     setUserEmail(null);
+    setLanguage(null);
     setUserFirstName(null);
     setUserLastName(null);
     setDefaultShoppingList(null);
@@ -80,11 +85,16 @@ function AuthContextProvider({ children }) {
     setCheckedList(departments);
   }
 
+  function updateLanguage(lang) {
+    setLanguage(lang);
+  }
+
   const contextValue = {
     token: authToken,
     mongoId: mongoId,
     userId: userId,
     userEmail: userEmail,
+    language: language,
     userFirstName: userFirstName,
     userLastName: userLastName,
     defaultShoppingList: defaultShoppingList,
@@ -96,7 +106,8 @@ function AuthContextProvider({ children }) {
     logout,
     change_list,
     refresh_user_data,
-    updateCheckedList
+    updateCheckedList,
+    updateLanguage,
   };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,8 @@ import {
   removeAdminFromShoppingList,
 } from "../../http/shoppingListHttp";
 
+import { LanguageStringContext } from "../../store/language-context";
+
 const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const { userId, listItemId } = route.params;
   const [users, setUsers] = useState([]);
@@ -26,6 +28,8 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const [isAdmin, setIsAdmin] = useState(false); // Assume the current user is an admin for this example
 
   const [newUserEmail, setNewUserEmail] = useState("");
+
+  const { translations } = useContext(LanguageStringContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,10 +80,8 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
 
   const addUser = async () => {
     if (newUserEmail.trim()) {
-      const newUser = {
-        userEmail: newUserEmail,
-      };
-      const res = await addUserToShoppingList(listItemId, newUser);
+      const userEmail = newUserEmail;
+      const res = await addUserToShoppingList(listItemId, userEmail);
       if (res) {
         setUsers([...users, res]);
         setNewUserEmail("");
@@ -137,9 +139,9 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
       <Text style={styles.userName}>{item.email}</Text>
-      {isAdmin && (item._id != userId) && (
+      {isAdmin && item._id != userId && (
         <Button
-          title={item.isAdmin ? "Remove Admin" : "Make Admin"}
+          title={item.isAdmin ? translations.settings_tab.remove_admin : translations.settings_tab.make_admin}
           onPress={() =>
             item.isAdmin ? RemoveAdmin(item._id) : MakeAdmin(item._id)
           }
@@ -153,26 +155,25 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <>
-          <Text style={styles.header}>Shopping List Settings</Text>
-
-          <Text style={styles.subHeader}>Users</Text>
+          <Text style={styles.header}>{translations.settings_tab.shopping_list_settings}</Text>
+          <Text style={styles.subHeader}>{translations.settings_tab.add_user}</Text>
+          {isAdmin && (
+            <View style={styles.addUserContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder={translations.settings_tab.enter_user_email}
+                value={newUserEmail}
+                onChangeText={setNewUserEmail}
+              />
+              <Button title={translations.settings_tab.add_user} onPress={addUser} />
+            </View>
+          )}
+          <Text style={styles.subHeader}>{translations.settings_tab.user_list}</Text>
           <FlatList
             data={users}
             renderItem={renderUserItem}
             keyExtractor={(item) => item._id}
           />
-
-          {isAdmin && (
-            <View style={styles.addUserContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter user email"
-                value={newUserEmail}
-                onChangeText={setNewUserEmail}
-              />
-              <Button title="Add User" onPress={addUser} />
-            </View>
-          )}
         </>
       )}
     </View>

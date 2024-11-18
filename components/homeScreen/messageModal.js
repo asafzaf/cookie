@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const MessagesModal = ({ visible, setModalVisible, messages }) => {
+const MessagesModal = ({ visible, setModalVisible, messages, translations }) => {
+  const { messages_topic, no_new_messages, close } = translations;
   return (
     <Modal
       animationType="fade"
@@ -18,7 +19,7 @@ const MessagesModal = ({ visible, setModalVisible, messages }) => {
     >
       <View style={styles.modalBackdrop}>
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>Messages</Text>
+          <Text style={styles.title}>{messages_topic}</Text>
           <View style={styles.messageList}>
             {messages.length > 0 ? (
               messages.map((message, index) => (
@@ -27,14 +28,14 @@ const MessagesModal = ({ visible, setModalVisible, messages }) => {
                 </Text>
               ))
             ) : (
-              <Text style={styles.emptyMessage}>No messages available</Text>
+              <Text style={styles.emptyMessage}>{no_new_messages}</Text>
             )}
           </View>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
           >
-            <Text style={styles.closeButtonText}>Close</Text>
+            <Text style={styles.closeButtonText}>{close}</Text>
           </TouchableOpacity>
         </View>
       </View>

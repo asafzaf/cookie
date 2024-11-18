@@ -8,26 +8,30 @@ import CreateListScreen from "../screens/settingsTab/createNewListScreen";
 import ShoppingListSettingsScreen from "../screens/settingsTab/shoppingListSettingsScreen";
 
 import ProfileBox from "../components/bottomTab/profileBox";
+import { TouchableOpacity } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
 const SettingsTabNavigator = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const popUpProfile = () => {
+    setModalVisible(true);
+  };
+
   return (
     <>
       <Stack.Navigator
         screenOptions={{
           headerRight: ({ black, pressColor }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={27}
-              color={black}
-              pressColor={pressColor}
-              onPress={() => {
-                setModalVisible(true);
-              }}
-            />
+            <TouchableOpacity onPressIn={popUpProfile}>
+              <MaterialCommunityIcons
+                name="account"
+                size={27}
+                color={black}
+                pressColor={pressColor}
+              />
+            </TouchableOpacity>
           ),
         }}
       >
@@ -37,7 +41,10 @@ const SettingsTabNavigator = () => {
           component={ConfigureShoppingListsScreen}
         />
         <Stack.Screen name="Create New List" component={CreateListScreen} />
-        <Stack.Screen name="Shopping List Settings" component={ShoppingListSettingsScreen} />
+        <Stack.Screen
+          name="Shopping List Settings"
+          component={ShoppingListSettingsScreen}
+        />
       </Stack.Navigator>
       <ProfileBox
         visible={modalVisible}

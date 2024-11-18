@@ -1,8 +1,12 @@
-import data from "./server.json";
+// import data from "./server.json";
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
 
 import { createUnrecognizedItem } from "./unrecognizedItemHttp";
+
+const data = {
+  serverUrl: process.env.EXPO_PUBLIC_API_URL,
+}
 
 export const getShoppingListById = async (listId) => {
   try {

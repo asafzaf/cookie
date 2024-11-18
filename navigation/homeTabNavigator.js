@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -14,6 +14,8 @@ import CancelLiveShopModal from "../components/homeScreen/cancelLiveShopModal";
 
 import AcceptLiveShopModal from "../components/homeScreen/acceptLiveShopModal";
 
+import { LanguageStringContext } from "../store/language-context";
+
 const Stack = createNativeStackNavigator();
 
 const HomeTabNavigator = () => {
@@ -23,24 +25,46 @@ const HomeTabNavigator = () => {
   const [acceptLiveShopModalVisible, setAcceptLiveShopModalVisible] =
     useState(false);
 
+  const popInMessages = () => {
+    setMessageModalVisible(true);
+  };
+
+  const popInCancel = () => {
+    setCancelLiveShopModalVisible(true);
+  };
+
+  const popInAccept = () => {
+    setAcceptLiveShopModalVisible(true);
+  };
+
   const navigation = useNavigation();
+
+  const { translations } = useContext(LanguageStringContext);
+
+  const message_translations = {
+    messages_topic: translations.messages.topic,
+    no_new_messages: translations.messages.no_new_messages,
+    close: translations.general.close,
+  };
 
   const messages = [];
   const messageBox =
     messages.length > 0 ? (
-      <MaterialCommunityIcons
-        name="message-text-outline"
-        size={27}
-        color="red"
-        onPress={() => setMessageModalVisible(true)}
-      />
+      <TouchableOpacity onPressIn={popInMessages}>
+        <MaterialCommunityIcons
+          name="message-text-outline"
+          size={27}
+          color="red"
+        />
+      </TouchableOpacity>
     ) : (
-      <MaterialCommunityIcons
-        name="message-text-outline"
-        size={27}
-        color="black"
-        onPress={() => setMessageModalVisible(true)}
-      />
+      <TouchableOpacity onPressIn={popInMessages}>
+        <MaterialCommunityIcons
+          name="message-text-outline"
+          size={27}
+          color="black"
+        />
+      </TouchableOpacity>
     );
 
   return (
@@ -57,9 +81,12 @@ const HomeTabNavigator = () => {
           options={{
             headerLeft: () => (
               <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-                onPress={() => {
-                  setCancelLiveShopModalVisible(true);
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                onPressIn={popInCancel}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  zIndex: 1,
                 }}
               >
                 <MaterialCommunityIcons
@@ -67,17 +94,20 @@ const HomeTabNavigator = () => {
                   name="cancel"
                   size={26}
                 />
-                <Text style={{ fontSize: 16 }}>Cancel</Text>
+                <Text style={{ fontSize: 16 }}>
+                  {translations.general.cancel}
+                </Text>
               </TouchableOpacity>
             ),
             headerRight: () => (
               <TouchableOpacity
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                onPressIn={popInAccept}
                 style={{ flexDirection: "row", alignItems: "center" }}
-                onPress={() => {
-                  setAcceptLiveShopModalVisible(true);
-                }}
               >
-                <Text style={{ fontSize: 16 }}>Accept</Text>
+                <Text style={{ fontSize: 16 }}>
+                  {translations.general.finish}
+                </Text>
                 <MaterialCommunityIcons name="check" size={27} color="black" />
               </TouchableOpacity>
             ),
@@ -88,6 +118,7 @@ const HomeTabNavigator = () => {
       {messageModalVisible && (
         <MessagesModal
           visible={messageModalVisible}
+          translations={message_translations}
           setModalVisible={setMessageModalVisible}
           messages={messages}
         />

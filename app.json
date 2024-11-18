@@ -4,11 +4,11 @@
     "slug": "cookie",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/cookie-icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/cookie-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -30,6 +30,18 @@
       "eas": {
         "projectId": "64319bd5-21a7-4b8b-ba82-58b357d33b6c"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/RobotoRegular.ttf"
+          ]
+        }
+      
+      ]
+
+    ]
   }
 }

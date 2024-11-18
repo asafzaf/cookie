@@ -10,8 +10,13 @@ import {
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 
+import { LanguageStringContext } from "../../store/language-context";
+
 const ProfileBox = ({ visible, setModalVisible }) => {
   const authCtx = useContext(AuthContext);
+
+  const { translations } = useContext(LanguageStringContext);
+
   return (
     <Modal
       animationType="fade"
@@ -21,27 +26,31 @@ const ProfileBox = ({ visible, setModalVisible }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
-          <Text style={styles.modalHeaderText}>Profile Information</Text>
+          <Text style={styles.modalHeaderText}>{translations.profile.topic}</Text>
           <Image
             style={styles.profileImage}
             source={{ uri: "https://example.com/profile.jpg" }} // Replace with dynamic profile URL
           />
           <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>First name: {authCtx.userFirstName}</Text>
-            <Text style={styles.infoText}>Last name: {authCtx.userLastName}</Text>
-            <Text style={styles.infoText}>Email: {authCtx.userEmail}</Text>
+            <Text style={styles.infoText}>
+              {translations.profile.first_name}: {authCtx.userFirstName}
+            </Text>
+            <Text style={styles.infoText}>
+              {translations.profile.last_name}: {authCtx.userLastName}
+            </Text>
+            <Text style={styles.infoText}>{translations.profile.email}: {authCtx.userEmail}</Text>
           </View>
           <TouchableOpacity
             style={styles.editButton}
             onPress={() => console.log("Edit Profile Pressed")} // Add your onPress functionality
           >
-            <Text style={styles.editButtonText}>Edit Profile</Text>
+            <Text style={styles.editButtonText}>{translations.profile.edit_profile}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
           >
-            <Text style={styles.closeButtonText}>Close</Text>
+            <Text style={styles.closeButtonText}>{translations.general.close}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 30,
-    width: '90%',
+    width: "90%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {

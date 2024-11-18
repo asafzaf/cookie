@@ -1,5 +1,7 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+.env
+
 # dependencies
 node_modules/
 
@@ -38,3 +40,5 @@ yarn-error.*
 services/firebaseCreds.json
 http/server.json
 
+# android/ios
+android/*

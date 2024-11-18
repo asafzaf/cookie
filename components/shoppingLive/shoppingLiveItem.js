@@ -5,6 +5,7 @@ const ShoppingLiveItem = (props) => {
   const itemId = props.item.item._id;
   const name = props.item?.item?.name?.heb || props.item?.item?.name?.eng || props.item?.item?.name || "Unknown";
   const quantity = props.item?.quantity || 0;
+  const quantityText = props.quantityText;
 
   const handleClick = () => {
     console.log("Clicked item", itemId);
@@ -24,7 +25,7 @@ const ShoppingLiveItem = (props) => {
       >
         <View style={{alignItems: "center"}}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.quantity}>כמות: {quantity}</Text>
+          <Text style={styles.quantity}>{quantityText}: {quantity}</Text>
         </View>
       </TouchableOpacity>
     </>
