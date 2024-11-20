@@ -13,7 +13,7 @@ import {
 
 import { AuthContext } from "../../store/auth-context";
 
-const ShoppingListItem = ({ item, refreshList }) => {
+const ShoppingListItem = ({ item, refreshList, language }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(item);
 
@@ -59,7 +59,7 @@ const ShoppingListItem = ({ item, refreshList }) => {
   const name =
     typeof data?.item?.name === "string"
       ? data.item.name
-      : data?.item?.name?.["heb"] || "Error Extract Name";
+      : data?.item?.name?.[language] || "Error Extract Name";
 
   return (
     <View style={styles.item}>

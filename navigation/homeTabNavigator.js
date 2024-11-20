@@ -41,10 +41,28 @@ const HomeTabNavigator = () => {
 
   const { translations } = useContext(LanguageStringContext);
 
+  const options_translations = {
+    yes: translations.general.yes,
+    no: translations.general.no,
+  };
+
   const message_translations = {
     messages_topic: translations.messages.topic,
     no_new_messages: translations.messages.no_new_messages,
     close: translations.general.close,
+  };
+
+  const cancel_live_shopping_translations = {
+    cancel_shopping_title: translations.home_screen.cancel_shopping_title,
+    cancel_shopping_message: translations.home_screen.cancel_shopping_message,
+  };
+
+  const complete_live_shopping_translations = {
+    complete_shopping_title: translations.home_screen.complete_shopping_title,
+    complete_shopping_message:
+      translations.home_screen.complete_shopping_message,
+    complete_shopping_total_price:
+      translations.home_screen.complete_shopping_total_price,
   };
 
   const messages = [];
@@ -126,6 +144,8 @@ const HomeTabNavigator = () => {
       {cancelLiveShopModalVisible && (
         <CancelLiveShopModal
           visible={cancelLiveShopModalVisible}
+          cancel_live_shopping_translations={cancel_live_shopping_translations}
+          options_translations={options_translations}
           setModalVisible={setCancelLiveShopModalVisible}
           navigation={navigation}
         />
@@ -133,6 +153,10 @@ const HomeTabNavigator = () => {
       {acceptLiveShopModalVisible && (
         <AcceptLiveShopModal
           visible={acceptLiveShopModalVisible}
+          complete_live_shopping_translations={
+            complete_live_shopping_translations
+          }
+          options_translations={options_translations}
           setModalVisible={setAcceptLiveShopModalVisible}
           navigation={navigation}
         />

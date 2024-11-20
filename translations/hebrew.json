@@ -1,4 +1,5 @@
 {
+  "language": "heb",
   "start_side": "right_to_left",
   "login_screen": {
     "login_title": "התחברות",
@@ -10,17 +11,28 @@
     "login_forgot_password": "שכחת סיסמה?",
     "login_error": "שם משתמש או סיסמה שגויים"
   },
+  "root": {
+    "home": "בית",
+    "shopping_cart": "רשימת קניות",
+    "recipes": "מתכונים",
+    "settings": "הגדרות"
+  },
   "home_screen": {
     "title": "ברוך הבא",
-    "start_shopping": "התחלת קניות!",
+    "start_shopping": "התחל לקנות!",
     "my_recipes": "המתכונים שלי",
     "messages_title": "הודעות",
     "no_messages": "אין הודעות חדשות",
     "close": "סגור",
     "live_shopping_topic": "התחל לקנות בחלוקה לקטגוריות",
-    "items_total": "סה\"כ פריטים",
-    "items_checked": "פריטים שסומנו",
-    "quantity": "כמות"
+    "items_total": "סה\"כ ",
+    "items_checked": "סומנו",
+    "quantity": "כמות",
+    "cancel_shopping_title": "ביטול קניות",
+    "cancel_shopping_message": "האם אתה בטוח שברצונך לבטל את הקניות? פעולה זו תמחק את כל הפריטים שנבחרו",
+    "complete_shopping_title": "סיום קניות",
+    "complete_shopping_message": "האם אתה בטוח שברצונך לסיים את הקניות?",
+    "complete_shopping_total_price": "סה\"כ לתשלום"
   },
   "shopping_list": {
     "title": "רשימת קניות",
@@ -100,7 +112,9 @@
     "first_name": "שם פרטי",
     "last_name": "שם משפחה",
     "email": "דואר אלקטרוני",
-    "edit_profile": "ערוך פרופיל"
+    "edit_profile": "ערוך פרופיל",
+    "change_language_title": "שנה שפה"
+
   },
   "messages": {
     "topic": "הודעות",

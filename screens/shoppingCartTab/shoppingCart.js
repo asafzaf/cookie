@@ -44,6 +44,8 @@ const ShoppingCart = () => {
 
   const { translations } = useContext(LanguageStringContext);
 
+  const language = translations.language;
+
   const onPefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -193,7 +195,7 @@ const ShoppingCart = () => {
                         }
                       >
                         <View style={styles.item}>
-                          <Text>{item.name["heb"]}</Text>
+                          <Text>{item.name[language]}</Text>
                         </View>
                       </TouchableOpacity>
                     )}
@@ -225,7 +227,7 @@ const ShoppingCart = () => {
                 data={[...shoppingListItems, ...unrecognizedShoppingListItems]}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                  <ShoppingListItem item={item} refreshList={refreshList} />
+                  <ShoppingListItem item={item} refreshList={refreshList} language={language} />
                 )}
                 contentContainerStyle={styles.list}
               />

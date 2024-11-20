@@ -12,12 +12,22 @@ import { AuthContext } from "../../store/auth-context";
 
 import { handleListSubmit } from "../homeScreen/liveShopSubmision";
 
-const AcceptLiveShopModal = ({ visible, setModalVisible, navigation }) => {
+const AcceptLiveShopModal = ({
+  visible,
+  setModalVisible,
+  navigation,
+  complete_live_shopping_translations,
+  options_translations,
+}) => {
   const authCtx = useContext(AuthContext);
   const listId = authCtx.selectedList;
   const userId = authCtx.mongoId;
   const shoppingListDepartments = authCtx.checkedList;
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const translations = complete_live_shopping_translations;
+
+  const options = options_translations;
 
   return (
     <Modal
@@ -28,19 +38,21 @@ const AcceptLiveShopModal = ({ visible, setModalVisible, navigation }) => {
     >
       <View style={styles.modalBackdrop}>
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>Complete Live Shopping</Text>
+          <Text style={styles.title}>
+            {translations.complete_shopping_title}
+          </Text>
           <Text style={styles.messageText}>
-            Are you sure you want to complete the live shopping session?
+            {translations.complete_shopping_message}
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.buttonText}>No</Text>
+              <Text style={styles.buttonText}>{options.no}</Text>
             </TouchableOpacity>
             <View style={styles.priceContainer}>
-              <Text>Total Price:</Text>
+              <Text>{translations.complete_shopping_total_price}:</Text>
               <TextInput
                 onChangeText={(text) => setTotalPrice(text)}
                 value={totalPrice}
@@ -61,7 +73,7 @@ const AcceptLiveShopModal = ({ visible, setModalVisible, navigation }) => {
                 navigation.navigate("Home");
               }}
             >
-              <Text style={styles.buttonText}>Yes</Text>
+              <Text style={styles.buttonText}>{options.yes}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -84,11 +96,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
+    alignSelf: "center",
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
   },
   messageText: {
+    alignSelf: "center",
+    textAlign: "center",
     fontSize: 16,
     marginBottom: 20,
   },
@@ -100,11 +115,17 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     padding: 10,
     borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
+    alignItems: "center",
   },
   confirmButton: {
     backgroundColor: "green",
     padding: 10,
     borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
+    alignItems: "center",
   },
   buttonText: {
     color: "white",
@@ -116,6 +137,7 @@ const styles = StyleSheet.create({
   },
   priceInput: {
     borderWidth: 1,
+    alignSelf: "center",
     borderColor: "black",
     borderRadius: 5,
     padding: 5,

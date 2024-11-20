@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 // import HomeScreen from "../screens/homeTab/homeScreen";
@@ -14,28 +13,42 @@ import SettingsTabNavigator from "./settingsTabNavigator";
 
 import ProfileBox from "../components/bottomTab/profileBox";
 
+import { LanguageStringContext } from "../store/language-context";
+
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab() {
   const [modalVisible, setModalVisible] = useState(false);
+  const { translations } = useContext(LanguageStringContext);
+
+  const rootVars = translations.root;
+
   return (
     <>
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: "#e91e63",
-          headerLeft: ({ tintColor,pressColor, }) => (
-            <MaterialCommunityIcons name="account" size={30} color={tintColor} pressColor={pressColor} onPress={()=>{setModalVisible(true);}}/>
-          ),
-          tabBarVisibilityAnimationConfig: { show: "slide-up", hide: "slide-down" },
+          tabBarInactiveTintColor: "gray",
+          tabBarLabelPosition: "below-icon",
+          tabBarStyle: {
+            backgroundColor: "#f2f2f2",
+            borderTopWidth: 0,
+            padding: 5,
+            height: "10%",
+          },
+          tabBarVisibilityAnimationConfig: {
+            show: "slide-up",
+            hide: "slide-down",
+          },
           headerShown: false,
         }}
-
       >
         <Tab.Screen
           name="Home Tab"
           component={HomeTabNavigator}
           options={{
-            tabBarLabel: "Home",
+            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabel: rootVars.home,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="home" color={color} size={size} />
             ),
@@ -45,7 +58,8 @@ export default function BottomTab() {
           name="Shopping Cart Tab"
           component={ShoppingCartTabNavigator}
           options={{
-            tabBarLabel: "Shopping Cart",
+            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabel: rootVars.shopping_cart,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="format-list-bulleted"
@@ -59,9 +73,14 @@ export default function BottomTab() {
           name="Recipes Tab"
           component={RecipesTabNavigator}
           options={{
-            tabBarLabel: "Recipes",
+            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabel: rootVars.recipes,
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="chef-hat" color={color} size={size} />
+              <MaterialCommunityIcons
+                name="chef-hat"
+                color={color}
+                size={size}
+              />
             ),
           }}
         />
@@ -69,15 +88,18 @@ export default function BottomTab() {
           name="Settings Tab"
           component={SettingsTabNavigator}
           options={{
-            tabBarLabel: "Settings",
+            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabel: rootVars.settings,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="cog" color={color} size={size} />
             ),
           }}
         />
       </Tab.Navigator>
-      <ProfileBox visible={modalVisible} setModalVisible={setModalVisible}></ProfileBox>
+      <ProfileBox
+        visible={modalVisible}
+        setModalVisible={setModalVisible}
+      ></ProfileBox>
     </>
   );
 }
-

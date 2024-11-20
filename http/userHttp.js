@@ -65,3 +65,19 @@ export const deleteUser = async () => {
     handleAxiosError("deleteUser", error);
   }
 };
+
+export const changeUserLanguage = async (userId, language) => {
+  try {
+    console.log("changeUserLanguage", userId, language);
+    const response = await axios.put(data.serverUrl + "/api/v1/user/" + userId + "/language", { language }, {
+      timeout: 5000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("changeLanguage", error);
+  }
+}

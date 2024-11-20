@@ -1,21 +1,38 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   Modal,
   View,
   Text,
   Image,
-  Button,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
+import { changeUserLanguage } from "../../http/userHttp";
 
 import { LanguageStringContext } from "../../store/language-context";
 
 const ProfileBox = ({ visible, setModalVisible }) => {
   const authCtx = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { translations } = useContext(LanguageStringContext);
+  const { translations, changeLanguage } = useContext(LanguageStringContext);
+
+  const setLanguage = async (language) => {
+    try {
+      setIsLoading(true);
+      const newUserData = await changeUserLanguage(authCtx.mongoId,language);
+      changeLanguage(newUserData.language);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
 
   return (
     <Modal
@@ -26,7 +43,9 @@ const ProfileBox = ({ visible, setModalVisible }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalView}>
-          <Text style={styles.modalHeaderText}>{translations.profile.topic}</Text>
+          <Text style={styles.modalHeaderText}>
+            {translations.profile.topic}
+          </Text>
           <Image
             style={styles.profileImage}
             source={{ uri: "https://example.com/profile.jpg" }} // Replace with dynamic profile URL
@@ -38,22 +57,56 @@ const ProfileBox = ({ visible, setModalVisible }) => {
             <Text style={styles.infoText}>
               {translations.profile.last_name}: {authCtx.userLastName}
             </Text>
-            <Text style={styles.infoText}>{translations.profile.email}: {authCtx.userEmail}</Text>
+            <Text style={styles.infoText}>
+              {translations.profile.email}: {authCtx.userEmail}
+            </Text>
+            <Text style={styles.infoText}>
+              {translations.profile.change_language_title}:
+            </Text>
+            <View style={styles.languageContainer}>
+              <TouchableOpacity
+                style={styles.languageButton}
+                onPress={() => setLanguage("english")} // Add your onPress functionality
+              >
+                <Image
+                  style={styles.languageIcon}
+                  source={require("../../assets/images/countries/united-states.png")}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.languageButton}
+                onPress={() => setLanguage("hebrew")} // Add your onPress functionality
+              >
+                <Image
+                  style={styles.languageIcon}
+                  source={require("../../assets/images/countries/israel.png")}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <TouchableOpacity
             style={styles.editButton}
             onPress={() => console.log("Edit Profile Pressed")} // Add your onPress functionality
           >
-            <Text style={styles.editButtonText}>{translations.profile.edit_profile}</Text>
+            <Text style={styles.editButtonText}>
+              {translations.profile.edit_profile}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
           >
-            <Text style={styles.closeButtonText}>{translations.general.close}</Text>
+            <Text style={styles.closeButtonText}>
+              {translations.general.close}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
+      {isLoading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
     </Modal>
   );
 };
@@ -126,6 +179,29 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  languageContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  languageIcon: {
+    width: 60,
+    height: 60,
+    marginLeft: 10,
+  },
+  languageButton: {
+    padding: 10,
+  },
+  loadingOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 

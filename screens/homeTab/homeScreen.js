@@ -106,7 +106,6 @@ export default function HomeScreen({ navigation }) {
           )}
         </View>
       )}
-
       <TouchableOpacity
         style={styles.item}
         title="Let's start Shopping!"
@@ -154,6 +153,7 @@ const ScreenStyles = StyleSheet.create({
     alignSelf: "baseline",
   },
   buttonText: {
+    fontWeight: "bold",
     fontSize: styles.text.size.medium,
     color: styles.colors.primary,
   },

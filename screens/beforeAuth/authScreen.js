@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { signUp, login } from "../../services/firebase";
 import { AuthContext } from "../../store/auth-context";
+import { LanguageStringContext } from "../../store/language-context";
 import { createUser, getUserById } from "../../http/userHttp";
 
 const AuthScreen = () => {
@@ -21,6 +22,8 @@ const AuthScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const authCtx = useContext(AuthContext);
+
+  const {changeLanguage} = useContext(LanguageStringContext);
 
   const handleLogin = async () => {
     try {
@@ -63,6 +66,7 @@ const AuthScreen = () => {
         userItem.data.default_shopping_list,
         userItem.data
       );
+      changeLanguage(userItem.data.language);
       setLoading(false);
     } catch (error) {
       console.log("Error:", error);
