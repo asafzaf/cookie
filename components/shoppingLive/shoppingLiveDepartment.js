@@ -27,8 +27,11 @@ const ShoppingLiveDepartment = (props) => {
     
     loadData();
   }, []);
+
+  const language = props.language;
   
   const departmentName = props.departmentName;
+
   const { items_total, items_checked, quantity } = props.translations;
   
   const toggleOpen = () => {
@@ -43,11 +46,12 @@ const ShoppingLiveDepartment = (props) => {
       <View style={styles.topRightContainer}>
         <Text style={styles.selectedCount}>{props.checkedCount} {items_checked}</Text>
       </View>
-      <Text style={styles.departmentName} >{departmentName}</Text>
+      <Text style={styles.departmentName} >{departmentName[language]}</Text>
       {open &&
         items.map((item) => (
           <ShoppingLiveItem
             key={item.item._id}
+            // language={language}
             quantityText={quantity}
             item={item}
             departmentId={props.departmentId}

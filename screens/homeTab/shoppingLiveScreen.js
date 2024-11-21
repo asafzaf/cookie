@@ -27,6 +27,7 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
     quantity: translations.home_screen.quantity,
   };
 
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await getOrderedShoppingListById(listId);
@@ -76,9 +77,10 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
           {shoppingListDepartments.map((department) => (
             <ShoppingLiveDepartment
               key={department.id}
+              language={language}
               translations={childTranslation}
               departmentId={department.id}
-              departmentName={department.department.heb}
+              departmentName={department.department}
               items={department.items}
               departmentCount={department.itemCount}
               checkedCount={department.checkedCount}
