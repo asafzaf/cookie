@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/cookie-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.asafz.cookie",
@@ -30,16 +30,6 @@
       }
     },
     "plugins": [
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/RobotoRegular.ttf"
-          ]
-        }
-      
-      ]
-
     ]
   }
 }

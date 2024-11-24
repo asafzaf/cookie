@@ -18,14 +18,11 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_measurementId,
 };
 
-
-export const FIREBASE_APP = initializeApp(firebaseConfig);
-export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
-
+const FIREBASE_APP = initializeApp(firebaseConfig);
+const auth = getAuth(FIREBASE_APP);
 
 export const signUp = async (email, password) => {
   try {
-    const auth = FIREBASE_AUTH;
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -51,7 +48,6 @@ export const signUp = async (email, password) => {
 
 export const login = async (email, password) => {
   try {
-    const auth = FIREBASE_AUTH;
     // Attempt to sign in with email and password
     const userCredential = await signInWithEmailAndPassword(
       auth,

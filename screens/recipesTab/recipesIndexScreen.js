@@ -49,7 +49,7 @@ export default function RecipesIndexScreen() {
           </View>
         </View>
       </TouchableOpacity> */}
-      <RenderRecipesList />
+      {/* <RenderRecipesList /> */}
     </View>
   );
 }

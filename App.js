@@ -1,55 +1,54 @@
-import { StyleSheet } from "react-native";
-import { View } from "react-native";
-import { useState, useContext, useEffect } from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { LanguageStringProvider } from "./store/language-context";
 import AuthScreen from "./screens/beforeAuth/authScreen";
 
-import React from "react";
 import { StatusBar } from "expo-status-bar";
 import RootNavigator from "./navigation/rootNavigator";
 
-import * as Font from "expo-font";
-import { ActivityIndicator } from "react-native";
+// import * as Font from "expo-font";
 
-const loadFonts = () => {
-  return Font.loadAsync({
-    defaulFont: require("./assets/fonts/RobotoRegular.ttf"),
-  });
-};
+// const loadFonts = () => {
+//   return Font.loadAsync({
+//     defaulFont: require("./assets/fonts/RobotoRegular.ttf"),
+//   });
+// };
 
 const Gate = () => {
   const authCtx = useContext(AuthContext);
 
   return (
-    <>
+    // <>
+    <View style={{ flex: 1 }}>
       {!authCtx.isLoggedIn && (
         <AuthScreen ctx_login={authCtx.login} ctx_signUp={authCtx.signup} />
       )}
       {authCtx.isLoggedIn && <RootNavigator />}
-    </>
+    </View>
+    // </>
   );
 };
 
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
+  // const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  useEffect(() => {
-    const fetchFonts = async () => {
-      await loadFonts();
-      setFontsLoaded(true);
-    };
+  // useEffect(() => {
+  //   const fetchFonts = async () => {
+  //     await loadFonts();
+  //     setFontsLoaded(true);
+  //   };
 
-    fetchFonts();
-  }, []);
+  //   fetchFonts();
+  // }, []);
 
-  if (!fontsLoaded) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+  // if (!fontsLoaded) {
+  //   return (
+  //     <View style={styles.loadingContainer}>
+  //       <ActivityIndicator size="large" color="#0000ff" />
+  //     </View>
+  //   );
+  // }
 
   return (
     <>

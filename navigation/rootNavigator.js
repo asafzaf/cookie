@@ -4,9 +4,9 @@ import BottomTab from "./bottomTabNavigator";
 
 const RootNavigator = () => {
   return (
-    <NavigationContainer>
-      <BottomTab />
-    </NavigationContainer>
+      <NavigationContainer>
+        <BottomTab />
+      </NavigationContainer>
   );
 };
 

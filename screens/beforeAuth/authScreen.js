@@ -16,14 +16,14 @@ import { createUser, getUserById } from "../../http/userHttp";
 const AuthScreen = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setemail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signupPage, setSignupPage] = useState(false);
+  const [isSignUpPage, setIsSignUpPage] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const authCtx = useContext(AuthContext);
 
-  const {changeLanguage} = useContext(LanguageStringContext);
+  const { changeLanguage } = useContext(LanguageStringContext);
 
   const handleLogin = async () => {
     try {
@@ -108,61 +108,92 @@ const AuthScreen = () => {
     }
   };
 
-  return loading ? (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" />
-    </View>
-  ) : signupPage ? (
-    <View style={styles.container}>
-      <Text style={styles.title}>Signup</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={setFirstName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="email"
-        value={email}
-        onChangeText={setemail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Signup" onPress={handleSignup} />
-      <Button title="Switch to Login" onPress={() => setSignupPage(false)} />
-    </View>
-  ) : (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="email"
-        value={email}
-        onChangeText={setemail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Switch to Signup" onPress={() => setSignupPage(true)} />
-    </View>
-  );
+  const loadingScreen = () => {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  };
+
+  const signUpPage = () => {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Signup</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <Button style={styles.button} title="Signup" onPress={handleSignup} />
+        <Button
+          style={styles.button}
+          title="Switch to Login"
+          onPress={() => setIsSignUpPage(false)}
+        />
+      </View>
+    );
+  };
+
+  const loginPage = () => {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <View style={styles.buttonView}>
+          <Button style={styles.button} title="Login" onPress={handleLogin} />
+          <Button
+            style={styles.button}
+            title="Switch to Signup"
+            onPress={() => setIsSignUpPage(true)}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  let content;
+  if (loading) {
+    content = loadingScreen();
+  } else if (isSignUpPage) {
+    content = signUpPage();
+  } else {
+    content = loginPage();
+  }
+
+  return content;
 };
 
 const styles = StyleSheet.create({
@@ -182,6 +213,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+  },
+  buttonView: {
+    flexDirection: "column",
+    justifyContent: 'space-around',
+    height: 100,
+    minHeight: "10%",
   },
 });
 

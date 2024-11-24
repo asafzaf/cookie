@@ -1,8 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const ModalMessage = ({ show, handleClose, title, message }) => {
+  
   if (!show) {
     return null;
   }
@@ -26,12 +26,6 @@ const ModalMessage = ({ show, handleClose, title, message }) => {
   );
 };
 
-ModalMessage.propTypes = {
-  show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-};
 
 const styles = StyleSheet.create({
   modalOverlay: {

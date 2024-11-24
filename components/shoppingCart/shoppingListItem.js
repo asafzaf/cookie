@@ -1,11 +1,9 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import {
   addItemToShoppingList,
-  createAddUnrecognizedItemToShoppingList,
   addUnrecognizedItemToShoppingList,
   removeItemFromShoppingList,
   removeUnrecognizedItemFromShoppingList,
