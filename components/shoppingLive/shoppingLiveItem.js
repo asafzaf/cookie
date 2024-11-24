@@ -4,7 +4,7 @@ import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 
 const ShoppingLiveItem = (props) => {
   const itemId = props.item.item._id;
-  // const language = props.language;
+  const language = props.language;
   const name = props.item?.item?.name?.heb|| props.item?.item?.name?.eng || props.item?.item?.name || "Unknown";
   const quantity = props.item?.quantity || 0;
   const quantityText = props.quantityText;

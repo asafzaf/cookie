@@ -93,6 +93,7 @@ const AuthScreen = () => {
           newUser._id,
           user.uid,
           user.email,
+          newUser.language,
           newUser.first_name,
           newUser.last_name,
           newUser.default_shopping_list,

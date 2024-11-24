@@ -51,7 +51,7 @@ const ShoppingLiveDepartment = (props) => {
         items.map((item) => (
           <ShoppingLiveItem
             key={item.item._id}
-            // language={language}
+            language={language}
             quantityText={quantity}
             item={item}
             departmentId={props.departmentId}

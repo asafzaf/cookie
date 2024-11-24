@@ -2,14 +2,11 @@
 import { initializeApp } from "firebase/app";
 
 import {
-  initializeAuth,
-  getReactNativePersistence,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
+  getAuth,
 } from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import firebaseConfig from "./firebaseCreds.json";
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_apiKey,
@@ -21,17 +18,14 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_measurementId,
 };
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage),
-});
+export const FIREBASE_APP = initializeApp(firebaseConfig);
+export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+
 
 export const signUp = async (email, password) => {
   try {
+    const auth = FIREBASE_AUTH;
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -57,6 +51,7 @@ export const signUp = async (email, password) => {
 
 export const login = async (email, password) => {
   try {
+    const auth = FIREBASE_AUTH;
     // Attempt to sign in with email and password
     const userCredential = await signInWithEmailAndPassword(
       auth,

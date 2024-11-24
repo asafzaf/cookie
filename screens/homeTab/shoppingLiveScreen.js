@@ -27,6 +27,7 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
     quantity: translations.home_screen.quantity,
   };
 
+  const language = translations.language;
 
   useEffect(() => {
     const fetchData = async () => {

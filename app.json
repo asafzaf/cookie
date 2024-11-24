@@ -21,10 +21,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.asafz.cookie"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "package": "com.asafz.cookie",
+      "versionCode": 1
     },
     "extra": {
       "eas": {
