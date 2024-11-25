@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
-  getAuth,
+  // getAuth,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -17,9 +18,13 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_appId,
   measurementId: process.env.EXPO_PUBLIC_measurementId,
 };
+const app = initializeApp(firebaseConfig);
+const auth = initializeAuth(app, {
+persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+});
 
-const FIREBASE_APP = initializeApp(firebaseConfig);
-const auth = getAuth(FIREBASE_APP);
+// const FIREBASE_APP = initializeApp(firebaseConfig);
+// const auth = getAuth(FIREBASE_APP);
 
 export const signUp = async (email, password) => {
   try {
