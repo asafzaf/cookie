@@ -22,7 +22,7 @@ const data = {
 
 const API_KEY = data.cred_file.firebase_api_key || "default_api_key"; // Optional default value
 
-console.log("API Key:", API_KEY);
+// console.log("API Key:", API_KEY);
 
 export const signUp = async (email, password) => {
   try {
