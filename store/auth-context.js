@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext({
   token: "",
@@ -34,6 +35,35 @@ function AuthContextProvider({ children }) {
   const [userData, setUserData] = useState({});
   const [checkedList, setCheckedList] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        setAuthToken(token);
+        const mongoId = await AsyncStorage.getItem("mongoId");
+        setMongoId(mongoId);
+        const userId = await AsyncStorage.getItem("userId");
+        setUserId(userId);
+        const userEmail = await AsyncStorage.getItem("userEmail");
+        setUserEmail(userEmail);
+        const language = await AsyncStorage.getItem("language");
+        setLanguage(language);
+        const userFirstName = await AsyncStorage.getItem("userFirstName");
+        setUserFirstName(userFirstName);
+        const userLastName = await AsyncStorage.getItem("userLastName");
+        setUserLastName(userLastName);
+        const defaultShoppingList = await AsyncStorage.getItem(
+          "defaultShoppingList"
+        );
+        setDefaultShoppingList(defaultShoppingList);
+        const userData = await AsyncStorage.getItem("userData");
+        setUserData(JSON.parse(userData));
+      }
+    };
+
+    fetchData();
+  }, []);
+
   function login(
     token,
     mongoId,
@@ -56,10 +86,19 @@ function AuthContextProvider({ children }) {
     setSelectedList(defaultShoppingList);
     setUserData(userData);
     setCheckedList([]);
+    AsyncStorage.setItem("token", token);
+    AsyncStorage.setItem("mongoId", mongoId);
+    AsyncStorage.setItem("userId", userId);
+    AsyncStorage.setItem("userEmail", userEmail);
+    AsyncStorage.setItem("language", language);
+    AsyncStorage.setItem("userFirstName", userFirstName);
+    AsyncStorage.setItem("userLastName", userLastName);
+    AsyncStorage.setItem("defaultShoppingList", defaultShoppingList);
+    AsyncStorage.setItem("userData", JSON.stringify(userData));
   }
 
   function logout() {
-    setToken(null);
+    setAuthToken(null);
     setMongoId(null);
     setUserId(null);
     setUserEmail(null);
@@ -70,6 +109,15 @@ function AuthContextProvider({ children }) {
     setSelectedList(null);
     setUserData(null);
     setCheckedList([]);
+    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("mongoId");
+    AsyncStorage.removeItem("userId");
+    AsyncStorage.removeItem("userEmail");
+    AsyncStorage.removeItem("language");
+    AsyncStorage.removeItem("userFirstName");
+    AsyncStorage.removeItem("userLastName");
+    AsyncStorage.removeItem("defaultShoppingList");
+    AsyncStorage.removeItem("userData");
   }
 
   function change_list(list) {
