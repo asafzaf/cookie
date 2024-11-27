@@ -10,7 +10,6 @@ try {
     console.log("creds.json not found. Using environment variables instead.");
   } else {
     console.error("An error occurred while loading creds.json:", error);
-    throw error; // Re-throw unexpected errors
   }
 }
 
