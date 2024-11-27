@@ -8,7 +8,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { signUp, login } from "../../services/firebase";
+// import { signUp, login } from "../../services/firebase";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 import { createUser, getUserById } from "../../http/userHttp";

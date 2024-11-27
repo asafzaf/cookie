@@ -19,6 +19,8 @@ eas.json
 *.key
 *.mobileprovision
 
+certs
+
 # Metro
 .metro-health-check*
 

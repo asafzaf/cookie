@@ -18,13 +18,16 @@ import RootNavigator from "./navigation/rootNavigator";
 const Gate = () => {
   const authCtx = useContext(AuthContext);
 
+  
+
   return (
     // <>
     <View style={{ flex: 1 }}>
-      {!authCtx.isLoggedIn && (
+      {/* {!authCtx.isLoggedIn && (
         <AuthScreen ctx_login={authCtx.login} ctx_signUp={authCtx.signup} />
       )}
-      {authCtx.isLoggedIn && <RootNavigator />}
+      {authCtx.isLoggedIn && <RootNavigator />} */}
+      <RootNavigator />
     </View>
     // </>
   );
