@@ -1,7 +1,9 @@
 import axios from "axios";
 import { handleAxiosError } from "../http/axios.error";
 
-const API_KEY = process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
+const cred_file = process.env.CRED_FILE ?? require("../config/creds.json");
+
+const API_KEY = cred_file.firebase_api_key;
 
 export const signUp = async (email, password) => {
   try {
