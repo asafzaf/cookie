@@ -4,9 +4,16 @@ import { handleAxiosError } from "./axios.error";
 
 import { createUnrecognizedItem } from "./unrecognizedItemHttp";
 
+import Constants from 'expo-constants';
+
+// const data = {
+//   serverUrl: process.env.EXPO_PUBLIC_API_URL,
+// };
+
 const data = {
-  serverUrl: process.env.EXPO_PUBLIC_API_URL,
+  serverUrl: Constants.expoConfig.extra.apiUrl,
 }
+
 
 export const getShoppingListById = async (listId) => {
   try {

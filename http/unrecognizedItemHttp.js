@@ -1,9 +1,14 @@
 // import data from "./server.json";
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
+import Constants from 'expo-constants';
+
+// const data = {
+//   serverUrl: process.env.EXPO_PUBLIC_API_URL,
+// };
 
 const data = {
-  serverUrl: process.env.EXPO_PUBLIC_API_URL,
+  serverUrl: Constants.expoConfig.extra.apiUrl,
 }
 
 export const createUnrecognizedItem = async (item) => {

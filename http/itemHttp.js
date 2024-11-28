@@ -1,9 +1,14 @@
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
+import Constants from 'expo-constants';
+
+// const data = {
+//   serverUrl: process.env.EXPO_PUBLIC_API_URL,
+// };
 
 const data = {
-  serverUrl: process.env.EXPO_PUBLIC_API_URL,
-};
+  serverUrl: Constants.expoConfig.extra.apiUrl,
+}
 
 export const getItems = async () => {
   try {
