@@ -1,10 +1,21 @@
 import React, { useContext } from "react";
 import { View, Text, Button, Modal, StyleSheet } from "react-native";
 
+import { logOut } from "../../services/auth";
+
 import { AuthContext } from "../../store/auth-context";
 
-const LogoutModal = ({ visible, setModalVisible, logout }) => {
+const LogoutModal = ({ visible, setModalVisible }) => {
   const authCtx = useContext(AuthContext);
+
+  const handleLoguot = async () => {
+    try {
+      authCtx.logout();
+      await logOut();
+    } catch (error) {
+      console.log("error:", error);
+    }
+  };
 
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>
@@ -13,13 +24,7 @@ const LogoutModal = ({ visible, setModalVisible, logout }) => {
           <Text style={styles.title}>Are you sure you want to log out?</Text>
           <View style={styles.buttonContainer}>
             <Button title="No" onPress={() => setModalVisible(false)} />
-            <Button
-              color="#FF2929"
-              title="Yes"
-              onPress={() => {
-                authCtx.logout();
-              }}
-            />
+            <Button color="#FF2929" title="Yes" onPress={handleLoguot} />
           </View>
         </View>
       </View>

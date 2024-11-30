@@ -3,13 +3,10 @@ import { handleAxiosError } from "./axios.error";
 
 import Constants from 'expo-constants';
 
-// const data = {
-//   serverUrl: process.env.EXPO_PUBLIC_API_URL,
-// };
-
 const data = {
-  serverUrl: Constants.expoConfig.extra.apiUrl,
-}
+  serverUrl: process.env.EXPO_PUBLIC_API_URL,
+};
+
 
 
 export const getUserById = async (userId) => {

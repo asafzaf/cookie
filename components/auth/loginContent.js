@@ -22,21 +22,20 @@ const LoginContent = ({ setIsSignUp }) => {
       setLoading(true);
 
       // Attempt to log in the user
-      const user = await login(email, password);
-      console.log("User:", user);
-      if (!user || user.error) {
+      const userData = await login(email, password);
+      if (!userData || userData.error) {
         console.log("Login failed");
         setPassword(""); // Reset password field
         Alert.alert(
           "Login failed",
-          user?.errorMessage || "Please check your credentials and try again"
+          userData?.errorMessage || "Please check your credentials and try again"
         );
         setLoading(false);
         return;
       }
-
+      const user = userData.user;
       // Fetch user data by ID (assuming getUserById fetches from the backend)
-      const userItem = await getUserById(user.localId);
+      const userItem = await getUserById(user.uid);
 
       if (!userItem) {
         setPassword(""); // Reset password field
@@ -47,11 +46,11 @@ const LoginContent = ({ setIsSignUp }) => {
 
       // Call the context or authentication handler
       authCtx.login(
-        user.idToken,
+        user.uid,
         userItem.data._id,
-        user.localId,
+        user.uid,
         user.email,
-        userItem.language,
+        userItem.data.language,
         userItem.data.first_name,
         userItem.data.last_name,
         userItem.data.default_shopping_list,

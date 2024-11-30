@@ -33,14 +33,14 @@ const SignupContent = ({ setIsSignUp }) => {
         first_name: firstName,
         last_name: lastName,
         email,
-        userId: user.localId,
+        userId: user.user.uid,
       });
       if (user && newUser) {
         authCtx.login(
-          user.idToken,
+          user.user.uid,
           newUser._id,
-          user.localId,
-          user.email,
+          user.user.uid,
+          user.user.email,
           newUser.language,
           newUser.first_name,
           newUser.last_name,

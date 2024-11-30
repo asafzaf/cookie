@@ -4,6 +4,7 @@
 
 # dependencies
 node_modules/
+package-lock.json
 
 # Expo
 .expo/
@@ -45,3 +46,8 @@ http/server.json
 
 # android/ios
 android/*
+
+# google services
+google-services.json
+google-services-*.json
+GoogleService-Info.plist

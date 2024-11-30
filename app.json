@@ -15,13 +15,15 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.asafz.cookie",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/cookie-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.asafz.cookie",
       "versionCode": 1
     },
@@ -30,6 +32,17 @@
         "projectId": "64319bd5-21a7-4b8b-ba82-58b357d33b6c"
       }
     },
-    "plugins": []
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
+    ]
   }
 }

@@ -3,9 +3,10 @@ import React, { useContext } from "react";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { LanguageStringProvider } from "./store/language-context";
 import AuthScreen from "./screens/beforeAuth/authScreen";
-
 import { StatusBar } from "expo-status-bar";
 import RootNavigator from "./navigation/rootNavigator";
+// import Constants from "expo-constants";
+
 
 const Gate = () => {
   const authCtx = useContext(AuthContext);
