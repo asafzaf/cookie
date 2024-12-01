@@ -8,15 +8,22 @@ import CreateListScreen from "../screens/settingsTab/createNewListScreen";
 import ShoppingListSettingsScreen from "../screens/settingsTab/shoppingListSettingsScreen";
 
 import ProfileBox from "../components/bottomTab/profileBox";
+import LogoutModal from "../components/auth/logoutModal";
+
 import { TouchableOpacity } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
 const SettingsTabNavigator = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [profileModalVisible, setProfileModalVisible] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
   const popUpProfile = () => {
-    setModalVisible(true);
+    setProfileModalVisible(true);
+  };
+
+  const popUpLogout = () => {
+    setLogoutModalVisible(true);
   };
 
   return (
@@ -27,6 +34,16 @@ const SettingsTabNavigator = () => {
             <TouchableOpacity onPressIn={popUpProfile}>
               <MaterialCommunityIcons
                 name="account"
+                size={27}
+                color={black}
+                pressColor={pressColor}
+              />
+            </TouchableOpacity>
+          ),
+          headerLeft: ({ black, pressColor }) => (
+            <TouchableOpacity onPressIn={popUpLogout}>
+              <MaterialCommunityIcons
+                name="logout"
                 size={27}
                 color={black}
                 pressColor={pressColor}
@@ -47,9 +64,13 @@ const SettingsTabNavigator = () => {
         />
       </Stack.Navigator>
       <ProfileBox
-        visible={modalVisible}
-        setModalVisible={setModalVisible}
+        visible={profileModalVisible}
+        setModalVisible={setProfileModalVisible}
       ></ProfileBox>
+      <LogoutModal
+        visible={logoutModalVisible}
+        setModalVisible={setLogoutModalVisible}
+      ></LogoutModal>
     </>
   );
 };

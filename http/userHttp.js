@@ -1,19 +1,25 @@
-// import data from "./server.json";
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
 
+import Constants from 'expo-constants';
+
 const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,
-}
+};
+
+
 
 export const getUserById = async (userId) => {
   try {
-    const response = await axios.get(data.serverUrl + "/api/v1/user/" + userId, {
-      timeout: 5000,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.get(
+      data.serverUrl + "/api/v1/user/" + userId,
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
@@ -69,15 +75,19 @@ export const deleteUser = async () => {
 export const changeUserLanguage = async (userId, language) => {
   try {
     console.log("changeUserLanguage", userId, language);
-    const response = await axios.put(data.serverUrl + "/api/v1/user/" + userId + "/language", { language }, {
-      timeout: 5000,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.put(
+      data.serverUrl + "/api/v1/user/" + userId + "/language",
+      { language },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const obj = JSON.parse(response.request._response);
     return obj;
   } catch (error) {
     handleAxiosError("changeLanguage", error);
   }
-}
+};
