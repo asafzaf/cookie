@@ -19,8 +19,13 @@ if (process.env.EAS_BUILD_PLATFORM === 'android') {
     process.exit(1);
   }
 
-  fs.writeFileSync('./GoogleService-Info.plist', process.env.GOOGLE_SERVICE_INFO, { encoding: 'utf8' });
-  console.log('GoogleService-Info.plist created successfully.');
+  try {
+    fs.writeFileSync('./GoogleService-Info.plist', process.env.GOOGLE_SERVICE_INFO, { encoding: 'utf8' });
+    console.log('GoogleService-Info.plist created successfully.');
+  } catch (err) {
+    console.error('Error writing GoogleService-Info.plist:', err);
+    process.exit(1);
+  }
 } else {
   console.error(`Error: Unknown platform '${process.env.EAS_BUILD_PLATFORM}'.`);
   process.exit(1);
