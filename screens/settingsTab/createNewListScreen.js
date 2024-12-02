@@ -19,9 +19,9 @@ const CreateListScreen = ({ navigation }) => {
       name: listName,
     }); // Create new list
     if (newList) {
-      Alert.alert("List created successfully");
       const userData = await getUserById(authCtx.mongoId); // Fetch user data
       authCtx.refresh_user_data(userData); // Refresh user data
+      Alert.alert("List created successfully");
       navigation.goBack(); // Go back to the previous screen
     } else {
       Alert.alert("Failed to create list");
