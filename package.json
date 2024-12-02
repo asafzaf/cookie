@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
+    "eas-build-pre-install": "./pre-install",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
