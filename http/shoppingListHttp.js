@@ -4,13 +4,9 @@ import { handleAxiosError } from "./axios.error";
 
 import { createUnrecognizedItem } from "./unrecognizedItemHttp";
 
-import Constants from 'expo-constants';
-
 const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,
 };
-
-
 
 export const getShoppingListById = async (listId) => {
   try {
@@ -67,9 +63,20 @@ export const createShoppingList = async (shoppingList) => {
   }
 };
 
-export const updateLiveShoppingList = async (listId, userId, totalPrice, departments) => {
+export const updateLiveShoppingList = async (
+  listId,
+  userId,
+  totalPrice,
+  departments
+) => {
   try {
-    console.log("Update Live Shopping List", listId, userId, totalPrice, departments);
+    console.log(
+      "Update Live Shopping List",
+      listId,
+      userId,
+      totalPrice,
+      departments
+    );
     const response = await axios.put(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/live",
       {
@@ -208,11 +215,11 @@ export const setDefaultShoppingList = async ({ userId, listId }) => {
   }
 };
 
-export const addUserToShoppingList = async (listId, userEmail) => {
+export const addUserToShoppingList = async (selfId, listId, userEmail) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/addUser",
-      { listId, userEmail },
+      { selfId, listId, userEmail },
       {
         timeout: 5000,
         headers: {
@@ -225,6 +232,44 @@ export const addUserToShoppingList = async (listId, userEmail) => {
     return obj;
   } catch (error) {
     handleAxiosError("addUserToShoppingList", error);
+  }
+};
+
+export const acceptUserToShoppingList = async (listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/acceptUser",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("acceptUserToShoppingList", error);
+  }
+};
+
+export const rejectUserToShoppingList = async (listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/rejectUser",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("rejectUserToShoppingList", error);
   }
 };
 

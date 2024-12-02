@@ -28,7 +28,8 @@ const LoginContent = ({ setIsSignUp }) => {
         setPassword(""); // Reset password field
         Alert.alert(
           "Login failed",
-          userData?.errorMessage || "Please check your credentials and try again"
+          userData?.errorMessage ||
+            "Please check your credentials and try again"
         );
         setLoading(false);
         return;
@@ -44,16 +45,14 @@ const LoginContent = ({ setIsSignUp }) => {
         return;
       }
 
+      console.log("User item:", userItem.data);
+
       // Call the context or authentication handler
       authCtx.login(
         user.uid,
         userItem.data._id,
         user.uid,
         user.email,
-        userItem.data.language,
-        userItem.data.first_name,
-        userItem.data.last_name,
-        userItem.data.default_shopping_list,
         userItem.data
       );
       changeLanguage(userItem.data.language);
