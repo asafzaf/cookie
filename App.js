@@ -1,15 +1,28 @@
-import { StyleSheet, View } from "react-native";
-import React, { useContext } from "react";
+import { Alert, StyleSheet, View } from "react-native";
+import React, { useContext, useEffect } from "react";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { LanguageStringProvider } from "./store/language-context";
 import AuthScreen from "./screens/beforeAuth/authScreen";
 import { StatusBar } from "expo-status-bar";
 import RootNavigator from "./navigation/rootNavigator";
-// import Constants from "expo-constants";
-
+import { checkHealth } from "./http/generalHttp";
 
 const Gate = () => {
   const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    const health = async () => {
+      const response = await checkHealth();
+      console.log("Health check response:", response);
+      if (response) {
+        console.log("Server is healthy");
+      } else {
+        Alert.alert("Server is not healthy", `Please try again later:\n${process.env.EXPO_PUBLIC_API_URL}`,);
+      }
+    };
+
+    health();
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
