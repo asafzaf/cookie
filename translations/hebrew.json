@@ -72,6 +72,7 @@
   },
   "general": {
     "loading": "טוען...",
+    "processing": "מבצע...",
     "cancel": "ביטול",
     "save": "שמור",
     "delete": "מחק",
@@ -114,7 +115,6 @@
     "email": "דואר אלקטרוני",
     "edit_profile": "ערוך פרופיל",
     "change_language_title": "שנה שפה"
-
   },
   "messages": {
     "topic": "הודעות",
