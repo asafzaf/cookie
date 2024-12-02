@@ -35,17 +35,14 @@ const SignupContent = ({ setIsSignUp }) => {
         email,
         userId: user.user.uid,
       });
+      console.log("newUser:", newUser);
       if (user && newUser) {
         authCtx.login(
           user.user.uid,
           newUser._id,
           user.user.uid,
           user.user.email,
-          newUser.language,
-          newUser.first_name,
-          newUser.last_name,
-          newUser.default_shopping_list,
-          newUser.data
+          newUser
         );
         changeLanguage(newUser.language);
         setLoading(false);
