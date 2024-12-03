@@ -29,6 +29,7 @@ const defineConfig = (): ExpoConfig => ({
         NSAllowsArbitraryLoads: true,
       },
     },
+    icon: "./assets/images/cookie-icon.png",
     splash: {
       image: "./assets/images/cookie-icon.png",
       backgroundColor: "#ffffff",
