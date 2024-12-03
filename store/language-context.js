@@ -1,4 +1,4 @@
-import React, { createContext, useState, useMemo } from "react";
+import React, { createContext, useState, useMemo, useEffect } from "react";
 import { getTranslation } from "../translations/translations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -7,14 +7,17 @@ export const LanguageStringContext = createContext();
 export const LanguageStringProvider = ({ children }) => {
   const [language, setLanguage] = useState("english");
 
-  useState(async () => {
-    const lang = await AsyncStorage.getItem("language");
-    if (lang) {
-      setLanguage(lang);
-    } else {
-      setLanguage("english");
-      AsyncStorage.setItem("language", "english");
-    }
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      const lang = await AsyncStorage.getItem("language");
+      if (lang) {
+        setLanguage(lang);
+      } else {
+        setLanguage("english");
+        AsyncStorage.setItem("language", "english");
+      }
+    };
+    fetchLanguage();
   }, []);
 
   const changeLanguage = (lang) => {
