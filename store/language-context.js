@@ -7,15 +7,14 @@ export const LanguageStringContext = createContext();
 export const LanguageStringProvider = ({ children }) => {
   const [language, setLanguage] = useState("english");
 
-  useState(() => {
-    AsyncStorage.getItem("language").then((lang) => {
-      if (lang) {
-        setLanguage(lang);
-      } else {
-        setLanguage("english");
-        AsyncStorage.setItem("language", "english");
-      }
-    });
+  useState(async () => {
+    const lang = await AsyncStorage.getItem("language");
+    if (lang) {
+      setLanguage(lang);
+    } else {
+      setLanguage("english");
+      AsyncStorage.setItem("language", "english");
+    }
   }, []);
 
   const changeLanguage = (lang) => {
