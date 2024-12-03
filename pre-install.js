@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 // Check platform and create appropriate configuration files
 if (process.env.EAS_BUILD_PLATFORM === 'android') {
@@ -9,8 +10,20 @@ if (process.env.EAS_BUILD_PLATFORM === 'android') {
     process.exit(1);
   }
 
-  fs.writeFileSync('./android/app/google-services.json', process.env.GOOGLE_SERVICES, { encoding: 'utf8' });
-  console.log('google-services.json created successfully.');
+  const androidDir = './android/app';
+  const googleServicesPath = path.join(androidDir, 'google-services.json');
+
+  try {
+    if (!fs.existsSync(androidDir)) {
+      fs.mkdirSync(androidDir, { recursive: true });
+    }
+
+    fs.writeFileSync(googleServicesPath, process.env.GOOGLE_SERVICES, { encoding: 'utf8' });
+    console.log('google-services.json created successfully.');
+  } catch (err) {
+    console.error('Error writing google-services.json:', err);
+    process.exit(1);
+  }
 } else if (process.env.EAS_BUILD_PLATFORM === 'ios') {
   console.log('Creating GoogleService-Info.plist for iOS build...');
 
