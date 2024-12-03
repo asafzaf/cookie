@@ -46,6 +46,12 @@ const ShoppingCart = () => {
 
   const language = translations.language;
 
+  const vars = {
+    add: translations.general.add,
+    to_the_shopping_list: translations.general.to_the_shopping_list,
+  }
+
+
   const onPefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -180,7 +186,7 @@ const ShoppingCart = () => {
                       }
                     >
                       <Text style={styles.addButtonText}>
-                        Add "{search}" to the list
+                        {vars.add} "{search}" {vars.to_the_shopping_list}
                       </Text>
                     </TouchableOpacity>
                   </View>

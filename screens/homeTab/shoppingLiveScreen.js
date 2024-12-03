@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
+import {
+  BackHandler,
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from "react-native";
 import ShoppingLiveDepartment from "../../components/shoppingLive/shoppingLiveDepartment";
 
 import { AuthContext } from "../../store/auth-context";
@@ -27,6 +34,14 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
     quantity: translations.home_screen.quantity,
   };
 
+  const backButtonPrev = {
+    back_button_disabled: translations.alerts.back_button_disabled,
+    back_button_disabled_message:
+      translations.alerts.back_button_disabled_message,
+    back_button_disabled_confirm:
+      translations.alerts.back_button_disabled_confirm,
+  };
+
   const language = translations.language;
 
   useEffect(() => {
@@ -50,6 +65,26 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Disable Android back button
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        // Prevent back navigation
+        Alert.alert(
+          backButtonPrev.back_button_disabled,
+          backButtonPrev.back_button_disabled_message,
+          [{ text: backButtonPrev.back_button_disabled_confirm, onPress: () => null }],
+          { cancelable: false }
+        );
+        return true; // Returning true prevents the default behavior
+      }
+    );
+
+    // Cleanup the event listener on component unmount
+    return () => backHandler.remove();
+  }, []);
+
   const handleItemCheck = (departmentId, itemId) => {
     const newShoppingListDepartments = [...shoppingListDepartments];
     const departmentIndex = newShoppingListDepartments.findIndex(
@@ -70,7 +105,9 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.Text}>{translations.home_screen.live_shopping_topic}</Text>
+      <Text style={styles.Text}>
+        {translations.home_screen.live_shopping_topic}
+      </Text>
       <ScrollView
         style={{ width: "100%", height: 200 }} // Added this line
       >

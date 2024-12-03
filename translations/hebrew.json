@@ -78,6 +78,7 @@
     "delete": "מחק",
     "edit": "ערוך",
     "add": "הוסף",
+    "to_the_shopping_list": "לרשימת הקניות",
     "search": "חפש",
     "yes": "כן",
     "no": "לא",
@@ -119,5 +120,10 @@
   "messages": {
     "topic": "הודעות",
     "no_new_messages": "אין הודעות חדשות"
+  },
+  "alerts": {
+    "back_button_disabled": "חזרה למסך הקודם מושבתת",
+    "back_button_disabled_message": "אינך יכול לחזור למסך הקודם עם כפתור זה.",
+    "back_button_disabled_confirm": "הבנתי"
   }
 }
