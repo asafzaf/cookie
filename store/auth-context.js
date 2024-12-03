@@ -130,6 +130,7 @@ function AuthContextProvider({ children }) {
 
   function updateLanguage(lang) {
     setLanguage(lang);
+    AsyncStorage.setItem("language", lang);
   }
 
   const contextValue = {
