@@ -119,5 +119,10 @@
   "messages": {
     "topic": "Messages",
     "no_new_messages": "No new messages"
+  },
+  "alerts": {
+    "back_button_disabled": "Back Button Disabled",
+    "back_button_disabled_message": "You cannot go back with this button.",
+    "back_button_disabled_confirm": "Understood"
   }
 }
