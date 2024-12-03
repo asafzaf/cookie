@@ -56,6 +56,8 @@ function AuthContextProvider({ children }) {
           "defaultShoppingList"
         );
         setDefaultShoppingList(defaultShoppingList);
+        const selectedList = await AsyncStorage.getItem("defaultShoppingList");
+        setSelectedList(selectedList);
         const userData = await AsyncStorage.getItem("userData");
         console.log("userData:", userData);
         setUserData(JSON.parse(userData));
@@ -85,6 +87,7 @@ function AuthContextProvider({ children }) {
     AsyncStorage.setItem("userFirstName", userData.first_name);
     AsyncStorage.setItem("userLastName", userData.last_name);
     AsyncStorage.setItem("defaultShoppingList", userData.default_shopping_list);
+    AsyncStorage.setItem("selectedList", userData.default_shopping_list);
     AsyncStorage.setItem("userData", JSON.stringify(userData));
   }
 
@@ -108,6 +111,7 @@ function AuthContextProvider({ children }) {
     AsyncStorage.removeItem("userFirstName");
     AsyncStorage.removeItem("userLastName");
     AsyncStorage.removeItem("defaultShoppingList");
+    AsyncStorage.removeItem("selectedList");
     AsyncStorage.removeItem("userData");
   }
 
