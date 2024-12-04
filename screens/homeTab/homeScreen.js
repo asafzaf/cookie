@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 import {
+  Alert,
   TouchableOpacity,
   Text,
   View,
@@ -111,6 +112,10 @@ export default function HomeScreen({ navigation }) {
         title="Let's start Shopping!"
         borderWidth="2"
         onPress={() => {
+          if (!authCtx.selectedList) {
+            Alert.alert("Please select a shopping list first");
+            return;
+          }
           navigation.navigate("Live Shopping", {
             listId: authCtx.selectedList,
           });
