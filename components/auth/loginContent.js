@@ -1,5 +1,13 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 import { getUserById } from "../../http/userHttp";
@@ -8,7 +16,7 @@ import { login } from "../../services/auth";
 
 import LoadingScreen from "../general/loadingScreen";
 
-const LoginContent = ({ setIsSignUp }) => {
+const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -94,6 +102,14 @@ const LoginContent = ({ setIsSignUp }) => {
           title="Switch to Signup"
           onPress={() => setIsSignUp(true)}
         />
+        <TouchableOpacity
+          onPress={() => setIsResetPassword(true)}
+          style={{ maxHeight: "30%", maxWidth: "100%" }}
+        >
+          <Text style={{ textAlign: "center", color: "#1F509A" }}>
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -120,8 +136,14 @@ const styles = StyleSheet.create({
   buttonView: {
     flexDirection: "column",
     justifyContent: "space-around",
-    height: 100,
+    alignContent: "center",
+    alignSelf: "center",
+    height: "20%",
+    width: "60%",
     minHeight: "10%",
+  },
+  button: {
+    marginBottom: 8,
   },
 });
 
