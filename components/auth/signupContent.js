@@ -23,19 +23,13 @@ const SignupContent = ({ setIsSignUp }) => {
     // Handle signup logic here
     try {
       setLoading(true);
-      const user = await signUp(email, password);
-      if (user.error) {
-        setLoading(false);
-        Alert.alert("Signup failed", user.error.message);
-        return;
-      }
+      const user = await signUp(firstName, email, password);
       const newUser = await createUser({
         first_name: firstName,
         last_name: lastName,
         email,
         userId: user.user.uid,
       });
-      console.log("newUser:", newUser);
       if (user && newUser) {
         authCtx.login(
           user.user.uid,
@@ -45,15 +39,26 @@ const SignupContent = ({ setIsSignUp }) => {
           newUser
         );
         changeLanguage(newUser.language);
+        
         setLoading(false);
         Alert.alert("Signup successful", "Welcome to the app!");
       } else {
         setLoading(false);
-        Alert.alert("Signup failed", "Please try again later");
+        Alert.alert("Signup failed", "Please try again later...");
       }
     } catch (error) {
       setLoading(false);
-      console.log("error:", error);
+      if (error.code === "auth/email-already-in-use") {
+        Alert.alert("Signup failed", "That email address is already in use!");
+      } else if (error.code === "auth/invalid-email") {
+        Alert.alert("Signup failed", "That email address is invalid!");
+      } else if (error.code === "auth/weak-password") {
+        Alert.alert("Signup failed", "Password is too weak");
+      } else if (error.code === "auth/network-request-failed") {
+        Alert.alert("Signup failed", "Network error");
+      } else {
+        Alert.alert("Signup failed", "Please try again later");
+      }
     }
   };
 

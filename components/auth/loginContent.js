@@ -31,17 +31,6 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
 
       // Attempt to log in the user
       const userData = await login(email, password);
-      if (!userData || userData.error) {
-        console.log("Login failed");
-        setPassword(""); // Reset password field
-        Alert.alert(
-          "Login failed",
-          userData?.errorMessage ||
-            "Please check your credentials and try again"
-        );
-        setLoading(false);
-        return;
-      }
       const user = userData.user;
       // Fetch user data by ID (assuming getUserById fetches from the backend)
       const userItem = await getUserById(user.uid);
@@ -52,8 +41,6 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
         setLoading(false);
         return;
       }
-
-      console.log("User item:", userItem.data);
 
       // Call the context or authentication handler
       authCtx.login(
@@ -66,12 +53,23 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
       changeLanguage(userItem.data.language);
       setLoading(false);
     } catch (error) {
-      console.log("Error:", error);
       setLoading(false);
-      Alert.alert(
-        "Login failed",
-        "An unexpected error occurred. Please try again later."
-      );
+      if (error.code === "auth/user-not-found") {
+        Alert.alert("Login failed", "User not found. Please try again.");
+      } else if (error.code === "auth/invalid-email") {
+        Alert.alert("Login failed", "Invalid email. Please try again.");
+      } else if (error.code === "auth/invalid-credential") {
+        Alert.alert("Login failed", "Invalid credentials. Please try again.");
+      } else if (error.code === "auth/wrong-password") {
+        Alert.alert("Login failed", "Incorrect password. Please try again.");
+      } else if (error.code === "auth/network-request-failed") {
+        Alert.alert("Login failed", "Network error. Please try again later.");
+      } else {
+        Alert.alert(
+          "Login failed",
+          "An unexpected error occurred. Please try again later."
+        );
+      }
     }
   };
 

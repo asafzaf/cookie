@@ -11,16 +11,24 @@ if (!firebase.apps.length) {
 
 import auth from "@react-native-firebase/auth";
 
-export const signUp = async (email, password) => {
+export const signUp = async (first_name, email, password) => {
   try {
     const response = await auth().createUserWithEmailAndPassword(
       email,
       password
     );
+    const user = response.user;
+
+    await user.updateProfile({
+      displayName: first_name,
+    });
+
+    await user.sendEmailVerification();
+
     return response;
   } catch (error) {
     handleAxiosError("signUp", error);
-    return error;
+    throw error;
   }
 };
 
@@ -30,7 +38,8 @@ export const login = async (email, password) => {
     return response;
   } catch (error) {
     handleAxiosError("login", error);
-    return error;
+    console.log("Error code:", error.code);
+    throw error;
   }
 };
 
@@ -40,7 +49,7 @@ export const logOut = async () => {
     return response;
   } catch (error) {
     handleAxiosError("logout", error);
-    return error;
+    throw error;
   }
 };
 
