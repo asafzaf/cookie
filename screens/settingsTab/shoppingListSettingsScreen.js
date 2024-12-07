@@ -78,14 +78,6 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
     checkAdminStatus();
   }, [admins]);
 
-  const toggleAdminStatus = (userId) => {
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, isAdmin: !user.isAdmin } : user
-      )
-    );
-  };
-
   const addUser = async () => {
     if (newUserEmail.trim()) {
       const userEmail = newUserEmail;
