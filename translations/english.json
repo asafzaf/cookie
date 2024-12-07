@@ -66,6 +66,7 @@
     "enter_user_email": "Enter Email",
     "add_user": "Add User",
     "remove_user": "Remove User",
+    "remove_user_confirm": "Are you sure you want to remove this user?",
     "user_list": "User List",
     "make_admin": "Make Admin",
     "remove_admin": "Remove Admin"

@@ -66,6 +66,7 @@
     "enter_user_email": "הכנס דואר אלקטרוני",
     "add_user": "הוסף משתמש",
     "remove_user": "הסר משתמש",
+    "remove_user_confirm": "האם אתה בטוח שברצונך להסיר משתמש זה?",
     "user_list": "רשימת משתמשים",
     "make_admin": "הגדר כמנהל",
     "remove_admin": "הסר ממנהל"
