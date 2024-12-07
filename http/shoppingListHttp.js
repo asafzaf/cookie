@@ -127,7 +127,7 @@ export const createAddUnrecognizedItemToShoppingList = async (
     const obj = {
       name: itemName,
       createByUserId: userId,
-      createOnList: listId,
+      createOnList: [listId],
     };
     const itemResponse = await createUnrecognizedItem(obj);
     const itemId = itemResponse._id;
