@@ -116,7 +116,8 @@
     "last_name": "Last Name",
     "email": "Email",
     "edit_profile": "Edit Profile",
-    "change_language_title": "Change Language"
+    "change_language_title": "Change Language",
+    "log_out": "Log Out"
   },
   "messages": {
     "topic": "Messages",

@@ -116,7 +116,8 @@
     "last_name": "שם משפחה",
     "email": "דואר אלקטרוני",
     "edit_profile": "ערוך פרופיל",
-    "change_language_title": "שנה שפה"
+    "change_language_title": "שנה שפה",
+    "log_out": "התנתק"
   },
   "messages": {
     "topic": "הודעות",

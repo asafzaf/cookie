@@ -40,16 +40,16 @@ const SettingsTabNavigator = () => {
               />
             </TouchableOpacity>
           ),
-          headerLeft: ({ black, pressColor }) => (
-            <TouchableOpacity onPressIn={popUpLogout}>
-              <MaterialCommunityIcons
-                name="logout"
-                size={27}
-                color={black}
-                pressColor={pressColor}
-              />
-            </TouchableOpacity>
-          ),
+          // headerLeft: ({ black, pressColor }) => (
+          //   <TouchableOpacity onPressIn={popUpLogout}>
+          //     <MaterialCommunityIcons
+          //       name="logout"
+          //       size={27}
+          //       color={black}
+          //       pressColor={pressColor}
+          //     />
+          //   </TouchableOpacity>
+          // ),
         }}
       >
         <Stack.Screen name="Settings" component={SettingsScreen} />
@@ -67,10 +67,10 @@ const SettingsTabNavigator = () => {
         visible={profileModalVisible}
         setModalVisible={setProfileModalVisible}
       ></ProfileBox>
-      <LogoutModal
+      {/* <LogoutModal
         visible={logoutModalVisible}
         setModalVisible={setLogoutModalVisible}
-      ></LogoutModal>
+      ></LogoutModal> */}
     </>
   );
 };
