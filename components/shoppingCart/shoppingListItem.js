@@ -1,5 +1,11 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import {
@@ -21,9 +27,13 @@ const ShoppingListItem = ({ item, refreshList, language }) => {
     setLoading(true);
     let newData = null;
     if (data.item.numberOfTimesRecognized !== undefined) {
-      newData = await addUnrecognizedItemToShoppingList(list, item);
+      newData = await addUnrecognizedItemToShoppingList(
+        authCtx.token,
+        list,
+        item
+      );
     } else {
-      newData = await addItemToShoppingList(list, item);
+      newData = await addItemToShoppingList(authCtx.token, list, item);
     }
     setData(newData || []);
     setLoading(false);
@@ -33,9 +43,13 @@ const ShoppingListItem = ({ item, refreshList, language }) => {
     setLoading(true);
     let newData = null;
     if (data.item.numberOfTimesRecognized !== undefined) {
-      newData = await removeUnrecognizedItemFromShoppingList(list, item);
+      newData = await removeUnrecognizedItemFromShoppingList(
+        authCtx.token,
+        list,
+        item
+      );
     } else {
-      newData = await removeItemFromShoppingList(list, item);
+      newData = await removeItemFromShoppingList(authCtx.token, list, item);
     }
     if (newData === null) {
       refreshList();

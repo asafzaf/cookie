@@ -49,8 +49,7 @@ const ShoppingCart = () => {
   const vars = {
     add: translations.general.add,
     to_the_shopping_list: translations.general.to_the_shopping_list,
-  }
-
+  };
 
   const onPefresh = useCallback(() => {
     setRefreshing(true);
@@ -64,7 +63,7 @@ const ShoppingCart = () => {
       setItemsLoading(true);
       setListLoading(true);
 
-      let res = await getItems();
+      let res = await getItems(authCtx.token);
       setItems(res.data || []);
 
       setItemsLoading(false);
@@ -74,7 +73,7 @@ const ShoppingCart = () => {
         return;
       }
 
-      let data = await getShoppingListById(authCtx.selectedList);
+      let data = await getShoppingListById(authCtx.token, authCtx.selectedList);
 
       setShoppingListItems(data.data.items || []);
       setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
@@ -91,7 +90,7 @@ const ShoppingCart = () => {
         setListLoading(false);
         return;
       }
-      let data = await getShoppingListById(authCtx.selectedList);
+      let data = await getShoppingListById(authCtx.token, authCtx.selectedList);
       setShoppingListItems(data.data.items || []);
       setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
       setListName(data.data.name || "-No Name-");
@@ -107,8 +106,11 @@ const ShoppingCart = () => {
 
   const addItem = async (list, item) => {
     setListLoading(true);
-    await addItemToShoppingList(list, item);
-    const newList = await getShoppingListById(authCtx.selectedList);
+    await addItemToShoppingList(authCtx.token, list, item);
+    const newList = await getShoppingListById(
+      authCtx.token,
+      authCtx.selectedList
+    );
     setShoppingListItems(newList.data.items || []);
     setListLoading(false);
     setSearch("");
@@ -116,18 +118,25 @@ const ShoppingCart = () => {
 
   const addUnrecognizedItem = async (list, itemName) => {
     await createAddUnrecognizedItemToShoppingList(
+      authCtx.token,
       authCtx.mongoId,
       list,
       itemName
     );
-    const newList = await getShoppingListById(authCtx.selectedList);
+    const newList = await getShoppingListById(
+      authCtx.token,
+      authCtx.selectedList
+    );
     setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
     setSearch("");
   };
 
   const refreshList = async () => {
     setListLoading(true);
-    const newList = await getShoppingListById(authCtx.selectedList);
+    const newList = await getShoppingListById(
+      authCtx.token,
+      authCtx.selectedList
+    );
     setShoppingListItems(newList.data.items || []);
     setUnrecognizedShoppingListItems(newList.data.unrecognizedItems || []);
     setListLoading(false);
@@ -160,7 +169,9 @@ const ShoppingCart = () => {
           style={styles.shoppingListTitle}
           onPress={toggleAddItems}
         >
-          <Text style={styles.sectionTitle}>{translations.shopping_list.add_items}</Text>
+          <Text style={styles.sectionTitle}>
+            {translations.shopping_list.add_items}
+          </Text>
         </TouchableOpacity>
         {AddItemsVisible && (
           <>
@@ -219,7 +230,9 @@ const ShoppingCart = () => {
           style={styles.shoppingListTitle}
           onPress={toggleMyShoppingList}
         >
-          <Text style={styles.sectionTitle}>{translations.shopping_list.my_shopping_list}</Text>
+          <Text style={styles.sectionTitle}>
+            {translations.shopping_list.my_shopping_list}
+          </Text>
           <Text style={styles.counterTitle}>
             {[...shoppingListItems, ...unrecognizedShoppingListItems].length}{" "}
             {translations.shopping_list.items}
@@ -233,7 +246,11 @@ const ShoppingCart = () => {
                 data={[...shoppingListItems, ...unrecognizedShoppingListItems]}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                  <ShoppingListItem item={item} refreshList={refreshList} language={language} />
+                  <ShoppingListItem
+                    item={item}
+                    refreshList={refreshList}
+                    language={language}
+                  />
                 )}
                 contentContainerStyle={styles.list}
               />
@@ -242,12 +259,12 @@ const ShoppingCart = () => {
         )}
       </View>
       {openNoListModal && (
-         <ModalMessage 
-            show={openNoListModal}
-            handleClose={() => setOpenNoListModal(false)}
-            title="No List Selected"
-            message="Please select a shopping list from the home screen."
-         />
+        <ModalMessage
+          show={openNoListModal}
+          handleClose={() => setOpenNoListModal(false)}
+          title="No List Selected"
+          message="Please select a shopping list from the home screen."
+        />
       )}
     </View>
   );

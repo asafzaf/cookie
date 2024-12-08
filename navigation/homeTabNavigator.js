@@ -3,7 +3,8 @@ import { Text, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { AuthContext } from "../store/auth-context";
+import { LanguageStringContext } from "../store/language-context";
 
 import HomeScreen from "../screens/homeTab/homeScreen";
 import ShoppingLiveScreen from "../screens/homeTab/shoppingLiveScreen";
@@ -12,10 +13,8 @@ import MessagesModal from "../components/homeScreen/messageModal";
 import CancelLiveShopModal from "../components/homeScreen/cancelLiveShopModal";
 import AcceptLiveShopModal from "../components/homeScreen/acceptLiveShopModal";
 
-import { AuthContext } from "../store/auth-context";
-import { LanguageStringContext } from "../store/language-context";
-
 import { getMessagesByUserId } from "../http/messageHttp";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Stack = createNativeStackNavigator();
 
@@ -75,7 +74,7 @@ const HomeTabNavigator = () => {
         if (!authCtx.mongoId) {
           return;
         }
-        const messagesData = await getMessagesByUserId(authCtx.mongoId);
+        const messagesData = await getMessagesByUserId(authCtx.token, authCtx.mongoId);
         if (messagesData) {
           setMessages(messagesData.data);
         } else {

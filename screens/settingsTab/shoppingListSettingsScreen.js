@@ -137,7 +137,11 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   };
 
   const RemoveUser = async (userId) => {
-    const res = await removeUserFromShoppingList(listItemId, userId);
+    const res = await removeUserFromShoppingList(
+      authCtx.token,
+      listItemId,
+      userId
+    );
     if (res) {
       setUsers(users.filter((user) => user._id !== userId));
     } else {

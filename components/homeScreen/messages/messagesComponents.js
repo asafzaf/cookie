@@ -1,12 +1,5 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import {
   acceptUserToShoppingList,
@@ -15,12 +8,14 @@ import {
 
 import { deleteMessage } from "../../../http/messageHttp";
 
+import { AuthContext } from "../../../store/auth-context";
 import { LanguageStringContext } from "../../../store/language-context";
 
 export const InvitationMessageComponent = (props) => {
   const { id, title, message, attachments, userId, removeMessage } = props;
   const [hasClicked, setHasClicked] = useState(false);
 
+  const authCtx = useContext(AuthContext);
   const { translations } = useContext(LanguageStringContext);
   const { confirm, cancel, processing } = translations.general;
 
@@ -31,8 +26,8 @@ export const InvitationMessageComponent = (props) => {
 
   const handleAccept = async () => {
     try {
-      await acceptUserToShoppingList(listId, userId);
-      await deleteMessage(id);
+      await acceptUserToShoppingList(authCtx.token, listId, userId);
+      await deleteMessage(token, id);
       setHasClicked(true);
       setTimeout(() => {
         removeMessage(id);
@@ -44,9 +39,8 @@ export const InvitationMessageComponent = (props) => {
 
   const handleReject = async () => {
     try {
-      await rejectUserToShoppingList(listId, userId);
-      await deleteMessage(id);
-      console.log("Rejected user from shopping list");
+      await rejectUserToShoppingList(authCtx.token, listId, userId);
+      await deleteMessage(authCtx.token, id);
       setHasClicked(true);
       setTimeout(() => {
         removeMessage(id);

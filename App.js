@@ -1,12 +1,15 @@
-import { Alert, StyleSheet, View } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
+import { Alert, StyleSheet, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+
+import AuthScreen from "./screens/beforeAuth/authScreen";
+import RootNavigator from "./navigation/rootNavigator";
+import LoadingScreen from "./components/general/loadingScreen";
+
+import { checkHealth } from "./http/generalHttp";
+
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { LanguageStringProvider } from "./store/language-context";
-import AuthScreen from "./screens/beforeAuth/authScreen";
-import { StatusBar } from "expo-status-bar";
-import RootNavigator from "./navigation/rootNavigator";
-import { checkHealth } from "./http/generalHttp";
-import LoadingScreen from "./components/general/loadingScreen";
 
 import auth from "@react-native-firebase/auth";
 

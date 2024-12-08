@@ -46,7 +46,7 @@ const ShoppingLiveScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getOrderedShoppingListById(listId);
+      const res = await getOrderedShoppingListById(authCtx.token, listId);
       if (res) {
         setShoppingList(res.data);
         res.data.orededData.forEach((department) => {
