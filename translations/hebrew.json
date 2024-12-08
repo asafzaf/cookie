@@ -116,7 +116,14 @@
     "last_name": "שם משפחה",
     "email": "דואר אלקטרוני",
     "edit_profile": "ערוך פרופיל",
-    "change_language_title": "שנה שפה"
+    "change_language_title": "שנה שפה",
+    "log_out": "התנתק"
+  },
+  "log_out": {
+    "title": "התנתקות",
+    "message": "האם אתה בטוח שברצונך להתנתק?",
+    "no": "ביטול",
+    "confirm": "התנתק"
   },
   "messages": {
     "topic": "הודעות",

@@ -116,7 +116,14 @@
     "last_name": "Last Name",
     "email": "Email",
     "edit_profile": "Edit Profile",
-    "change_language_title": "Change Language"
+    "change_language_title": "Change Language",
+    "log_out": "Log Out"
+  },
+  "log_out": {
+    "title": "Log Out",
+    "message": "Are you sure you want to log out?",
+    "no": "Cancel",
+    "confirm": "Log Out"
   },
   "messages": {
     "topic": "Messages",
