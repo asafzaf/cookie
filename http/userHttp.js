@@ -1,13 +1,9 @@
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
 
-import Constants from 'expo-constants';
-
 const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,
 };
-
-
 
 export const getUserById = async (userId) => {
   try {
@@ -72,15 +68,15 @@ export const deleteUser = async () => {
   }
 };
 
-export const changeUserLanguage = async (userId, language) => {
+export const changeUserLanguage = async (token, userId, language) => {
   try {
-    console.log("changeUserLanguage", userId, language);
     const response = await axios.put(
       data.serverUrl + "/api/v1/user/" + userId + "/language",
       { language },
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -108,4 +104,4 @@ export const getToken = async (userId) => {
   } catch (error) {
     handleAxiosError("getToken", error);
   }
-}
+};

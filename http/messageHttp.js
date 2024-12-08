@@ -6,13 +6,14 @@ const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,
 };
 
-export const getMessageById = async (messageId) => {
+export const getMessageById = async (token, messageId) => {
   try {
     const response = await axios.get(
       data.serverUrl + "/api/v1/message/" + messageId,
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -24,13 +25,14 @@ export const getMessageById = async (messageId) => {
   }
 };
 
-export const getMessagesByUserId = async (userId) => {
+export const getMessagesByUserId = async (token, userId) => {
   try {
     const response = await axios.get(
       data.serverUrl + "/api/v1/message/user/" + userId,
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -45,11 +47,12 @@ export const getMessagesByUserId = async (userId) => {
   }
 };
 
-export const deleteMessage = async (messageId) => {
+export const deleteMessage = async (token, messageId) => {
   try {
     await axios.delete(data.serverUrl + "/api/v1/message/" + messageId, {
       timeout: 5000,
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
