@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
-import { getUserById } from "../../http/userHttp";
+import { getUserById, getToken } from "../../http/userHttp";
 
 import { login } from "../../services/auth";
 
@@ -34,7 +34,7 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
       const user = userData.user;
       // Fetch user data by ID (assuming getUserById fetches from the backend)
       const userItem = await getUserById(user.uid);
-
+      const token = await getToken(user.uid);
       if (!userItem) {
         setPassword(""); // Reset password field
         Alert.alert("Login failed", "System error. Please try again later");
@@ -44,7 +44,7 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
 
       // Call the context or authentication handler
       authCtx.login(
-        user.uid,
+        token.token,
         userItem.data._id,
         user.uid,
         user.email,

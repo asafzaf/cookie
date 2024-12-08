@@ -91,3 +91,21 @@ export const changeUserLanguage = async (userId, language) => {
     handleAxiosError("changeLanguage", error);
   }
 };
+
+export const getToken = async (userId) => {
+  try {
+    const response = await axios.get(
+      data.serverUrl + "/api/v1/user/" + userId + "/token",
+      {
+        timeout: 5000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("getToken", error);
+  }
+}
