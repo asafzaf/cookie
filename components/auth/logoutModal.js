@@ -4,9 +4,18 @@ import { View, Text, Button, Modal, StyleSheet } from "react-native";
 import { logOut } from "../../services/auth";
 
 import { AuthContext } from "../../store/auth-context";
+import { LanguageStringContext } from "../../store/language-context";
 
 const LogoutModal = ({ visible, setModalVisible }) => {
   const authCtx = useContext(AuthContext);
+  const { translations } = useContext(LanguageStringContext);
+
+  const vars = {
+    title: translations.log_out.title,
+    message: translations.log_out.message,
+    no: translations.log_out.no,
+    confirm: translations.log_out.confirm,
+  };
 
   const handleLoguot = async () => {
     try {
@@ -21,10 +30,15 @@ const LogoutModal = ({ visible, setModalVisible }) => {
     <Modal animationType="fade" transparent={true} visible={visible}>
       <View style={styles.modalBackdrop}>
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>Are you sure you want to log out?</Text>
+          <Text style={styles.title}>{vars.title}</Text>
+          <Text style={styles.messageText}>{vars.message}</Text>
           <View style={styles.buttonContainer}>
-            <Button title="No" onPress={() => setModalVisible(false)} />
-            <Button color="#FF2929" title="Yes" onPress={handleLoguot} />
+            <Button title={vars.no} onPress={() => setModalVisible(false)} />
+            <Button
+              color="#FF2929"
+              title={vars.confirm}
+              onPress={handleLoguot}
+            />
           </View>
         </View>
       </View>
@@ -49,6 +63,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    marginBottom: 20,
+  },
+  messageText: {
     marginBottom: 20,
   },
   buttonContainer: {
