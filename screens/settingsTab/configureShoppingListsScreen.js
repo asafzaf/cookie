@@ -33,7 +33,7 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
         setLoading(false);
         return;
       }
-      const data = await getShoppingListByUserId(authCtx.userId);
+      const data = await getShoppingListByUserId(authCtx.token, authCtx.userId);
       setShoppingLists(data || []);
       setLoading(false);
     }
@@ -49,7 +49,7 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
   const handleSetDefult = async (listId) => {
     // Set default shopping list
     setLoading(true);
-    const newUserData = await setDefaultShoppingList({
+    const newUserData = await setDefaultShoppingList(authCtx.token, {
       userId: authCtx.mongoId,
       listId,
     });
@@ -69,7 +69,9 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
         onChangeText={setSearch}
       />
       <View style={[styles.section, { maxHeight: screenHeight / 3 }]}>
-        <Text style={styles.sectionTitle}>{translations.settings_tab.avaliable_shopping_lists}</Text>
+        <Text style={styles.sectionTitle}>
+          {translations.settings_tab.avaliable_shopping_lists}
+        </Text>
         {loading && <ActivityIndicator size="large" />}
         {!loading && (
           <FlatList
@@ -93,11 +95,15 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
                         handleSetDefult(item._id);
                       }}
                     >
-                      <Text style={{ color: "blue" }}>{translations.settings_tab.set_as_default}</Text>
+                      <Text style={{ color: "blue" }}>
+                        {translations.settings_tab.set_as_default}
+                      </Text>
                     </Pressable>
                   )}
                   {item._id === authCtx.defaultShoppingList && (
-                    <Text style={{ fontWeight: "bold" }}>{translations.settings_tab.default_shopping_list}</Text>
+                    <Text style={{ fontWeight: "bold" }}>
+                      {translations.settings_tab.default_shopping_list}
+                    </Text>
                   )}
                 </View>
               </TouchableOpacity>
@@ -112,7 +118,9 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
         style={styles.createButton}
         onPress={() => navigation.navigate("Create New List")} // Navigate to CreateListScreen
       >
-        <Text style={styles.createButtonText}>+ {translations.settings_tab.create_shopping_list}</Text>
+        <Text style={styles.createButtonText}>
+          + {translations.settings_tab.create_shopping_list}
+        </Text>
       </TouchableOpacity>
     </View>
   );

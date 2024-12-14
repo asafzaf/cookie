@@ -1,6 +1,5 @@
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
-import { Alert } from "react-native";
 
 const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,

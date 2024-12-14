@@ -23,6 +23,7 @@ import {
   removeAdminFromShoppingList,
 } from "../../http/shoppingListHttp";
 
+import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 
 const ShoppingListSettingsScreen = ({ route, navigation }) => {
@@ -40,10 +41,12 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
 
   const { translations } = useContext(LanguageStringContext);
 
+  const authCtx = useContext(AuthContext);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const res = await getShoppingListById(listItemId);
+      const res = await getShoppingListById(authCtx.token, listItemId);
       if (res) {
         for (let i = 0; i < res.data.admins.length; i++) {
           for (let j = 0; j < res.data.users.length; j++) {

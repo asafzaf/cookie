@@ -34,7 +34,7 @@ export default function HomeScreen({ navigation }) {
     async function fetchData() {
       setLoading(true);
       if (authCtx.isLoggedIn && authCtx.userId) {
-        let data = await getShoppingListByUserId(authCtx.userId);
+        let data = await getShoppingListByUserId(authCtx.token, authCtx.userId);
         setItems(data || []);
 
         // Only pre-select if defaultShoppingListId is defined
