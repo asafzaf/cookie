@@ -53,6 +53,15 @@ export default function BottomTab() {
               <MaterialCommunityIcons name="home" color={color} size={size} />
             ),
           }}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              const state = navigation.getState();
+              const currentRoute = state.routes[state.index]?.name;
+              if (currentRoute === "Home Tab") {
+                e.preventDefault();
+              }
+            },
+          })}
         />
         <Tab.Screen
           name="Shopping Cart Tab"

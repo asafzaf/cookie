@@ -64,6 +64,7 @@ const AcceptLiveShopModal = ({
               style={styles.confirmButton}
               onPress={async () => {
                 await handleListSubmit(
+                  authCtx.token,
                   listId,
                   userId,
                   totalPrice,

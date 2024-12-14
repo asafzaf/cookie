@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import { updateLiveShoppingList } from "../../http/shoppingListHttp";
 
 export const handleListSubmit = async (
+  token,
   listId,
   userId,
   totalPrice,
@@ -11,7 +12,13 @@ export const handleListSubmit = async (
   console.log("List ID: ", listId);
   console.log("User ID: ", userId);
   console.log("Shopping List Departments: ", shoppingListDepartments);
-  const res = await updateLiveShoppingList(listId, userId, totalPrice, shoppingListDepartments);
+  const res = await updateLiveShoppingList(
+    token,
+    listId,
+    userId,
+    totalPrice,
+    shoppingListDepartments
+  );
   console.log(res);
   if (res) {
     Alert.alert("הרשימה נשמרה בהצלחה");

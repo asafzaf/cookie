@@ -1,29 +1,26 @@
 import React, { useContext } from "react";
 import { View, Text, Button, Modal, StyleSheet } from "react-native";
 
-import { logOut } from "../../services/auth";
-
-import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 
-const LogoutModal = ({ visible, setModalVisible }) => {
-  const authCtx = useContext(AuthContext);
+const DeletionModal = ({
+  visible,
+  setModalVisible,
+  userEmail,
+  userId,
+  RemoveUser,
+}) => {
   const { translations } = useContext(LanguageStringContext);
 
   const vars = {
-    title: translations.log_out.title,
-    message: translations.log_out.message,
-    no: translations.log_out.no,
-    confirm: translations.log_out.confirm,
+    title: translations.settings_tab.remove_user_confirm,
+    yes: translations.general.yes,
+    no: translations.general.no,
   };
 
-  const handleLoguot = async () => {
-    try {
-      authCtx.logout();
-      await logOut();
-    } catch (error) {
-      console.log("error:", error);
-    }
+  const handleDeletion = async () => {
+    await RemoveUser(userId);
+    setModalVisible(false);
   };
 
   return (
@@ -31,22 +28,16 @@ const LogoutModal = ({ visible, setModalVisible }) => {
       <View style={styles.modalBackdrop}>
         <View style={styles.modalContainer}>
           <Text style={styles.title}>{vars.title}</Text>
-          <Text style={styles.messageText}>{vars.message}</Text>
+          <Text style={styles.subTitle}>{userEmail}</Text>
           <View style={styles.buttonContainer}>
             <Button title={vars.no} onPress={() => setModalVisible(false)} />
-            <Button
-              color="#FF2929"
-              title={vars.confirm}
-              onPress={handleLoguot}
-            />
+            <Button color="#FF2929" title={vars.yes} onPress={handleDeletion} />
           </View>
         </View>
       </View>
     </Modal>
   );
 };
-
-export default LogoutModal;
 
 const styles = StyleSheet.create({
   modalBackdrop: {
@@ -65,7 +56,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
-  messageText: {
+  subTitle: {
+    fontSize: 16,
     marginBottom: 20,
   },
   buttonContainer: {
@@ -73,3 +65,5 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
 });
+
+export default DeletionModal;

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
-import { createUser } from "../../http/userHttp";
+import { signUpBackend } from "../../http/userHttp";
 
 import { signUp } from "../../services/auth";
 
@@ -23,13 +23,10 @@ const SignupContent = ({ setIsSignUp }) => {
     // Handle signup logic here
     try {
       setLoading(true);
-      const user = await signUp(email, password);
-      if (user.error) {
-        setLoading(false);
-        Alert.alert("Signup failed", user.error.message);
-        return;
-      }
-      const newUser = await createUser({
+      console.log("Signing up...");
+      const user = await signUp(firstName, email, password);
+      console.log("user: ", user);
+      const newUser = await signUpBackend({
         first_name: firstName,
         last_name: lastName,
         email,
@@ -37,26 +34,33 @@ const SignupContent = ({ setIsSignUp }) => {
       });
       if (user && newUser) {
         authCtx.login(
-          user.user.uid,
-          newUser._id,
+          newUser.token,
+          newUser.data._id,
           user.user.uid,
           user.user.email,
-          newUser.language,
-          newUser.first_name,
-          newUser.last_name,
-          newUser.default_shopping_list,
-          newUser.data
+          newUser
         );
         changeLanguage(newUser.language);
+
         setLoading(false);
         Alert.alert("Signup successful", "Welcome to the app!");
       } else {
         setLoading(false);
-        Alert.alert("Signup failed", "Please try again later");
+        Alert.alert("Signup failed", "Please try again later...");
       }
     } catch (error) {
       setLoading(false);
-      console.log("error:", error);
+      if (error.code === "auth/email-already-in-use") {
+        Alert.alert("Signup failed", "That email address is already in use!");
+      } else if (error.code === "auth/invalid-email") {
+        Alert.alert("Signup failed", "That email address is invalid!");
+      } else if (error.code === "auth/weak-password") {
+        Alert.alert("Signup failed", "Password is too weak");
+      } else if (error.code === "auth/network-request-failed") {
+        Alert.alert("Signup failed", "Network error");
+      } else {
+        Alert.alert("Signup failed", "Please try again later");
+      }
     }
   };
 

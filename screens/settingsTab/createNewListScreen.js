@@ -9,21 +9,27 @@ const CreateListScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
 
   const handleCreateList = async () => {
-    if (!listName) {
-      Alert.alert("Please enter a list name");
-      return;
-    }
-
-    const newList = await createShoppingList({
-      userId: authCtx.mongoId,
-      name: listName,
-    }); // Create new list
-    if (newList) {
-      Alert.alert("List created successfully");
-      const userData = await getUserById(authCtx.mongoId); // Fetch user data
-      authCtx.refresh_user_data(userData); // Refresh user data
-      navigation.goBack(); // Go back to the previous screen
-    } else {
+    try {
+      console.log("Creating list...");
+      if (!listName) {
+        Alert.alert("Please enter a list name");
+        return;
+      }
+      const newList = await createShoppingList(authCtx.token, {
+        userId: authCtx.mongoId,
+        name: listName,
+      }); // Create new list
+      console.log("newList: ", newList);
+      if (newList) {
+        const userData = await getUserById(authCtx.token, authCtx.userId); // Fetch user data
+        authCtx.refresh_user_data(userData); // Refresh user data
+        Alert.alert("List created successfully");
+        navigation.goBack(); // Go back to the previous screen
+      } else {
+        Alert.alert("Failed to create list");
+      }
+    } catch (error) {
+      console.log(error);
       Alert.alert("Failed to create list");
     }
   };

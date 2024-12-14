@@ -9,20 +9,23 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { AuthContext } from "../../store/auth-context";
+import { LanguageStringContext } from "../../store/language-context";
+
 import { changeUserLanguage } from "../../http/userHttp";
 
-import { LanguageStringContext } from "../../store/language-context";
+import LogoutModal from "../auth/logoutModal";
 
 const ProfileBox = ({ visible, setModalVisible }) => {
   const authCtx = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
   const { translations, changeLanguage } = useContext(LanguageStringContext);
 
   const setLanguage = async (language) => {
     try {
       setIsLoading(true);
-      const newUserData = await changeUserLanguage(authCtx.mongoId,language);
+      const newUserData = await changeUserLanguage(authCtx.token, authCtx.mongoId, language);
       changeLanguage(newUserData.language);
       setTimeout(() => {
         setIsLoading(false);
@@ -33,81 +36,94 @@ const ProfileBox = ({ visible, setModalVisible }) => {
     }
   };
 
-
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={visible}
-      onRequestClose={() => setModalVisible(false)}
-    >
-      <View style={styles.modalBackground}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalHeaderText}>
-            {translations.profile.topic}
-          </Text>
-          <Image
-            style={styles.profileImage}
-            source={{ uri: "https://example.com/profile.jpg" }} // Replace with dynamic profile URL
-          />
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              {translations.profile.first_name}: {authCtx.userFirstName}
+    <>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={visible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalHeaderText}>
+              {translations.profile.topic}
             </Text>
-            <Text style={styles.infoText}>
-              {translations.profile.last_name}: {authCtx.userLastName}
-            </Text>
-            <Text style={styles.infoText}>
-              {translations.profile.email}: {authCtx.userEmail}
-            </Text>
-            <Text style={styles.infoText}>
-              {translations.profile.change_language_title}:
-            </Text>
-            <View style={styles.languageContainer}>
-              <TouchableOpacity
-                style={styles.languageButton}
-                onPress={() => setLanguage("english")} // Add your onPress functionality
-              >
-                <Image
-                  style={styles.languageIcon}
-                  source={require("../../assets/images/countries/united-states.png")}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.languageButton}
-                onPress={() => setLanguage("hebrew")} // Add your onPress functionality
-              >
-                <Image
-                  style={styles.languageIcon}
-                  source={require("../../assets/images/countries/israel.png")}
-                />
-              </TouchableOpacity>
+            <Image
+              style={styles.profileImage}
+              source={{ uri: "https://example.com/profile.jpg" }} // Replace with dynamic profile URL
+            />
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>
+                {translations.profile.first_name}: {authCtx.userFirstName}
+              </Text>
+              <Text style={styles.infoText}>
+                {translations.profile.last_name}: {authCtx.userLastName}
+              </Text>
+              <Text style={styles.infoText}>
+                {translations.profile.email}: {authCtx.userEmail}
+              </Text>
+              <Text style={styles.infoText}>
+                {translations.profile.change_language_title}:
+              </Text>
+              <View style={styles.languageContainer}>
+                <TouchableOpacity
+                  style={styles.languageButton}
+                  onPress={() => setLanguage("english")} // Add your onPress functionality
+                >
+                  <Image
+                    style={styles.languageIcon}
+                    source={require("../../assets/images/countries/united-states.png")}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.languageButton}
+                  onPress={() => setLanguage("hebrew")} // Add your onPress functionality
+                >
+                  <Image
+                    style={styles.languageIcon}
+                    source={require("../../assets/images/countries/israel.png")}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => console.log("Edit Profile Pressed")} // Add your onPress functionality
+            >
+              <Text style={styles.editButtonText}>
+                {translations.profile.edit_profile}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={() => setLogoutModalVisible(true)}
+            >
+              <Text style={styles.logoutButtonText}>
+                {translations.profile.log_out}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>
+                {translations.general.close}
+              </Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => console.log("Edit Profile Pressed")} // Add your onPress functionality
-          >
-            <Text style={styles.editButtonText}>
-              {translations.profile.edit_profile}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.closeButtonText}>
-              {translations.general.close}
-            </Text>
-          </TouchableOpacity>
         </View>
-      </View>
-      {isLoading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )}
-    </Modal>
+        {isLoading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
+      </Modal>
+      <LogoutModal
+        visible={logoutModalVisible}
+        setModalVisible={setLogoutModalVisible}
+      ></LogoutModal>
+    </>
   );
 };
 
@@ -176,6 +192,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   closeButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  logoutButton: {
+    backgroundColor: "#f55555",
+    borderRadius: 20,
+    padding: 10,
+    marginBottom: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  logoutButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",

@@ -56,7 +56,10 @@ function AuthContextProvider({ children }) {
           "defaultShoppingList"
         );
         setDefaultShoppingList(defaultShoppingList);
+        const selectedList = await AsyncStorage.getItem("defaultShoppingList");
+        setSelectedList(selectedList);
         const userData = await AsyncStorage.getItem("userData");
+        console.log("userData:", userData);
         setUserData(JSON.parse(userData));
       }
     };
@@ -64,36 +67,27 @@ function AuthContextProvider({ children }) {
     fetchData();
   }, []);
 
-  function login(
-    token,
-    mongoId,
-    userId,
-    userEmail,
-    language,
-    userFirstName,
-    userLastName,
-    defaultShoppingList,
-    userData
-  ) {
+  function login(token, mongoId, userId, userEmail, userData) {
     setAuthToken(token);
     setMongoId(mongoId);
     setUserId(userId);
     setUserEmail(userEmail);
-    setLanguage(language);
-    setUserFirstName(userFirstName);
-    setUserLastName(userLastName);
-    setDefaultShoppingList(defaultShoppingList);
-    setSelectedList(defaultShoppingList);
+    setLanguage(userData.language);
+    setUserFirstName(userData.first_name);
+    setUserLastName(userData.last_name);
+    setDefaultShoppingList(userData.default_shopping_list);
+    setSelectedList(userData.default_shopping_list);
     setUserData(userData);
     setCheckedList([]);
     AsyncStorage.setItem("token", token);
     AsyncStorage.setItem("mongoId", mongoId);
     AsyncStorage.setItem("userId", userId);
     AsyncStorage.setItem("userEmail", userEmail);
-    AsyncStorage.setItem("language", language);
-    AsyncStorage.setItem("userFirstName", userFirstName);
-    AsyncStorage.setItem("userLastName", userLastName);
-    AsyncStorage.setItem("defaultShoppingList", defaultShoppingList);
+    AsyncStorage.setItem("language", userData.language);
+    AsyncStorage.setItem("userFirstName", userData.first_name);
+    AsyncStorage.setItem("userLastName", userData.last_name);
+    AsyncStorage.setItem("defaultShoppingList", userData.default_shopping_list);
+    AsyncStorage.setItem("selectedList", userData.default_shopping_list);
     AsyncStorage.setItem("userData", JSON.stringify(userData));
   }
 
@@ -117,6 +111,7 @@ function AuthContextProvider({ children }) {
     AsyncStorage.removeItem("userFirstName");
     AsyncStorage.removeItem("userLastName");
     AsyncStorage.removeItem("defaultShoppingList");
+    AsyncStorage.removeItem("selectedList");
     AsyncStorage.removeItem("userData");
   }
 
@@ -135,6 +130,7 @@ function AuthContextProvider({ children }) {
 
   function updateLanguage(lang) {
     setLanguage(lang);
+    AsyncStorage.setItem("language", lang);
   }
 
   const contextValue = {

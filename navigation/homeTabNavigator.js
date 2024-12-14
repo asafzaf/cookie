@@ -1,25 +1,26 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { useNavigation } from "@react-navigation/native";
 
-import HomeScreen from "../screens/homeTab/homeScreen";
+import { AuthContext } from "../store/auth-context";
+import { LanguageStringContext } from "../store/language-context";
 
+import HomeScreen from "../screens/homeTab/homeScreen";
 import ShoppingLiveScreen from "../screens/homeTab/shoppingLiveScreen";
 
 import MessagesModal from "../components/homeScreen/messageModal";
 import CancelLiveShopModal from "../components/homeScreen/cancelLiveShopModal";
-
 import AcceptLiveShopModal from "../components/homeScreen/acceptLiveShopModal";
 
-import { LanguageStringContext } from "../store/language-context";
+import { getMessagesByUserId } from "../http/messageHttp";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Stack = createNativeStackNavigator();
 
 const HomeTabNavigator = () => {
   const [messageModalVisible, setMessageModalVisible] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [cancelLiveShopModalVisible, setCancelLiveShopModalVisible] =
     useState(false);
   const [acceptLiveShopModalVisible, setAcceptLiveShopModalVisible] =
@@ -65,7 +66,37 @@ const HomeTabNavigator = () => {
       translations.home_screen.complete_shopping_total_price,
   };
 
-  const messages = [];
+  const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!authCtx.mongoId) {
+          return;
+        }
+        const messagesData = await getMessagesByUserId(authCtx.token, authCtx.mongoId);
+        if (messagesData) {
+          setMessages(messagesData.data);
+        } else {
+          setMessages([]);
+          console.log("No messages");
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
+    fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const removeMessage = (messageId) => {
+    const newMessages = messages.filter((message) => message._id !== messageId);
+    setMessages(newMessages);
+  };
+
   const messageBox =
     messages.length > 0 ? (
       <TouchableOpacity onPressIn={popInMessages}>
@@ -139,6 +170,7 @@ const HomeTabNavigator = () => {
           translations={message_translations}
           setModalVisible={setMessageModalVisible}
           messages={messages}
+          removeMessage={removeMessage}
         />
       )}
       {cancelLiveShopModalVisible && (

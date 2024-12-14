@@ -66,17 +66,20 @@
     "enter_user_email": "Enter Email",
     "add_user": "Add User",
     "remove_user": "Remove User",
+    "remove_user_confirm": "Are you sure you want to remove this user?",
     "user_list": "User List",
     "make_admin": "Make Admin",
     "remove_admin": "Remove Admin"
   },
   "general": {
     "loading": "Loading...",
+    "processing": "Processing...",
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
     "add": "Add",
+    "to_the_shopping_list": "to the shopping list",
     "search": "Search",
     "yes": "Yes",
     "no": "No",
@@ -113,10 +116,22 @@
     "last_name": "Last Name",
     "email": "Email",
     "edit_profile": "Edit Profile",
-    "change_language_title": "Change Language"
+    "change_language_title": "Change Language",
+    "log_out": "Log Out"
+  },
+  "log_out": {
+    "title": "Log Out",
+    "message": "Are you sure you want to log out?",
+    "no": "Cancel",
+    "confirm": "Log Out"
   },
   "messages": {
     "topic": "Messages",
     "no_new_messages": "No new messages"
+  },
+  "alerts": {
+    "back_button_disabled": "Back Button Disabled",
+    "back_button_disabled_message": "You cannot go back with this button.",
+    "back_button_disabled_confirm": "Understood"
   }
 }

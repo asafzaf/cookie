@@ -1,24 +1,20 @@
-// import data from "./server.json";
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
 
 import { createUnrecognizedItem } from "./unrecognizedItemHttp";
 
-import Constants from 'expo-constants';
-
 const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,
 };
 
-
-
-export const getShoppingListById = async (listId) => {
+export const getShoppingListById = async (token, listId) => {
   try {
     const response = await axios.get(
       data.serverUrl + "/api/v1/shoppinglist/" + listId,
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -30,13 +26,14 @@ export const getShoppingListById = async (listId) => {
   }
 };
 
-export const getOrderedShoppingListById = async (listId) => {
+export const getOrderedShoppingListById = async (token, listId) => {
   try {
     const response = await axios.get(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/ordered",
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -48,7 +45,7 @@ export const getOrderedShoppingListById = async (listId) => {
   }
 };
 
-export const createShoppingList = async (shoppingList) => {
+export const createShoppingList = async (token, shoppingList) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist",
@@ -56,6 +53,7 @@ export const createShoppingList = async (shoppingList) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -67,9 +65,14 @@ export const createShoppingList = async (shoppingList) => {
   }
 };
 
-export const updateLiveShoppingList = async (listId, userId, totalPrice, departments) => {
+export const updateLiveShoppingList = async (
+  token,
+  listId,
+  userId,
+  totalPrice,
+  departments
+) => {
   try {
-    console.log("Update Live Shopping List", listId, userId, totalPrice, departments);
     const response = await axios.put(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/live",
       {
@@ -80,6 +83,7 @@ export const updateLiveShoppingList = async (listId, userId, totalPrice, departm
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -92,7 +96,7 @@ export const updateLiveShoppingList = async (listId, userId, totalPrice, departm
   }
 };
 
-export const addItemToShoppingList = async (listId, item) => {
+export const addItemToShoppingList = async (token, listId, item) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/add",
@@ -100,6 +104,7 @@ export const addItemToShoppingList = async (listId, item) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -112,6 +117,7 @@ export const addItemToShoppingList = async (listId, item) => {
 };
 
 export const createAddUnrecognizedItemToShoppingList = async (
+  token,
   userId,
   listId,
   itemName
@@ -120,19 +126,24 @@ export const createAddUnrecognizedItemToShoppingList = async (
     const obj = {
       name: itemName,
       createByUserId: userId,
-      createOnList: listId,
+      createOnList: [listId],
     };
-    const itemResponse = await createUnrecognizedItem(obj);
+    const itemResponse = await createUnrecognizedItem(token, obj);
     const itemId = itemResponse._id;
-
-    const res = addUnrecognizedItemToShoppingList(listId, { item: itemId });
+    const res = await addUnrecognizedItemToShoppingList(token, listId, {
+      item: itemId,
+    });
     return res;
   } catch (error) {
     handleAxiosError("createAddUnrecognizedItemToShoppingList", error);
   }
 };
 
-export const addUnrecognizedItemToShoppingList = async (listId, item) => {
+export const addUnrecognizedItemToShoppingList = async (
+  token,
+  listId,
+  item
+) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/addUnrecognized",
@@ -140,6 +151,7 @@ export const addUnrecognizedItemToShoppingList = async (listId, item) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -151,7 +163,7 @@ export const addUnrecognizedItemToShoppingList = async (listId, item) => {
   }
 };
 
-export const removeItemFromShoppingList = async (listId, item) => {
+export const removeItemFromShoppingList = async (token, listId, item) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/remove",
@@ -159,6 +171,7 @@ export const removeItemFromShoppingList = async (listId, item) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -170,7 +183,11 @@ export const removeItemFromShoppingList = async (listId, item) => {
   }
 };
 
-export const removeUnrecognizedItemFromShoppingList = async (listId, item) => {
+export const removeUnrecognizedItemFromShoppingList = async (
+  token,
+  listId,
+  item
+) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/" + listId + "/removeUnrecognized",
@@ -178,6 +195,7 @@ export const removeUnrecognizedItemFromShoppingList = async (listId, item) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -189,7 +207,7 @@ export const removeUnrecognizedItemFromShoppingList = async (listId, item) => {
   }
 };
 
-export const setDefaultShoppingList = async ({ userId, listId }) => {
+export const setDefaultShoppingList = async (token, { userId, listId }) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/setDefault",
@@ -197,6 +215,7 @@ export const setDefaultShoppingList = async ({ userId, listId }) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -208,14 +227,20 @@ export const setDefaultShoppingList = async ({ userId, listId }) => {
   }
 };
 
-export const addUserToShoppingList = async (listId, userEmail) => {
+export const addUserToShoppingList = async (
+  token,
+  selfId,
+  listId,
+  userEmail
+) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/addUser",
-      { listId, userEmail },
+      { selfId, listId, userEmail },
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -228,7 +253,47 @@ export const addUserToShoppingList = async (listId, userEmail) => {
   }
 };
 
-export const removeUserFromShoppingList = async (listId, userId) => {
+export const acceptUserToShoppingList = async (token, listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/acceptUser",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("acceptUserToShoppingList", error);
+  }
+};
+
+export const rejectUserToShoppingList = async (token, listId, userId) => {
+  try {
+    const response = await axios.post(
+      data.serverUrl + "/api/v1/shoppinglist/rejectUser",
+      { listId, userId },
+      {
+        timeout: 5000,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const obj = JSON.parse(response.request._response);
+    return obj;
+  } catch (error) {
+    handleAxiosError("rejectUserToShoppingList", error);
+  }
+};
+
+export const removeUserFromShoppingList = async (token, listId, userId) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/removeUser",
@@ -236,6 +301,7 @@ export const removeUserFromShoppingList = async (listId, userId) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -247,7 +313,7 @@ export const removeUserFromShoppingList = async (listId, userId) => {
   }
 };
 
-export const addAdminToShoppingList = async (listId, userId) => {
+export const addAdminToShoppingList = async (token, listId, userId) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/addAdmin",
@@ -255,6 +321,7 @@ export const addAdminToShoppingList = async (listId, userId) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -266,7 +333,7 @@ export const addAdminToShoppingList = async (listId, userId) => {
   }
 };
 
-export const removeAdminFromShoppingList = async (listId, userId) => {
+export const removeAdminFromShoppingList = async (token, listId, userId) => {
   try {
     const response = await axios.post(
       data.serverUrl + "/api/v1/shoppinglist/removeAdmin",
@@ -274,6 +341,7 @@ export const removeAdminFromShoppingList = async (listId, userId) => {
       {
         timeout: 5000,
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }

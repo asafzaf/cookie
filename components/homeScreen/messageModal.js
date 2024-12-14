@@ -6,10 +6,20 @@ import {
   Button,
   Modal,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
-const MessagesModal = ({ visible, setModalVisible, messages, translations }) => {
+import { InvitationMessageComponent } from "./messages/messagesComponents";
+
+const MessagesModal = ({
+  visible,
+  setModalVisible,
+  messages,
+  translations,
+  removeMessage,
+}) => {
   const { messages_topic, no_new_messages, close } = translations;
+
   return (
     <Modal
       animationType="fade"
@@ -22,11 +32,21 @@ const MessagesModal = ({ visible, setModalVisible, messages, translations }) => 
           <Text style={styles.title}>{messages_topic}</Text>
           <View style={styles.messageList}>
             {messages.length > 0 ? (
-              messages.map((message, index) => (
-                <Text key={index} style={styles.messageText}>
-                  {message}
-                </Text>
-              ))
+              <ScrollView style={styles.scrollView}>
+                {messages.map((message) =>
+                  message.type === "invitation" ? (
+                    <InvitationMessageComponent
+                      key={message._id}
+                      id={message._id}
+                      title={message.title}
+                      userId={message.userId}
+                      message={message.message}
+                      attachments={message.attachments}
+                      removeMessage={removeMessage}
+                    />
+                  ) : null
+                )}
+              </ScrollView>
             ) : (
               <Text style={styles.emptyMessage}>{no_new_messages}</Text>
             )}
@@ -52,10 +72,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: "80%",
+    height: "60%",
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
+  },
+  scrollView: {
+    width: "100%",
+    height: "100%",
   },
   title: {
     fontSize: 20,

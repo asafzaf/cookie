@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../store/auth-context";
-import { LanguageStringContext } from "../../store/language-context";
+import styles from "../../styles/styles";
 import {
+  Alert,
   TouchableOpacity,
   Text,
   View,
   ScrollView,
   StatusBar,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import styles from "../../styles/styles";
-import { getShoppingListByUserId } from "../../utils/shoppinglist";
-import { ActivityIndicator } from "react-native";
+import { AuthContext } from "../../store/auth-context";
+import { LanguageStringContext } from "../../store/language-context";
 
+import { getShoppingListByUserId } from "../../utils/shoppinglist";
+
+import Ionicons from "@expo/vector-icons/Ionicons";
 import ComingSoonComponent from "../../components/general/commingSoonComponent";
 
 export default function HomeScreen({ navigation }) {
@@ -32,7 +34,7 @@ export default function HomeScreen({ navigation }) {
     async function fetchData() {
       setLoading(true);
       if (authCtx.isLoggedIn && authCtx.userId) {
-        let data = await getShoppingListByUserId(authCtx.userId);
+        let data = await getShoppingListByUserId(authCtx.token, authCtx.userId);
         setItems(data || []);
 
         // Only pre-select if defaultShoppingListId is defined
@@ -111,6 +113,10 @@ export default function HomeScreen({ navigation }) {
         title="Let's start Shopping!"
         borderWidth="2"
         onPress={() => {
+          if (!authCtx.selectedList) {
+            Alert.alert("Please select a shopping list first");
+            return;
+          }
           navigation.navigate("Live Shopping", {
             listId: authCtx.selectedList,
           });

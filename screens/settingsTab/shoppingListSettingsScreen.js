@@ -8,7 +8,12 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
+  TouchableOpacity,
 } from "react-native";
+
+import { MaterialCommunityIcons } from "react-native-vector-icons";
+
+import DeletionModal from "../../components/settingsTab/deletionModal";
 
 import {
   getShoppingListById,
@@ -18,23 +23,30 @@ import {
   removeAdminFromShoppingList,
 } from "../../http/shoppingListHttp";
 
+import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 
 const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const { userId, listItemId } = route.params;
   const [users, setUsers] = useState([]);
+  const [pendingUsers, setPendingUsers] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false); // Assume the current user is an admin for this example
+  const [deletionModalVisible, setDeletionModalVisible] = useState(false);
+  const [userForRemoval, setUserForRemoval] = useState("");
+  const [userIdRemoval, setUserIdRemoval] = useState("");
 
   const [newUserEmail, setNewUserEmail] = useState("");
 
   const { translations } = useContext(LanguageStringContext);
 
+  const authCtx = useContext(AuthContext);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const res = await getShoppingListById(listItemId);
+      const res = await getShoppingListById(authCtx.token, listItemId);
       if (res) {
         for (let i = 0; i < res.data.admins.length; i++) {
           for (let j = 0; j < res.data.users.length; j++) {
@@ -43,7 +55,14 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
             }
           }
         }
+        for (let i = 0; i < res.data.pendingUsers.length; i++) {
+          let pend = res.data.pendingUsers[i];
+          pend.isAdmin = false;
+          pend.isPending = true;
+          res.data.users.push(pend);
+        }
         setUsers(res.data.users);
+        setPendingUsers(res.data.pendingUsers);
         setAdmins(res.data.admins);
         setLoading(false);
         // Check if the current user is an admin
@@ -70,21 +89,16 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
     checkAdminStatus();
   }, [admins]);
 
-  const toggleAdminStatus = (userId) => {
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, isAdmin: !user.isAdmin } : user
-      )
-    );
-  };
-
   const addUser = async () => {
     if (newUserEmail.trim()) {
       const userEmail = newUserEmail;
-      const res = await addUserToShoppingList(listItemId, userEmail);
+      let res = await addUserToShoppingList(userId, listItemId, userEmail);
       if (res) {
+        res.isAdmin = false;
+        res.isPending = true;
         setUsers([...users, res]);
         setNewUserEmail("");
+        Alert.alert("User added", "Sent invitation to user, pending approval");
       } else {
         console.log("Failed to add user");
         Alert.alert("Failed to add user", "Please try again later");
@@ -126,57 +140,100 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   };
 
   const RemoveUser = async (userId) => {
-    const res = await removeUserFromShoppingList(listItemId, userId);
+    const res = await removeUserFromShoppingList(
+      authCtx.token,
+      listItemId,
+      userId
+    );
     if (res) {
-      setUsers(users.filter((user) => user.id !== userId));
+      setUsers(users.filter((user) => user._id !== userId));
     } else {
       console.log("Failed to remove user");
       Alert.alert("Failed to remove user", "Please try again later");
     }
   };
-  //   const isAdmin = admins.find((admin) => admin._id === userId) ? true : false;
 
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
       <Text style={styles.userName}>{item.email}</Text>
-      {isAdmin && item._id != userId && (
-        <Button
-          title={item.isAdmin ? translations.settings_tab.remove_admin : translations.settings_tab.make_admin}
-          onPress={() =>
-            item.isAdmin ? RemoveAdmin(item._id) : MakeAdmin(item._id)
-          }
-        />
+      {isAdmin && item.isPending && (
+        <Text style={styles.pendingUserText}>Pending</Text>
+      )}
+      {isAdmin && item._id != userId && !item.isPending && (
+        <>
+          <Button
+            title={
+              item.isAdmin
+                ? translations.settings_tab.remove_admin
+                : translations.settings_tab.make_admin
+            }
+            onPress={() =>
+              item.isAdmin ? RemoveAdmin(item._id) : MakeAdmin(item._id)
+            }
+          />
+          <TouchableOpacity
+            onPress={() => {
+              setDeletionModalVisible(true);
+              setUserForRemoval(item.email);
+              setUserIdRemoval(item._id);
+              console.log("User for removal", item.email);
+              console.log("User for removal", item._id);
+            }}
+          >
+            <MaterialCommunityIcons name="delete" size={20} color="red" />
+          </TouchableOpacity>
+        </>
       )}
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      {loading && <ActivityIndicator size="large" />}
-      {!loading && (
-        <>
-          <Text style={styles.header}>{translations.settings_tab.shopping_list_settings}</Text>
-          <Text style={styles.subHeader}>{translations.settings_tab.add_user}</Text>
-          {isAdmin && (
-            <View style={styles.addUserContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder={translations.settings_tab.enter_user_email}
-                value={newUserEmail}
-                onChangeText={setNewUserEmail}
-              />
-              <Button title={translations.settings_tab.add_user} onPress={addUser} />
-            </View>
-          )}
-          <Text style={styles.subHeader}>{translations.settings_tab.user_list}</Text>
-          <FlatList
-            data={users}
-            renderItem={renderUserItem}
-            keyExtractor={(item) => item._id}
-          />
-        </>
+    <>
+      <View style={styles.container}>
+        {loading && <ActivityIndicator size="large" />}
+        {!loading && (
+          <>
+            <Text style={styles.header}>
+              {translations.settings_tab.shopping_list_settings}
+            </Text>
+            <Text style={styles.subHeader}>
+              {translations.settings_tab.add_user}
+            </Text>
+            {isAdmin && (
+              <View style={styles.addUserContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder={translations.settings_tab.enter_user_email}
+                  value={newUserEmail}
+                  onChangeText={setNewUserEmail}
+                />
+                <Button
+                  title={translations.settings_tab.add_user}
+                  onPress={addUser}
+                />
+              </View>
+            )}
+            <Text style={styles.subHeader}>
+              {translations.settings_tab.user_list}
+            </Text>
+            <FlatList
+              data={users}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item._id}
+            />
+          </>
+        )}
+      </View>
+      {deletionModalVisible && (
+        <DeletionModal
+          visible={deletionModalVisible}
+          setModalVisible={setDeletionModalVisible}
+          userEmail={userForRemoval}
+          userId={userIdRemoval}
+          RemoveUser={RemoveUser}
+        />
       )}
-    </View>
+    </>
   );
 };
 
@@ -207,6 +264,12 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 18,
+    marginRight: 30,
+  },
+  pendingUserText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "red",
   },
   addUserContainer: {
     flexDirection: "row",
@@ -220,6 +283,21 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     borderRadius: 5,
+  },
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "50%",
   },
 });
 

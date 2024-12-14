@@ -66,17 +66,20 @@
     "enter_user_email": "הכנס דואר אלקטרוני",
     "add_user": "הוסף משתמש",
     "remove_user": "הסר משתמש",
+    "remove_user_confirm": "האם אתה בטוח שברצונך להסיר משתמש זה?",
     "user_list": "רשימת משתמשים",
     "make_admin": "הגדר כמנהל",
     "remove_admin": "הסר ממנהל"
   },
   "general": {
     "loading": "טוען...",
+    "processing": "מבצע...",
     "cancel": "ביטול",
     "save": "שמור",
     "delete": "מחק",
     "edit": "ערוך",
     "add": "הוסף",
+    "to_the_shopping_list": "לרשימת הקניות",
     "search": "חפש",
     "yes": "כן",
     "no": "לא",
@@ -113,11 +116,22 @@
     "last_name": "שם משפחה",
     "email": "דואר אלקטרוני",
     "edit_profile": "ערוך פרופיל",
-    "change_language_title": "שנה שפה"
-
+    "change_language_title": "שנה שפה",
+    "log_out": "התנתק"
+  },
+  "log_out": {
+    "title": "התנתקות",
+    "message": "האם אתה בטוח שברצונך להתנתק?",
+    "no": "ביטול",
+    "confirm": "התנתק"
   },
   "messages": {
     "topic": "הודעות",
     "no_new_messages": "אין הודעות חדשות"
+  },
+  "alerts": {
+    "back_button_disabled": "חזרה למסך הקודם מושבתת",
+    "back_button_disabled_message": "אינך יכול לחזור למסך הקודם עם כפתור זה.",
+    "back_button_disabled_confirm": "הבנתי"
   }
 }
