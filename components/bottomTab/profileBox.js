@@ -25,7 +25,7 @@ const ProfileBox = ({ visible, setModalVisible }) => {
   const setLanguage = async (language) => {
     try {
       setIsLoading(true);
-      const newUserData = await changeUserLanguage(authCtx.mongoId, language);
+      const newUserData = await changeUserLanguage(authCtx.token, authCtx.mongoId, language);
       changeLanguage(newUserData.language);
       setTimeout(() => {
         setIsLoading(false);

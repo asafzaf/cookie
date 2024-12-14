@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
-import { createUser } from "../../http/userHttp";
+import { signUpBackend } from "../../http/userHttp";
 
 import { signUp } from "../../services/auth";
 
@@ -23,8 +23,10 @@ const SignupContent = ({ setIsSignUp }) => {
     // Handle signup logic here
     try {
       setLoading(true);
+      console.log("Signing up...");
       const user = await signUp(firstName, email, password);
-      const newUser = await createUser({
+      console.log("user: ", user);
+      const newUser = await signUpBackend({
         first_name: firstName,
         last_name: lastName,
         email,
@@ -32,14 +34,14 @@ const SignupContent = ({ setIsSignUp }) => {
       });
       if (user && newUser) {
         authCtx.login(
-          user.user.uid,
-          newUser._id,
+          newUser.token,
+          newUser.data._id,
           user.user.uid,
           user.user.email,
           newUser
         );
         changeLanguage(newUser.language);
-        
+
         setLoading(false);
         Alert.alert("Signup successful", "Welcome to the app!");
       } else {

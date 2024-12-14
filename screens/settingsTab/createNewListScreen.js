@@ -15,13 +15,13 @@ const CreateListScreen = ({ navigation }) => {
         Alert.alert("Please enter a list name");
         return;
       }
-      const newList = await createShoppingList({
+      const newList = await createShoppingList(authCtx.token, {
         userId: authCtx.mongoId,
         name: listName,
       }); // Create new list
       console.log("newList: ", newList);
       if (newList) {
-        const userData = await getUserById(authCtx.userId); // Fetch user data
+        const userData = await getUserById(authCtx.token, authCtx.userId); // Fetch user data
         authCtx.refresh_user_data(userData); // Refresh user data
         Alert.alert("List created successfully");
         navigation.goBack(); // Go back to the previous screen

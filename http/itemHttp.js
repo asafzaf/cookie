@@ -1,17 +1,16 @@
 import axios from "axios";
 import { handleAxiosError } from "./axios.error";
-import Constants from 'expo-constants';
 
 const data = {
   serverUrl: process.env.EXPO_PUBLIC_API_URL,
 };
 
-
-export const getItems = async () => {
+export const getItems = async (token) => {
   try {
     const response = await axios.get(data.serverUrl + "/api/v1/item", {
       timeout: 5000,
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
