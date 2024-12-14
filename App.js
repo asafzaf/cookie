@@ -12,6 +12,9 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { LanguageStringProvider } from "./store/language-context";
 
 import auth from "@react-native-firebase/auth";
+import  MobileAds  from "react-native-google-mobile-ads";
+
+console.log(MobileAds)
 
 const Gate = () => {
   const [initialized, setInitialized] = useState(false);
@@ -25,6 +28,20 @@ const Gate = () => {
       setInitialized(true);
     }
   };
+
+  useEffect(() => {
+    const initMobileAds = async () => {
+      console.log("Initializing MobileAds");
+      try {
+        await MobileAds().initialize();
+        console.log("MobileAds initialized!");
+      } catch (error) {
+        console.error("MobileAds initialization error:", error);
+      }
+    };
+    console.log("Initializing");
+    initMobileAds();
+  }, []);
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

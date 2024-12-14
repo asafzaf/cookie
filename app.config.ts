@@ -15,6 +15,11 @@ const defineConfig = (): ExpoConfig => ({
       foregroundImage: "./assets/images/cookie-icon.png",
       backgroundColor: "#ffffff",
     },
+    splash: {
+      image: "./assets/images/cookie-icon.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff",
+    },
     package: "com.asafz.cookie",
     versionCode: 1,
   },
@@ -48,6 +53,14 @@ const defineConfig = (): ExpoConfig => ({
         ios: {
           useFrameworks: "static",
         },
+      },
+    ],
+    [
+      "react-native-google-mobile-ads",
+      {
+        iosAppId: "ca-app-pub-4302889545264887~1872723594",
+        androidAppId: "ca-app-pub-4302889545264887~7768032196",
+        android_app_id: "ca-app-pub-4302889545264887~7768032196",
       },
     ],
     "@react-native-firebase/app",
