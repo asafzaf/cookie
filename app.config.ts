@@ -9,7 +9,7 @@ const defineConfig = (): ExpoConfig => ({
   orientation: "portrait",
 
   android: {
-    permissions: ["INTERNET,ACCESS_NETWORK_STATE"],
+    permissions: ["INTERNET", "ACCESS_NETWORK_STATE"],
     googleServicesFile: process.env.GOOGLE_SERVICES ?? "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/cookie-icon.png",
