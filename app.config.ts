@@ -9,7 +9,7 @@ const defineConfig = (): ExpoConfig => ({
   orientation: "portrait",
 
   android: {
-    permissions: ["INTERNET"],
+    permissions: ["INTERNET,ACCESS_NETWORK_STATE"],
     googleServicesFile: process.env.GOOGLE_SERVICES ?? "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/cookie-icon.png",
@@ -61,6 +61,7 @@ const defineConfig = (): ExpoConfig => ({
         iosAppId: "ca-app-pub-4302889545264887~1872723594",
         androidAppId: "ca-app-pub-4302889545264887~7768032196",
         android_app_id: "ca-app-pub-4302889545264887~7768032196",
+        ios_app_id: "ca-app-pub-4302889545264887~1872723594",
       },
     ],
     "@react-native-firebase/app",

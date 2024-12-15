@@ -12,9 +12,8 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import { LanguageStringProvider } from "./store/language-context";
 
 import auth from "@react-native-firebase/auth";
-import  MobileAds  from "react-native-google-mobile-ads";
+import MobileAds from "react-native-google-mobile-ads";
 
-console.log(MobileAds)
 
 const Gate = () => {
   const [initialized, setInitialized] = useState(false);

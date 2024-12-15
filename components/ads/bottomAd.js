@@ -8,8 +8,8 @@ import {
   TestIds,
 } from "react-native-google-mobile-ads";
 
-const iosAdMobBanner = "ca-app-pub-4302889545264887~1872723594";
-const androidAdMobBanner = "ca-app-pub-4302889545264887~7768032196";
+const iosAdMobBanner = "ca-app-pub-4302889545264887/8505580554";
+const androidAdMobBanner = "ca-app-pub-4302889545264887/2765302742";
 
 const ProductionID =
   Device.osName === "Android" ? androidAdMobBanner : iosAdMobBanner;
