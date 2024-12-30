@@ -92,7 +92,7 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const addUser = async () => {
     if (newUserEmail.trim()) {
       const userEmail = newUserEmail;
-      let res = await addUserToShoppingList(userId, listItemId, userEmail);
+      let res = await addUserToShoppingList(authCtx.token, userId, listItemId, userEmail);
       if (res) {
         res.isAdmin = false;
         res.isPending = true;
@@ -109,7 +109,7 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
 
   const MakeAdmin = async (userId) => {
     console.log("Make Admin", userId);
-    const res = await addAdminToShoppingList(listItemId, userId);
+    const res = await addAdminToShoppingList(authCtx.token, listItemId, userId);
     if (res) {
       setUsers(
         users.map((user) =>
@@ -124,7 +124,7 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
 
   const RemoveAdmin = async (userId) => {
     console.log("Remove Admin", userId);
-    const res = await removeAdminFromShoppingList(listItemId, userId);
+    const res = await removeAdminFromShoppingList(authCtx.token, listItemId, userId);
     console.log("Remove Admin Res", res);
     if (res) {
       console.log("Remove Admin Res!");
@@ -196,9 +196,11 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
             <Text style={styles.header}>
               {translations.settings_tab.shopping_list_settings}
             </Text>
-            <Text style={styles.subHeader}>
-              {translations.settings_tab.add_user}
-            </Text>
+            {isAdmin && (
+              <Text style={styles.subHeader}>
+                {translations.settings_tab.add_user}
+              </Text>
+            )}
             {isAdmin && (
               <View style={styles.addUserContainer}>
                 <TextInput

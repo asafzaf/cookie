@@ -30,7 +30,7 @@ import { LanguageStringContext } from "../../store/language-context";
 const ShoppingCart = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [AddItemsVisible, setAddItemsVisible] = useState(true);
-  const [MyShoppingListVisible, setMyShoppingListVisible] = useState(true);
+  const [MyShoppingListVisible, setMyShoppingListVisible] = useState(false);
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([]);
   const [shoppingListItems, setShoppingListItems] = useState([]);
@@ -287,8 +287,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   section: {
-    marginBottom: 16,
-    padding: 16,
+    marginBottom: 12,
+    padding: 12,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,

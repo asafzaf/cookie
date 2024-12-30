@@ -90,7 +90,7 @@ const HomeTabNavigator = () => {
       fetchData();
     }, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [authCtx.mongoId, authCtx.token]);
 
   const removeMessage = (messageId) => {
     const newMessages = messages.filter((message) => message._id !== messageId);

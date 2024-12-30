@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import {
   View,
   Text,
@@ -20,6 +20,9 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const input1Ref = useRef(null);
+  const input2Ref = useRef(null);
 
   const authCtx = useContext(AuthContext);
 
@@ -88,19 +91,25 @@ const LoginContent = ({ setIsSignUp, setIsResetPassword }) => {
         placeholder="email"
         value={email}
         onChangeText={setEmail}
+        ref={input1Ref}
+        returnKeyType="next"
+        blurOnSubmit={false}
+        onSubmitEditing={() => input2Ref.current.focus()}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
+        ref={input2Ref}
+        returnKeyType="done"
         secureTextEntry
       />
       <View style={styles.buttonView}>
         <Button style={styles.button} title="Login" onPress={handleLogin} />
         <Button
           style={styles.button}
-          title="Switch to Signup"
+          title="Signup"
           onPress={() => setIsSignUp(true)}
         />
         <TouchableOpacity

@@ -1,5 +1,13 @@
-import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import React, { useState, useContext, useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  ScrollView,
+} from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { LanguageStringContext } from "../../store/language-context";
 import { signUpBackend } from "../../http/userHttp";
@@ -14,6 +22,11 @@ const SignupContent = ({ setIsSignUp }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const input1Ref = useRef(null);
+  const input2Ref = useRef(null);
+  const input3Ref = useRef(null);
+  const input4Ref = useRef(null);
 
   const authCtx = useContext(AuthContext);
 
@@ -70,45 +83,70 @@ const SignupContent = ({ setIsSignUp }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Signup</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={setFirstName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button style={styles.button} title="Signup" onPress={handleSignup} />
-      <Button
-        style={styles.button}
-        title="Switch to Login"
-        onPress={() => setIsSignUp(false)}
-      />
+      <ScrollView contentContainerStyle={styles.scroller}>
+        <Text style={styles.title}>Signup</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+          blurOnSubmit={false}
+          ref={input1Ref}
+          onSubmitEditing={() => input2Ref.current.focus()}
+          returnKeyType="next"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
+          blurOnSubmit={false}
+          ref={input2Ref}
+          onSubmitEditing={() => input3Ref.current.focus()}
+          returnKeyType="next"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="email"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+          blurOnSubmit={false}
+          ref={input3Ref}
+          onSubmitEditing={() => input4Ref.current.focus()}
+          returnKeyType="next"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          ref={input4Ref}
+          returnKeyType="done"
+        />
+        <View style={styles.buttonView}>
+          <Button style={styles.button} title="Signup" onPress={handleSignup} />
+          <Button
+            style={styles.button}
+            title="Back to Login"
+            onPress={() => setIsSignUp(false)}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  scroller: {
+    flex: 1,
+    justifyContent: "center",
+    padding1: 16,
+  },
   container: {
     flex: 1,
+    alignContent: "center",
     justifyContent: "center",
     padding: 16,
   },

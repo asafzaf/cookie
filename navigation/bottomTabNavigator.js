@@ -30,6 +30,7 @@ export default function BottomTab() {
           tabBarActiveTintColor: "#e91e63",
           tabBarInactiveTintColor: "gray",
           tabBarLabelPosition: "below-icon",
+          tabBarHideOnKeyboard: true,
           tabBarStyle: {
             backgroundColor: "#f2f2f2",
             borderTopWidth: 0,
@@ -47,7 +48,7 @@ export default function BottomTab() {
           name="Home Tab"
           component={HomeTabNavigator}
           options={{
-            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabelStyle: { fontSize: 14, marginBottom: 10 },
             tabBarLabel: rootVars.home,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="home" color={color} size={size} />
@@ -67,7 +68,7 @@ export default function BottomTab() {
           name="Shopping Cart Tab"
           component={ShoppingCartTabNavigator}
           options={{
-            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabelStyle: { fontSize: 14, marginBottom: 10 },
             tabBarLabel: rootVars.shopping_cart,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
@@ -82,7 +83,7 @@ export default function BottomTab() {
           name="Recipes Tab"
           component={RecipesTabNavigator}
           options={{
-            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabelStyle: { fontSize: 14, marginBottom: 10 },
             tabBarLabel: rootVars.recipes,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
@@ -97,7 +98,7 @@ export default function BottomTab() {
           name="Settings Tab"
           component={SettingsTabNavigator}
           options={{
-            tabBarLabelStyle: { fontSize: 14 },
+            tabBarLabelStyle: { fontSize: 14, marginBottom: 10 },
             tabBarLabel: rootVars.settings,
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="cog" color={color} size={size} />
