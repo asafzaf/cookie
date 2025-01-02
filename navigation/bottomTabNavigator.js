@@ -78,6 +78,11 @@ export default function BottomTab() {
               />
             ),
           }}
+          tabPress={(e) => {
+            e.preventDefault();
+               
+          }
+        }
         />
         <Tab.Screen
           name="Recipes Tab"

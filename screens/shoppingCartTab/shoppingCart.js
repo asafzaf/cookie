@@ -27,6 +27,8 @@ import {
 import ModalMessage from "../../components/general/modalMessage";
 import { LanguageStringContext } from "../../store/language-context";
 
+import { useFocusEffect } from "@react-navigation/native";
+
 const ShoppingCart = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [AddItemsVisible, setAddItemsVisible] = useState(true);
@@ -51,54 +53,38 @@ const ShoppingCart = () => {
     to_the_shopping_list: translations.general.to_the_shopping_list,
   };
 
-  const onPefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
-
   useEffect(() => {
-    async function fetchData() {
+    const fetchItemsData = async () => {
       setItemsLoading(true);
-      setListLoading(true);
-
       let res = await getItems(authCtx.token);
       setItems(res.data || []);
-
       setItemsLoading(false);
-      if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
-        setOpenNoListModal(true);
-        setListLoading(false);
-        return;
-      }
-
-      let data = await getShoppingListById(authCtx.token, authCtx.selectedList);
-
-      setShoppingListItems(data.data.items || []);
-      setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
-      setListName(data.data.name || "-No Name-");
-      setListLoading(false);
-    }
-    fetchData();
+    };
+    fetchItemsData();
   }, []);
 
-  useEffect(() => {
-    async function fetchData() {
-      setListLoading(true);
-      if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
-        setListLoading(false);
-        return;
-      }
-      let data = await getShoppingListById(authCtx.token, authCtx.selectedList);
-      setShoppingListItems(data.data.items || []);
-      setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
-      setListName(data.data.name || "-No Name-");
+  const fetchListData = async () => {
+    setListLoading(true);
 
+    if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
+      setOpenNoListModal(true);
       setListLoading(false);
+      return;
     }
-    fetchData();
-  }, [authCtx]);
+
+    let data = await getShoppingListById(authCtx.token, authCtx.selectedList);
+
+    setShoppingListItems(data.data.items || []);
+    setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
+    setListName(data.data.name || "-No Name-");
+    setListLoading(false);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchListData();
+    }, [])
+  );
 
   const filteredItems = items.filter((item) =>
     item.name["heb"].toLowerCase().includes(search.toLowerCase())

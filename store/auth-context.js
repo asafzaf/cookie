@@ -117,11 +117,16 @@ function AuthContextProvider({ children }) {
 
   function change_list(list) {
     setSelectedList(list);
+    AsyncStorage.setItem("selectedList", list);
   }
 
   function refresh_user_data(data) {
     setUserData(data);
     setDefaultShoppingList(data.default_shopping_list);
+    setSelectedList(data.default_shopping_list);
+    AsyncStorage.setItem("userData", JSON.stringify(data));
+    AsyncStorage.setItem("defaultShoppingList", data.default_shopping_list);
+    AsyncStorage.setItem("selectedList", data.default_shopping_list);
   }
 
   function updateCheckedList(departments) {
