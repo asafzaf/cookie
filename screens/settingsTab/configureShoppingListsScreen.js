@@ -64,7 +64,7 @@ const ConfigureShoppingListsScreen = ({ navigation }) => {
     <View style={styles.container}>
       <TextInput
         style={styles.searchBar}
-        placeholder="Search list..."
+        placeholder={translations.settings_tab.search_list}
         value={search}
         onChangeText={setSearch}
       />

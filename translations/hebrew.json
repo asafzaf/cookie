@@ -69,7 +69,8 @@
     "remove_user_confirm": "האם אתה בטוח שברצונך להסיר משתמש זה?",
     "user_list": "רשימת משתמשים",
     "make_admin": "הגדר כמנהל",
-    "remove_admin": "הסר ממנהל"
+    "remove_admin": "הסר ממנהל",
+    "search_list": "חפש רשימה..."
   },
   "general": {
     "loading": "טוען...",

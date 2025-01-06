@@ -56,11 +56,17 @@ const SettingsTabNavigator = () => {
         <Stack.Screen
           name="Configure Shopping Lists"
           component={ConfigureShoppingListsScreen}
+          options={{ headerRight: null }}
         />
-        <Stack.Screen name="Create New List" component={CreateListScreen} />
+        <Stack.Screen
+          name="Create New List"
+          component={CreateListScreen}
+          options={{ headerRight: null }}
+        />
         <Stack.Screen
           name="Shopping List Settings"
           component={ShoppingListSettingsScreen}
+          options={{ headerRight: null }}
         />
       </Stack.Navigator>
       <ProfileBox
