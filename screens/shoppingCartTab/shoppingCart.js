@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from "react-native";
 
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { AuthContext } from "../../store/auth-context";
 
@@ -44,6 +44,8 @@ const ShoppingCart = () => {
   const [openNoListModal, setOpenNoListModal] = useState(false);
   const authCtx = useContext(AuthContext);
 
+  const { selectedList } = authCtx;
+
   const { translations } = useContext(LanguageStringContext);
 
   const language = translations.language;
@@ -66,13 +68,13 @@ const ShoppingCart = () => {
   const fetchListData = async () => {
     setListLoading(true);
 
-    if (authCtx.selectedList === null || authCtx.selectedList === undefined) {
+    if (selectedList === null || selectedList === undefined) {
       setOpenNoListModal(true);
       setListLoading(false);
       return;
     }
 
-    let data = await getShoppingListById(authCtx.token, authCtx.selectedList);
+    let data = await getShoppingListById(authCtx.token, selectedList);
 
     setShoppingListItems(data.data.items || []);
     setUnrecognizedShoppingListItems(data.data.unrecognizedItems || []);
@@ -80,11 +82,18 @@ const ShoppingCart = () => {
     setListLoading(false);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchListData();
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setItemsLoading(true);
+  //     fetchListData();
+  //     setItemsLoading(false);
+  //     console.log("ShoppingCart.js:", authCtx.selectedList);
+  //   }, [])
+  // );
+
+  useEffect(() => {
+    fetchListData();
+  }, [selectedList]);
 
   const filteredItems = items.filter((item) =>
     item.name["heb"].toLowerCase().includes(search.toLowerCase())
@@ -147,9 +156,14 @@ const ShoppingCart = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.sectionTitle, { alignSelf: "center" }]}>
-        {translations.shopping_list.title}: {listName}
-      </Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={[styles.sectionTitle, { alignSelf: "center" }]}>
+          {translations.shopping_list.title}: {listName}
+        </Text>
+        <TouchableOpacity onPress={fetchListData}>
+          <MaterialCommunityIcons name="reload" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <View style={[styles.section, { maxHeight: addItemsHeight }]}>
         <TouchableOpacity
           style={styles.shoppingListTitle}

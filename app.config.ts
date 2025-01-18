@@ -29,12 +29,12 @@ const defineConfig = (): ExpoConfig => ({
     supportsTablet: true,
     bundleIdentifier: "com.asafz.cookie",
     buildNumber: "1.0.0",
-    infoPlist: {
-      NSAppTransportSecurity: {
-        NSAllowsArbitraryLoads: true,
-      },
-    },
     icon: "./assets/images/cookie-icon.png",
+    // infoPlist: {
+    //   NSAppTransportSecurity: {
+    //     NSAllowsArbitraryLoads: true,
+    //   },
+    // },
     splash: {
       image: "./assets/images/cookie-icon.png",
       backgroundColor: "#ffffff",
@@ -52,9 +52,9 @@ const defineConfig = (): ExpoConfig => ({
       {
         ios: {
           useFrameworks: "static",
-        },
-        android: {
-          usesCleartextTraffic: true,
+        // },
+        // android: {
+        //   usesCleartextTraffic: true,
         },
       },
     ],

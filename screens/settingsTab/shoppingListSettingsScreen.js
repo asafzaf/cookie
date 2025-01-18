@@ -92,7 +92,12 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
   const addUser = async () => {
     if (newUserEmail.trim()) {
       const userEmail = newUserEmail;
-      let res = await addUserToShoppingList(authCtx.token, userId, listItemId, userEmail);
+      let res = await addUserToShoppingList(
+        authCtx.token,
+        userId,
+        listItemId,
+        userEmail
+      );
       if (res) {
         res.isAdmin = false;
         res.isPending = true;
@@ -124,7 +129,11 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
 
   const RemoveAdmin = async (userId) => {
     console.log("Remove Admin", userId);
-    const res = await removeAdminFromShoppingList(authCtx.token, listItemId, userId);
+    const res = await removeAdminFromShoppingList(
+      authCtx.token,
+      listItemId,
+      userId
+    );
     console.log("Remove Admin Res", res);
     if (res) {
       console.log("Remove Admin Res!");
@@ -153,11 +162,38 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
     }
   };
 
+  const RemovePendingUser = async (userId) => {
+    const res = await removeUserFromShoppingList(
+      authCtx.token,
+      listItemId,
+      userId
+    );
+    if (res) {
+      setPendingUsers(pendingUsers.filter((user) => user._id !== userId));
+    } else {
+      console.log("Failed to remove user");
+      Alert.alert("Failed to remove user", "Please try again later");
+    }
+  };
+
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
       <Text style={styles.userName}>{item.email}</Text>
       {isAdmin && item.isPending && (
-        <Text style={styles.pendingUserText}>Pending</Text>
+        <>
+          <Text style={styles.pendingUserText}>Pending</Text>
+          <TouchableOpacity
+            onPress={() => {
+              setUserForRemoval(item.email);
+              setUserIdRemoval(item._id);
+              setDeletionModalVisible(true);
+              console.log("User for removal", item.email);
+              console.log("User for removal", item._id);
+            }}
+          >
+            <MaterialCommunityIcons name="delete" size={20} color="red" />
+          </TouchableOpacity>
+        </>
       )}
       {isAdmin && item._id != userId && !item.isPending && (
         <>
@@ -173,9 +209,9 @@ const ShoppingListSettingsScreen = ({ route, navigation }) => {
           />
           <TouchableOpacity
             onPress={() => {
-              setDeletionModalVisible(true);
               setUserForRemoval(item.email);
               setUserIdRemoval(item._id);
+              setDeletionModalVisible(true);
               console.log("User for removal", item.email);
               console.log("User for removal", item._id);
             }}

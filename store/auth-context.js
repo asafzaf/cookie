@@ -56,7 +56,7 @@ function AuthContextProvider({ children }) {
           "defaultShoppingList"
         );
         setDefaultShoppingList(defaultShoppingList);
-        const selectedList = await AsyncStorage.getItem("defaultShoppingList");
+        const selectedList = await AsyncStorage.getItem("selectedList");
         setSelectedList(selectedList);
         const userData = await AsyncStorage.getItem("userData");
         console.log("userData:", userData);
@@ -115,9 +115,9 @@ function AuthContextProvider({ children }) {
     AsyncStorage.removeItem("userData");
   }
 
-  function change_list(list) {
+  async function change_list(list) {
     setSelectedList(list);
-    AsyncStorage.setItem("selectedList", list);
+    await AsyncStorage.setItem("selectedList", list);
   }
 
   function refresh_user_data(data) {
