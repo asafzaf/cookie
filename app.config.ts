@@ -30,6 +30,11 @@ const defineConfig = (): ExpoConfig => ({
     bundleIdentifier: "com.asafz.cookie",
     buildNumber: "1.0.0",
     icon: "./assets/images/cookie-icon.png",
+    // infoPlist: {
+    //   NSAppTransportSecurity: {
+    //     NSAllowsArbitraryLoads: true,
+    //   },
+    // },
     splash: {
       image: "./assets/images/cookie-icon.png",
       backgroundColor: "#ffffff",
@@ -47,6 +52,9 @@ const defineConfig = (): ExpoConfig => ({
       {
         ios: {
           useFrameworks: "static",
+        // },
+        // android: {
+        //   usesCleartextTraffic: true,
         },
       },
     ],
