@@ -27,6 +27,8 @@ export default function HomeScreen({ navigation }) {
   const authCtx = useContext(AuthContext);
   const { translations } = useContext(LanguageStringContext);
 
+  const selectedList = authCtx.selectedList || null; // Use the selected list if it exists
+
   // Use the default shopping list ID if it exists
   const defaultShoppingListId = authCtx.defaultShoppingList || null;
 
@@ -37,8 +39,14 @@ export default function HomeScreen({ navigation }) {
         let data = await getShoppingListByUserId(authCtx.token, authCtx.userId);
         setItems(data || []);
 
+        if (selectedList) {
+          const selected = data.find((item) => item._id === selectedList);
+          if (selected) {
+            setSelectedItem(selected);
+          }
+        }
         // Only pre-select if defaultShoppingListId is defined
-        if (defaultShoppingListId) {
+        else if (defaultShoppingListId) {
           const defaultItem = data.find(
             (item) => item._id === defaultShoppingListId
           );
