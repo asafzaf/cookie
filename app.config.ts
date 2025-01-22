@@ -1,7 +1,7 @@
 import { ExpoConfig } from "@expo/config";
 
 const defineConfig = (): ExpoConfig => ({
-  name: "cookie", // Replace with your app's name
+  name: "Cookie.", // Replace with your app's name
   slug: "cookie", // Replace with your app's slug
   version: "1.0.0", // Match the version in your `app.json`
   sdkVersion: "52.0.0", // Replace with the correct Expo SDK version
